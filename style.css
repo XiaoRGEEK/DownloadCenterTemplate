@@ -1,0 +1,33 @@
+* { margin: 0 ; padding: 0; }
+body { background-color: #edf1f7 ; font-size: 14px ;}
+a { text-decoration: none !important; ; color: #333 ;}
+h1, h2, h3, h4, h5, h6 { font-weight: 400 !important;}
+
+.content { width: 1230px !important; margin-left: auto; margin-right: auto; overflow: hidden; margin-top: 20px; margin-bottom: 20px;}
+.mytitle { height: 40px; line-height: 40px; color: #3c4f6b;}
+.mytitle h2 { font-size: 16px;}
+
+.mylist ul { margin: -10px 0 0 -10px !important; font-size: 0; }
+.mylist li { position: relative !important; display: inline-block !important; width: 610px; margin: 10px 0 0 10px; background-color: #fff; vertical-align: top;border-radius: 10px;}
+.mylist .to-detail { position: relative !important; display: block !important; height: 150px !important; padding: 40px 30px 40px 130px !important; }
+.mylist .to-detail:hover .name { color: #666;}
+.mylist .logo { position: absolute !important; left: 30px; top: 40px; width: 80px; height: 80px; border-radius: 10px;}
+.mylist .info { height: 38px; margin-top: 10px;}
+.mylist .name { display: inline-block !important; font-size: 20px; color: #333;}
+.mylist .time { display: inline-block !important; margin-left: 20px; font-size: 14px; color: #202020;}
+.mylist .desc { line-height: 22px; font-size: 12px; color: #a4a4a4;}
+
+.mylist .down-btns { position: absolute !important; right: 30px; top: 41px; width: 110px; height: 78px; }
+
+.mylist .btn { display: inline-block !important; width: 108px; margin-top: 22px; border: 1px solid #3ace72; line-height: 34px; font-size: 14px; color: #fff; text-align: center; background-color: #3ace72;border-radius: 5px;}
+.mylist .btn:hover { border-color: #4ae484; background-color: #4ae484;}
+.mylist .btn-appstore { color: #28b96c; background-color: #fff;}
+.mylist .btn-appstore:hover { color: #fff;}
+/* .mylist .btn-appstore:hover .icon-appstore { background-image: url(../images/appstore2.png);} */
+
+.mylist .btns2 .btn { margin-top: 6px;}
+.mylist .btns2 .btn:first-child { margin-top: 0;}
+
+.mylist .icon-appstore { display: inline-block !important; width: 24px; height: 24px; margin-bottom: 6px; background: url(../images/appstore.png) no-repeat 50%; background-size: 16px auto; vertical-align: middle;}
+
+.footer { padding: 50px; line-height: 26px; font-size: 12px; text-align: center; color: #8a8c90;}
