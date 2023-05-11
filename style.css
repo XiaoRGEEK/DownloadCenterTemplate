@@ -9,7 +9,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: 400 !important;}
 
 .mylist ul { margin: -10px 0 0 -10px !important; font-size: 0; }
 .mylist li { position: relative !important; display: inline-block !important; width: 610px; margin: 10px 0 0 10px; background-color: #fff; vertical-align: top;border-radius: 10px;}
-.mylist .to-detail { position: relative !important; display: block !important; height: 150px !important; padding: 40px 30px 40px 130px !important; }
+.mylist .to-detail { position: relative !important; display: block !important; height: 80px !important; padding: 40px 30px 40px 130px !important; }
 .mylist .to-detail:hover .name { color: #666;}
 .mylist .logo { position: absolute !important; left: 30px; top: 40px; width: 80px; height: 80px; border-radius: 10px;}
 .mylist .info { height: 38px; margin-top: 10px;}
@@ -31,3 +31,11 @@ h1, h2, h3, h4, h5, h6 { font-weight: 400 !important;}
 .mylist .icon-appstore { display: inline-block !important; width: 24px; height: 24px; margin-bottom: 6px; background: url(../images/appstore.png) no-repeat 50%; background-size: 16px auto; vertical-align: middle;}
 
 .footer { padding: 50px; line-height: 26px; font-size: 12px; text-align: center; color: #8a8c90;}
+
+.header-bar-title{
+    text-align: center;
+    cursor: pointer;
+    padding: 10px;
+    font-weight: bold;
+    user-select: none;
+}
