@@ -289,10 +289,8 @@ h6 {
     color: #333;
     position: absolute;
     top: 50%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     width: 55%;
+        transform: translateY(-50%)
 }
     .photo img {
     width: 40px;
