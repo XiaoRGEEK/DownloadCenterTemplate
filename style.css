@@ -195,6 +195,15 @@ h6 {
 
 
 @media (min-width: 900px) {
+    .photo img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
     .content {
     width: 1230px !important;
     margin-left: auto;
@@ -232,6 +241,15 @@ h6 {
     }
 }
 @media (max-width: 900px) {
+    .photo img {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
     .content {
     width: 100% !important;
     margin-left: auto;
@@ -285,15 +303,7 @@ h6 {
 
 }
 
-.photo img {
-    width: 80px;
-    height: 80px;
-    border-radius: 10px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
-}
+
 
 .software-content {
     /* float: right; */
