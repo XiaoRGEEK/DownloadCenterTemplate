@@ -239,8 +239,30 @@ h6 {
         transform: translateX(-50%);
         width: 100%;
     }
+    .my-name {
+    display: inline-block !important;
+    font-size: 20px;
+    color: #333;
+    position: absolute;
+    top: 30%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 55%;
+}
 }
 @media (max-width: 900px) {
+    .my-name {
+    display: inline-block !important;
+    font-size: 15px;
+    color: #333;
+    position: absolute;
+    top: 30%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 55%;
+}
     .photo img {
     width: 40px;
     height: 40px;
@@ -320,17 +342,7 @@ h6 {
     transform: translateY(-50%);
 }
 
-.my-name {
-    display: inline-block !important;
-    font-size: 20px;
-    color: #333;
-    position: absolute;
-    top: 30%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 55%;
-}
+
 
 .my-info {
     /* margin-top: 5%; */
