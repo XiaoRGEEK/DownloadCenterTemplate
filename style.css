@@ -270,9 +270,9 @@ h6 {
     color: #a4a4a4;
     position: absolute;
     bottom: 30%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+    /* white-space: nowrap; */
     width: 70%;
 }
 }
