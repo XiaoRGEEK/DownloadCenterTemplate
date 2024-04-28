@@ -145,5 +145,18 @@
         "btnNames": [
             "Windows"
         ]
+    },
+    {
+        "logoSrc": "https://www.cleverfiles.com/howto/wp-content/uploads/2018/04/what-is-zip.png",
+        "name": "A RobotKit Software",
+        "version": "v2.0.0",
+        "desc": "A software for PWM Servo. Support win all",
+        "link": [
+            "./software/pc/Robotkit.zip"
+        ],
+        "isTwoBtn": false,
+        "btnNames": [
+            "Windows"
+        ]
     }
 ]
