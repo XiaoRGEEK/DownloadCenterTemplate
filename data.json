@@ -2,10 +2,10 @@
     {
         "logoSrc": "https://www.xiaorgeek.com/Software/logo/xrcontroller.png",
         "name": "XR-Controller for Android",
-        "version": "v1.4.134",
+        "version": "v1.4.136",
         "desc": "support X-series、Jetbot V2.0、DonkeyCar and Bionic robots",
         "link": [
-            "./software/android/XR-Controller V1.4.134.240509.aa5a471.apk"
+            "./software/android/XR-Controller V1.4.136.240510.48048d8.apk"
         ],
         "isTwoBtn": false,
         "btnNames": [
