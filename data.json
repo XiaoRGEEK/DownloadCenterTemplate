@@ -52,6 +52,19 @@
         ]
     },
     {
+        "logoSrc": "http://bugly.xiao-r.com/api/static/avatar/pqYaS_7sg.png",
+        "name": "ROSCollie for Android",
+        "version": "v1.0.0",
+        "desc": "colie dog ros application",
+        "link": [
+            "./software/android/roscollie.apk"
+        ],
+        "isTwoBtn": false,
+        "btnNames": [
+            "Download"
+        ]
+    },
+    {
         "logoSrc": "https://www.xiaorgeek.com/Software/logo/wifirobot.jpg",
         "name": "WifiRobot for iOS/Android",
         "version": "v2.37",
