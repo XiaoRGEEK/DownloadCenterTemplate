@@ -2,7 +2,7 @@
  * @Author: Ceoifung
  * @Date: 2023-11-06 11:48:32
  * @LastEditors: Ceoifung
- * @LastEditTime: 2024-04-04 14:50:01
+ * @LastEditTime: 2024-06-05 10:34:33
  * @Description: XiaoRGEEK All Rights Reserved. Copyright © 2023
 -->
 <!DOCTYPE html>
@@ -11,7 +11,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>XiaoRGEEK Software Download Center</title>
+    <title>小R科技软件下载中心|Powered by XiaoRGEEK</title>
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon"
         href="https://cdn.shopifycdn.net/s/files/1/0144/3568/0342/files/logo_c453a353-f3e6-4173-aea4-7ab3848a0d8e_96x96.jpg">
@@ -30,7 +30,7 @@
         </table>
     </div>
     <div class="container">
-<!-- 软件填充页面 -->
+        <!-- 软件填充页面 -->
     </div>
     <!-- 底部状态栏 -->
     <div class="footer-bar">Copyright © 2023-2024. <a href="http://xiaorgeek.net" target="_blank">XiaoRGEEK</a> All
@@ -41,30 +41,29 @@
             var container = document.querySelector('.container');
             var software = document.createElement('div');
             software.className = 'software';
-            software.innerHTML = isTwoBtn ? `
-                <img class="logo" src="${logoSrc}" alt="Software Logo">
+
+            // 根据 versions 数组生成多个版本信息
+            let versions = version.split(',')
+            var versionInfoHtml = ""
+            versions.map(item =>
+                versionInfoHtml += `<span class="version-info">${item}</span> `
+            );
+            let downloadHtml = ""
+            for (var i = 0; i < btnNames.length; i++) {
+                downloadHtml += `<a class="download-button"
+                    href="${downloadLinks[i]}">${btnNames[i]}</a>`
+            }
+
+            software.innerHTML =
+                `<img class="logo" src="${logoSrc}" alt="Software Logo">
                 <div class="software-info">
-                    <div class="software-name">${name} <span class="version-info">${version}</span></div>
+                    <div class="software-name">${name} ${versionInfoHtml}</div>
                     <div class="software-description">${description}</div>
                 </div>
-                <div class="download-buttons">
-                    <a class="download-button"
-                    href="${downloadLinks[0]}">${btnNames[0]}</a>
-                    <a class="download-button"
-                    href="${downloadLinks[1]}">${btnNames[1]}</a>
-                </div>`
-                : `
-                <img class="logo" src="${logoSrc}" alt="Software Logo">
-                <div class="software-info">
-                    <div class="software-name">${name} <span class="version-info">${version}</span></div>
-                    <div class="software-description">${description}</div>
+                <div style="text-align:right; display: grid;grid-gap: 10px;">
+                ${downloadHtml}
                 </div>
-                <div sytle="width:110px">
-                    <a class="download-button"
-                    href="${downloadLinks[0]}">${btnNames[0]}</a>
-                </div>
-              
-            `;
+                `;
             container.appendChild(software);
         }
         fetch('data.json')
@@ -77,6 +76,7 @@
                 }
             })
             .catch(error => console.error('Error:', error));
+
     </script>
 </body>
 

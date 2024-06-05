@@ -2,14 +2,15 @@
     {
         "logoSrc": "https://www.xiaorgeek.com/Software/logo/xrcontroller.png",
         "name": "XR-Controller for Android",
-        "version": "v1.4.136",
+        "version": "v1.4.139,arm64,armv7a",
         "desc": "support X-series、Jetbot V2.0、DonkeyCar and Bionic robots",
         "link": [
-            "./software/android/XR-Controller V1.4.136.240510.48048d8.apk"
+            "./software/android/XR-Controller_V1.4.139.240604.1d1b340_arm64-v8a-release.apk",
+            "./software/android/XR-Controller_V1.4.139.240604.1d1b340_armeabi-v7a-release.apk"
         ],
-        "isTwoBtn": false,
         "btnNames": [
-            "Download"
+            "arm64",
+            "armv7a"
         ]
     },
     {
@@ -20,7 +21,6 @@
         "link": [
             "./software/image/xr-controller_IOS.png"
         ],
-        "isTwoBtn": false,
         "btnNames": [
             "QRCode"
         ]
@@ -33,7 +33,6 @@
         "link": [
             "./software/android/ROSXRMobile V1.6.71.230508.97a7d55.apk"
         ],
-        "isTwoBtn": false,
         "btnNames": [
             "Download"
         ]
@@ -41,12 +40,11 @@
     {
         "logoSrc": "./software/image/ros2mobile.png",
         "name": "ROS2Mobile for Android",
-        "version": "v1.0.20 arm64",
+        "version": "v1.0.21,arm64",
         "desc": "A ROS2 Android App",
         "link": [
-            "./software/android/ROS2Mobile_V1.0.20.240312.ee1d8af.apk"
+            "./software/android/ROS2Mobile_V1.0.21.240604.ee1d8af_arm64-v8a-release.apk"
         ],
-        "isTwoBtn": false,
         "btnNames": [
             "Download"
         ]
@@ -59,7 +57,6 @@
         "link": [
             "./software/android/roscollie.apk"
         ],
-        "isTwoBtn": false,
         "btnNames": [
             "Download"
         ]
@@ -68,12 +65,11 @@
         "logoSrc": "https://www.xiaorgeek.com/Software/logo/wifirobot.jpg",
         "name": "WifiRobot for iOS/Android",
         "version": "v2.37",
-        "desc": "Wireless Robot Car. Android software no longer maintained, use xr-controller ASAP.",
+        "desc": "Wireless Robot Car. <span style='color:red'>Android software no longer maintained, use xr-controller ASAP.</span>",
         "link": [
             "https://www.xiaorgeek.com/Software/WiFiRobot_V2.37.apk",
             "https://www.xiaorgeek.com/Software/XiaoRGEEK_iOS_For_DS_GFS_TH.jpg"
         ],
-        "isTwoBtn": true,
         "btnNames": [
             "Android",
             "iOS"
@@ -87,7 +83,6 @@
         "link": [
             "https://www.xiaorgeek.com/Software/XiaoRGEEK_PC_For_DS_GFS_TH.zip"
         ],
-        "isTwoBtn": false,
         "btnNames": [
             "Download"
         ]
@@ -96,11 +91,10 @@
         "logoSrc": "https://www.xiaorgeek.com/Software/logo/donkeycar.png",
         "name": "XR-DonkeyCar for Android",
         "version": "v1.6",
-        "desc": "only android support. No longer maintained, use xr-controller ASAP.",
+        "desc": "only android support. <span style='color:red'>No longer maintained, use xr-controller ASAP.</span>",
         "link": [
             "https://www.xiaorgeek.com/Software/XiaoRGEEK_Donkeycar_Android.apk"
         ],
-        "isTwoBtn": false,
         "btnNames": [
             "Download"
         ]
@@ -113,7 +107,6 @@
         "link": [
             "https://www.xiaorgeek.com/Software/WuLiBot.apk"
         ],
-        "isTwoBtn": false,
         "btnNames": [
             "Download"
         ]
@@ -127,7 +120,6 @@
             "https://www.xiaorgeek.com/Software/XiaoRGEEK_Microbit_Android.apk",
             "./software/image/xrbitcar-ios.png"
         ],
-        "isTwoBtn": true,
         "btnNames": [
             "Android",
             "iOS"
@@ -137,11 +129,10 @@
         "logoSrc": "https://www.xiaorgeek.com/Software/logo/hexapod.png",
         "name": "Hexapod For PC",
         "version": "v1.0.2",
-        "desc": "Hexapod for Window. The software provides a simulation system but is no longer maintained",
+        "desc": "Hexapod for Window. The software provides a simulation system but is <span style='color:red'>no longer maintained</span>",
         "link": [
             "https://www.xiaorgeek.com/Software/hexapod-1.0.2.zip"
         ],
-        "isTwoBtn": false,
         "btnNames": [
             "Download"
         ]
@@ -150,11 +141,10 @@
         "logoSrc": "./software/image/smart-arm.png",
         "name": "AI Robotic-Arm Software",
         "version": "v1.0.9",
-        "desc": "A software for AI Robotic-Arm serial product. Support win all",
+        "desc": "A software for AI Robotic-Arm serial product. Support win7、win10、win11",
         "link": [
             "./software/pc/smart-arm Setup 1.0.9.exe"
         ],
-        "isTwoBtn": false,
         "btnNames": [
             "Windows"
         ]
@@ -167,7 +157,6 @@
         "link": [
             "./software/pc/Robotkit.zip"
         ],
-        "isTwoBtn": false,
         "btnNames": [
             "Windows"
         ]
