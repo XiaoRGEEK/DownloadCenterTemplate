@@ -28,10 +28,10 @@
     {
         "logoSrc": "https://www.xiaorgeek.com/Software/logo/rosslam.png",
         "name": "ROSXRMobile for Android",
-        "version": "v1.6.71",
+        "version": "v1.6.86",
         "desc": "support jetson nano、raspberry pi and sunrise ros series robot. Software is only android support",
         "link": [
-            "./software/android/ROSXRMobile V1.6.71.230508.97a7d55.apk"
+            "./software/android/ROSXRMobile V1.6.86.250107.8e48d4d.apk"
         ],
         "btnNames": [
             "Download"
