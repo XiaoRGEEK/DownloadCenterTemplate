@@ -1,6 +1,6 @@
 [
     {
-        "logoSrc": "https://www.xiaorgeek.com/Software/logo/xrcontroller.png",
+        "logoSrc": "./software/image/xr-controller.png",
         "name": "XR-Controller for Android",
          "version": "v1.4.143,arm64,armv7a",
         "desc": "support X-series、Jetbot V2.0、DonkeyCar and Bionic robots",
@@ -14,7 +14,7 @@
         ]
     },
     {
-        "logoSrc": "https://www.xiaorgeek.com/Software/logo/xrcontroller.png",
+        "logoSrc": "./software/image/xr-controller.png",
         "name": "Corgi for iOS",
         "version": "v1.2.0",
         "desc": "support Bionic robots like hexapod、corgi dog.This is part of the iOS implementation of the xr-controller",
@@ -26,7 +26,7 @@
         ]
     },
     {
-        "logoSrc": "https://www.xiaorgeek.com/Software/logo/rosslam.png",
+        "logoSrc": "./software/image/rosxrmobile.png",
         "name": "ROSXRMobile for Android",
         "version": "v1.6.87",
         "desc": "support jetson nano、raspberry pi and sunrise ros series robot. Software is only android support",
@@ -50,7 +50,7 @@
         ]
     },
     {
-        "logoSrc": "http://bugly.xiao-r.com/api/static/avatar/pqYaS_7sg.png",
+        "logoSrc": "./software/image/roscollie.png",
         "name": "ROSCollie for Android",
         "version": "v1.0.0",
         "desc": "colie dog ros application",
@@ -62,13 +62,13 @@
         ]
     },
     {
-        "logoSrc": "https://www.xiaorgeek.com/Software/logo/wifirobot.jpg",
+        "logoSrc": "./software/image/wifirobot.png",
         "name": "WifiRobot for iOS/Android",
         "version": "v2.37",
         "desc": "Wireless Robot Car. <span style='color:red'>Android software no longer maintained, use xr-controller ASAP.</span>",
         "link": [
-            "https://www.xiaorgeek.com/Software/WiFiRobot_V2.37.apk",
-            "https://www.xiaorgeek.com/Software/XiaoRGEEK_iOS_For_DS_GFS_TH.jpg"
+            "./software/android/WiFiRobot_V2.37.apk",
+            "./software/image/wifirobot-ios.png"
         ],
         "btnNames": [
             "Android",
@@ -76,48 +76,48 @@
         ]
     },
     {
-        "logoSrc": "https://www.xiaorgeek.com/Software/logo/wifirobot_pc.jpg",
+        "logoSrc": "./software/image/wifirobot-pc.png",
         "name": "WifiRobot for Window",
-        "version": "v1.2.7",
+        "version": "V2.7.1",
         "desc": "support win7、win8、win10 and win11. Suitable for most products, please contact customer service for details",
         "link": [
-            "https://www.xiaorgeek.com/Software/XiaoRGEEK_PC_For_DS_GFS_TH.zip"
+            "./software/pc/WIFIRobot_V2.7.1_Setup.exe"
         ],
         "btnNames": [
             "Download"
         ]
     },
     {
-        "logoSrc": "https://www.xiaorgeek.com/Software/logo/donkeycar.png",
+        "logoSrc": "./software/image/donkeycar.png",
         "name": "XR-DonkeyCar for Android",
         "version": "v1.6",
         "desc": "only android support. <span style='color:red'>No longer maintained, use xr-controller ASAP.</span>",
         "link": [
-            "https://www.xiaorgeek.com/Software/XiaoRGEEK_Donkeycar_Android.apk"
+            "./software/android/DonkeyCar_V1.3.0.apk"
         ],
         "btnNames": [
             "Download"
         ]
     },
     {
-        "logoSrc": "https://www.xiaorgeek.com/Software/logo/wulibot.png",
+        "logoSrc": "./software/image/wulibot.png",
         "name": "WuliBot for Android",
         "version": "v1.1",
         "desc": "support wulibot robot",
         "link": [
-            "https://www.xiaorgeek.com/Software/WuLiBot.apk"
+            "./software/android/wulibot.apk"
         ],
         "btnNames": [
             "Download"
         ]
     },
     {
-        "logoSrc": "https://www.xiaorgeek.com/Software/logo/microbit.png",
+        "logoSrc": "./software/image/xrbitcar.png",
         "name": "XRBitCar for iOS/Android",
         "version": "v3.2.1",
         "desc": "Micro:bit Robot Control and programming APP",
         "link": [
-            "https://www.xiaorgeek.com/Software/XiaoRGEEK_Microbit_Android.apk",
+            "./software/android/xrbitcar.apk",
             "./software/image/xrbitcar-ios.png"
         ],
         "btnNames": [
@@ -126,12 +126,12 @@
         ]
     },
     {
-        "logoSrc": "https://www.xiaorgeek.com/Software/logo/hexapod.png",
+        "logoSrc": "./software/image/hexapod.png",
         "name": "Hexapod For PC",
         "version": "v1.0.2",
         "desc": "Hexapod for Window. The software provides a simulation system but is <span style='color:red'>no longer maintained</span>",
         "link": [
-            "https://www.xiaorgeek.com/Software/hexapod-1.0.2.zip"
+            "./software/pc/hexapod-1.0.2.zip"
         ],
         "btnNames": [
             "Download"
