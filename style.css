@@ -6,8 +6,8 @@ a {
 
 body{
     background-color: #edf1f7;
-    user-select: none;
-    cursor: pointer;
+    /* user-select: none; */
+    /* cursor: pointer; */
 }
 /* 手机界面的时候 */
 @media (max-width: 900px) {
