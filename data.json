@@ -164,10 +164,10 @@
     {
         "logoSrc": "./software/image/xr-servo.png",
         "name": "A Bus Servo Control Terminal Software",
-        "version": "v1.0.0",
+        "version": "v1.1.2",
         "desc": "A software for PWM Servo. Support win all",
         "link": [
-            "./software/pc/xr-servo.exe"
+            "./software/pc/xr-servo-1.1.2.exe"
         ],
         "btnNames": [
             "Windows"
