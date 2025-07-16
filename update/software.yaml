@@ -1,7 +1,7 @@
 xr-servo:
   name: xr-servo
-  version: 1.1.4
-  url: software/pc/xr-servo-1.1.4.exe
+  version: 1.1.5
+  url: software/pc/xr-servo-1.1.5.exe
 
 ros2mobile:
   name: ros2mobile
