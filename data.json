@@ -9,8 +9,8 @@
             "./software/android/XR-Controller_V1.4.143.250603.91316e0_armeabi-v7a-release.apk"
         ],
         "btnNames": [
-            "arm64",
-            "armv7a"
+            "Android arm64",
+            "Android armv7a"
         ]
     },
     {
@@ -22,7 +22,7 @@
             "./software/image/xr-controller_IOS.png"
         ],
         "btnNames": [
-            "QRCode"
+            "iOS Code"
         ]
     },
     {
@@ -34,7 +34,7 @@
             "./software/android/ROSXRMobile V1.6.87.250115.cf4f37a.apk"
         ],
         "btnNames": [
-            "Download"
+            "Android"
         ]
     },
     {
@@ -46,7 +46,7 @@
             "./software/android/ROS2Mobile_V1.0.21.240604.ee1d8af_arm64-v8a-release.apk"
         ],
         "btnNames": [
-            "Download"
+            "Android"
         ]
     },
     {
@@ -58,7 +58,7 @@
             "./software/android/roscollie.apk"
         ],
         "btnNames": [
-            "Download"
+            "Android"
         ]
     },
     {
@@ -72,7 +72,7 @@
         ],
         "btnNames": [
             "Android",
-            "iOS"
+            "iOS Code"
         ]
     },
     {
@@ -84,7 +84,7 @@
             "./software/pc/WIFIRobot_V2.7.1_Setup.exe"
         ],
         "btnNames": [
-            "Download"
+            "Windows"
         ]
     },
     {
@@ -96,7 +96,7 @@
             "./software/android/DonkeyCar_V1.3.0.apk"
         ],
         "btnNames": [
-            "Download"
+            "Android"
         ]
     },
     {
@@ -108,7 +108,7 @@
             "./software/android/wulibot.apk"
         ],
         "btnNames": [
-            "Download"
+            "Android"
         ]
     },
     {
@@ -122,7 +122,7 @@
         ],
         "btnNames": [
             "Android",
-            "iOS"
+            "iOS Code"
         ]
     },
     {
@@ -134,7 +134,7 @@
             "./software/pc/hexapod-1.0.2.zip"
         ],
         "btnNames": [
-            "Download"
+            "Windows"
         ]
     },
     {

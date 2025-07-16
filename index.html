@@ -1,24 +1,18 @@
-<!--
- * @Author: Ceoifung
- * @Date: 2023-11-06 11:48:32
- * @LastEditors: Ceoifung
- * @LastEditTime: 2024-06-05 10:34:33
- * @Description: XiaoRGEEK All Rights Reserved. Copyright © 2023
--->
 <!DOCTYPE html>
-<html>
-
+<html lang="zh-CN">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">
-    <title>小R科技软件下载中心|Powered by XiaoRGEEK</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon"
-        href="https://cdn.shopifycdn.net/s/files/1/0144/3568/0342/files/logo_c453a353-f3e6-4173-aea4-7ab3848a0d8e_96x96.jpg">
+  <meta charset="UTF-8">
+  <title>软件下载中心</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 字体 & 图标 -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css"/>
 </head>
-
 <body>
-    <!-- 顶部状态栏 -->
+  <header>
+    <!-- <img src="./software/image/logo.png" alt="LOGO" onerror="this.style.display='none'">
+    <h1>软件下载中心</h1> -->
     <div class="header-bar-title">
         <table style="width: 100%;">
             <td style="width:50%;text-align:right"> <a href="http://xiaorgeek.net" target="_blank"><img
@@ -29,55 +23,64 @@
             </td>
         </table>
     </div>
-    <div class="container">
-        <!-- 软件填充页面 -->
-    </div>
-    <!-- 底部状态栏 -->
-    <div class="footer-bar">Copyright © 2023-2024. <a href="http://xiaorgeek.net" target="_blank">XiaoRGEEK</a> All
+  </header>
+
+  <section id="list">加载中…</section>
+ <div class="footer-bar">Copyright © 2023-2025. <a href="http://xiaorgeek.net" target="_blank">XiaoRGEEK</a> All
         Rights Reserved. Powered by <a href="https://github.com/ceoifung" target="_blank">Ceoifung</a>
     </div>
-    <script>
-        function addSoftware(logoSrc, name, version, description, downloadLinks, isTwoBtn, btnNames) {
-            var container = document.querySelector('.container');
-            var software = document.createElement('div');
-            software.className = 'software';
+  <script>
+  (async () => {
+    try {
+      const res = await fetch('./data.json');
+      if (!res.ok) throw new Error('无法读取 data.json');
+      const data = await res.json();
+      const list = document.getElementById('list');
+      list.innerHTML = '';
 
-            // 根据 versions 数组生成多个版本信息
-            let versions = version.split(',')
-            var versionInfoHtml = ""
-            versions.map(item =>
-                versionInfoHtml += `<span class="version-info">${item}</span> `
-            );
-            let downloadHtml = ""
-            for (var i = 0; i < btnNames.length; i++) {
-                downloadHtml += `<a class="download-button"
-                    href="${downloadLinks[i]}">${btnNames[i]}</a>`
-            }
+      data.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
 
-            software.innerHTML =
-                `<img class="logo" src="${logoSrc}" alt="Software Logo">
-                <div class="software-info">
-                    <div class="software-name">${name} ${versionInfoHtml}</div>
-                    <div class="software-description">${description}</div>
-                </div>
-                <div style="text-align:right; display: grid;grid-gap: 10px;">
-                ${downloadHtml}
-                </div>
-                `;
-            container.appendChild(software);
-        }
-        fetch('data.json')
-            .then(response => response.json())
-            .then(softwareObj => {
-                // document.getElementById('output').innerHTML = 'Name: ' + data.name + ', Age: ' + data.age + ', City: ' + data.city;
-                for (var i = 0, len = softwareObj.length; i < len; i++) {
-                    addSoftware(softwareObj[i].logoSrc, softwareObj[i].name, softwareObj[i].version, softwareObj[i].desc,
-                        softwareObj[i].link, softwareObj[i].isTwoBtn, softwareObj[i].btnNames);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+        // 处理 logo 地址：如果包含 <url …> 则提取 src
+        let logoSrc = item.logoSrc;
+        const urlMatch = logoSrc.match(/src="([^"]+)"/);
+        if (urlMatch) logoSrc = urlMatch[1];
 
-    </script>
+        // 生成按钮
+        const btns = item.link.map((url, i) => {
+            const isQR = url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg');
+            const platform = item.btnNames[i]?.toLowerCase() || 'download';
+            let cls = '', icon = '';
+            if (platform.includes('android')) { cls = 'android'; icon = 'fab fa-android'; }
+            else if (platform.includes('windows') || platform.includes('pc')) { cls = 'windows'; icon = 'fab fa-windows'; }
+            else if (isQR) { cls = 'qr'; icon = 'fas fa-qrcode'; }
+            else { cls = ''; icon = 'fas fa-download'; }
+
+            return `<a class="btn ${cls}" href="${url}" ${!isQR ? 'download' : ''} target="_blank">
+                        <i class="${icon}"></i>
+                        ${item.btnNames[i] || 'Download'}
+                    </a>`;
+        }).join('');
+
+        card.innerHTML = `
+          <div class="logo-area">
+            <img src="${logoSrc}" alt="${item.name}">
+            <div class="title-area">
+              <h2>${item.name}</h2>
+              <small>${item.version}</small>
+            </div>
+          </div>
+          <p class="desc">${item.desc}</p>
+          <div class="buttons">${btns}</div>
+        `;
+        list.appendChild(card);
+      });
+    } catch (e) {
+      document.getElementById('list').textContent = '加载失败，请检查 data.json 是否存在且格式正确。';
+      console.error(e);
+    }
+  })();
+  </script>
 </body>
-
 </html>

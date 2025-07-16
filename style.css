@@ -1,183 +1,147 @@
-a {
-    text-decoration: none !important;
-    ;
-    color: #333;
+:root {
+    --bg: #f5f7fa;
+    --card: #fff;
+    --accent: #0078ff;
+    --text: #222;
+    --muted: #666;
+    --android: #3DDB85;
+    --windows: #00A4EF;
 }
 
-body{
-    background-color: #edf1f7;
-    /* user-select: none; */
-    /* cursor: pointer; */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
 }
-/* 手机界面的时候 */
-@media (max-width: 900px) {
-    .container {
-        margin-left: 10px;
-        margin-right: 10px;
-        display: grid;
-        /* grid-template-columns: 1fr 1fr; */
-        grid-column-gap: 20px;
-        grid-row-gap: 20px;
-    }
 
-    .software-name {
-        font-weight: bold;
-        margin-bottom: 5px;
-        /* width: 80%; */
-        font-size: 15px;
-    }
-    .version-info{
-        font-size:15px; 
-        color:rgb(255, 255, 255);
-        font-weight: normal;
-        background-color: #28b96c;
-        border-radius: 5px;
-        padding-left: 5px;
-        padding-right: 5px;
-        font-size: 9px;
-    }
-    .software-description {
-        color: #666;
-        /* width: 80%; */
-        font-size: 12px;
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 40px 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px
+}
+
+/* header img {
+    height: 60px;
+    margin-bottom: 12px
+}
+
+header h1 {
+    font-size: 32px;
+    font-weight: 600
+} */
+
+#list {
+    display: grid;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    grid-template-columns: repeat(2, 1fr);
+    /* 电脑端 2 列 */
+}
+
+@media(max-width:768px) {
+    #list {
+        grid-template-columns: 1fr
     }
 
     .header-bar-title h1 {
         display: none;
     }
 
-    .header-bar-title img {
-        width: 200px;
-        height: 90px;
-        color: #202020;
-        -webkit-filter: invert(1);
-        filter: invert(1);
-    }
-    .download-button {
-        width: 80px;
-        display: inline-block;
-        text-decoration: none;
-        /* margin-top: 22px; */
-        border: 1px solid #3ace72;
-        line-height: 34px;
-        font-size: 14px;
-        color: #fff;
-        text-align: center;
-        background-color: #3ace72;
-        border-radius: 5px;
-        margin-right: 10px;
-    }
-}
-/* 电脑网页的时候 */
-@media (min-width: 900px) {
-    .container {
-        margin-left: 5%;
-        margin-right: 5%;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-column-gap: 20px;
-        grid-row-gap: 20px;
-    }
-
-    .software-name {
-        font-weight: bold;
-        margin-bottom: 5px;
-        /* width: 80%; */
-    }
-    .version-info{
-        font-size:15px; 
-        color:rgb(255, 255, 255);
-        font-weight: normal;
-        background-color: #28b96c;
-        border-radius: 5px;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-    .software-description {
-        color: #666;
-        /* width: 80%; */
-    }
-
-    .header-bar-title h1 {
-        display: inline-block;
-        width: 100%;
-    }
-
-    .header-bar-title img {
-        width: 200px;
-        height: 90px;
-        color: #202020;
-        -webkit-filter: invert(1);
-        filter: invert(1);
-    }
-    .download-button {
-        width: 110px;
-        display: inline-block;
-        text-decoration: none;
-        /* margin-top: 22px; */
-        border: 1px solid #3ace72;
-        line-height: 34px;
-        font-size: 14px;
-        color: #fff;
-        text-align: center;
-        background-color: #3ace72;
-        border-radius: 5px;
-        margin-right: 10px;
-    }
+    /* 移动端 1 列 */
 }
 
+.header-bar-title img {
+    width: 200px;
+    height: 90px;
+    color: #202020;
+    -webkit-filter: invert(1);
+    filter: invert(1);
+}
 
-.software {
-    width: calc(100% - 20px);
+.card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, .06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.logo-area {
     display: flex;
     align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    height: 120px;
-    background-color: white;
+    gap: 14px
 }
 
-
-
-.logo {
-    width: 50px;
-    height: 50px;
-    margin: 10px;
-    border-radius: 10px;
+.logo-area img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain
 }
 
-.software-info {
-    flex-grow: 1;
+.title-area h2 {
+    font-size: 24px;
+    font-weight: 600
 }
 
+.title-area small {
+    color: var(--muted)
+}
 
+.desc {
+    line-height: 1.6;
+    color: var(--muted)
+}
 
-.download-buttons {
-    display: grid;
+.buttons {
+    margin-top: auto;
+    /* 把按钮压到底部 */
+    display: flex;
+    justify-content: flex-end;
+    /* 所有按钮整体靠右 */
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
     align-items: center;
-    grid-template-rows: 1fr 1fr;
-    /* height: 100%; */
-    grid-row-gap: 10px;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: opacity .2s;
 }
 
-
-
-.download-button:hover {
-    border-color: #4ae484;
-    background-color: #4ae484;
+.btn:hover {
+    opacity: .85
 }
 
-
-
-.my-down-btns {
-    width: 110px !important;
-    height: 36px !important;
-    display: inline-block;
-    padding-right: 10px;
+.btn.android {
+    background: var(--android)
 }
 
-strong {
-    color: red;
+.btn.windows {
+    background: var(--windows)
+}
+
+.btn.qr {
+    background: #28a745
+}
+
+.btn i {
+    font-size: 16px
 }
 
 .footer-bar {
@@ -191,10 +155,4 @@ strong {
 .footer-bar a {
     text-decoration: underline !important;
     color: #28b96c;
-}
-
-@media only screen and (max-width: 600px) {
-    .software {
-        width: 100%;
-    }
 }
