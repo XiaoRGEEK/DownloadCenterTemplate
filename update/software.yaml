@@ -1,0 +1,14 @@
+xr-servo:
+  name: xr-servo
+  version: 1.1.4
+  url: software/pc/xr-servo-1.1.4.exe
+
+ros2mobile:
+  name: ros2mobile
+  version: 1.0.0
+  url: software/pc/ros2mobile.exe
+
+xr-controller:
+  name: xr-controller
+  version: 1.0.0
+  url: software/pc/xr-controller.apk
