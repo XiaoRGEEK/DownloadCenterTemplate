@@ -9,8 +9,8 @@
             "./software/android/XR-Controller_V1.4.143.250603.91316e0_armeabi-v7a-release.apk"
         ],
         "btnNames": [
-            "Android arm64",
-            "Android armv7a"
+            "Android 64-bit",
+            "Android 32-bit"
         ]
     },
     {
@@ -52,7 +52,7 @@
     {
         "logoSrc": "./software/image/roscollie.png",
         "name": "ROSCollie for Android",
-        "version": "v1.0.0",
+        "version": "v1.6.60",
         "desc": "colie dog ros application",
         "link": [
             "./software/android/roscollie.apk"
@@ -164,10 +164,10 @@
     {
         "logoSrc": "./software/image/xr-servo.png",
         "name": "A Bus Servo Control Terminal Software",
-        "version": "v1.1.8",
+        "version": "v1.1.9",
         "desc": "A software for Bus Servo. Support win 10+",
         "link": [
-            "./software/pc/xr-servo-1.1.8.exe"
+            "./software/pc/xr-servo-1.1.9.exe"
         ],
         "btnNames": [
             "Windows"
