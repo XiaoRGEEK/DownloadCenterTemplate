@@ -1,7 +1,7 @@
 xr-servo:
   name: xr-servo
-  version: 1.1.9
-  url: software/pc/xr-servo-1.1.9.exe
+  version: 1.2.1
+  url: software/pc/xr-servo-1.2.1.exe
 
 ros2mobile:
   name: ros2mobile
@@ -12,3 +12,21 @@ xr-controller:
   name: xr-controller
   version: 1.0.0
   url: software/pc/xr-controller.apk
+
+test_app:
+  name: "xr-test"
+  version: 20
+  url: software/android/wulibot.apk
+  forceUpdate: false
+  updateMsg:
+    chinese: "更新了测试app"
+    english: "Updated test app"
+
+VortaDroid:
+  name: "VortaDroid"
+  version: 20
+  url: software/android/wulibot.apk
+  forceUpdate: true
+  updateMsg:
+    chinese: "更新了测试app"
+    english: "Updated test app"
