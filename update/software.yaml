@@ -19,7 +19,7 @@ test_app:
   url: software/android/wulibot.apk
   forceUpdate: false
   updateMsg:
-    chinese: "更新了测试app"
+    chinese: "update text"
     english: "Updated test app"
 
 VortaDroid:
@@ -28,5 +28,5 @@ VortaDroid:
   url: software/android/wulibot.apk
   forceUpdate: true
   updateMsg:
-    chinese: "更新了测试app"
+    chinese: "update text"
     english: "Updated test app"
