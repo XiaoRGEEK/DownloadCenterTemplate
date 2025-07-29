@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>软件下载中心</title>
+  <title>Software Download Center</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- 字体 & 图标 -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -11,31 +11,96 @@
 </head>
 <body>
   <header>
-    <!-- <img src="./software/image/logo.png" alt="LOGO" onerror="this.style.display='none'">
-    <h1>软件下载中心</h1> -->
     <div class="header-bar-title">
         <table style="width: 100%;">
             <td style="width:50%;text-align:right"> <a href="http://xiaorgeek.net" target="_blank"><img
                         src="https://cdn.shopifycdn.net/s/files/1/0144/3568/0342/files/logopng_1_255x@2x.png?v=1669193355"
                         alt="" /></a></td>
             <td style="width: 50%;;text-align:left">
-                <h1> Software Download Center</h1>
+                <h1 data-en="Software Download Center" data-zh="软件下载中心">Software Download Center</h1>
             </td>
         </table>
+        <!-- 语言切换按钮 -->
+        <div class="language-switch">
+            <button id="lang-en" class="lang-btn" data-lang="en">English</button>
+            <button id="lang-zh" class="lang-btn" data-lang="zh">中文</button>
+        </div>
     </div>
   </header>
 
-  <section id="list">加载中…</section>
+  <section id="list">Loading...</section>
  <div class="footer-bar">Copyright © 2023-2025. <a href="http://xiaorgeek.net" target="_blank">XiaoRGEEK</a> All
         Rights Reserved. Powered by <a href="https://github.com/ceoifung" target="_blank">Ceoifung</a>
     </div>
+  
   <script>
-  (async () => {
+  // 语言数据
+  const langData = {
+    "en": {
+      "loading": "Loading...",
+      "loadFailed": "Failed to load. Please check if data.json exists and is formatted correctly.",
+      "android": "Android",
+      "iosCode": "iOS Code",
+      "windows": "Windows",
+      "download": "Download"
+    },
+    "zh": {
+      "loading": "加载中…",
+      "loadFailed": "加载失败，请检查 data.json 是否存在且格式正确。",
+      "android": "Android",
+      "iosCode": "iOS Code",
+      "windows": "Windows",
+      "download": "下载"
+    }
+  };
+
+  // 获取浏览器语言，如果浏览器语言是中文则返回'zh'，否则返回'en'
+  function getBrowserLanguage() {
+    const browserLang = navigator.language || navigator.userLanguage;
+    return browserLang.startsWith('zh') ? 'zh' : 'en';
+  }
+
+  // 当前语言，默认根据浏览器语言设置
+  let currentLang = getBrowserLanguage();
+
+  console.log(`Current language: ${currentLang}`);
+
+  // 获取多语言字段的函数
+  function getTextByLang(obj, lang) {
+    if (typeof obj === 'object' && obj !== null && obj[lang]) {
+      return obj[lang];
+    }
+    return obj;
+  }
+
+  // 设置语言
+  function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('language', lang);
+    
+    // 更新按钮状态
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    document.getElementById(`lang-${lang}`).classList.add('active');
+    
+    // 更新页面标题
+    const title = document.querySelector('h1');
+    title.textContent = title.getAttribute(`data-${lang}`);
+    
+    // 重新加载数据
+    loadData();
+  }
+
+  // 加载数据
+  async function loadData() {
     try {
       const res = await fetch('./data.json');
-      if (!res.ok) throw new Error('无法读取 data.json');
+      if (!res.ok) throw new Error(langData[currentLang].loadFailed);
       const data = await res.json();
       const list = document.getElementById('list');
+      list.innerHTML = `<p>${langData[currentLang].loading}</p>`;
+
       list.innerHTML = '';
 
       data.forEach(item => {
@@ -47,10 +112,15 @@
         const urlMatch = logoSrc.match(/src="([^"]+)"/);
         if (urlMatch) logoSrc = urlMatch[1];
 
+        // 获取当前语言的名称和描述
+        const name = getTextByLang(item.name, currentLang);
+        const desc = getTextByLang(item.desc, currentLang);
+        const btnNames = getTextByLang(item.btnNames, currentLang);
+
         // 生成按钮
         const btns = item.link.map((url, i) => {
             const isQR = url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg');
-            const platform = item.btnNames[i]?.toLowerCase() || 'download';
+            const platform = btnNames[i]?.toLowerCase() || 'download';
             let cls = '', icon = '';
             if (platform.includes('android')) { cls = 'android'; icon = 'fab fa-android'; }
             else if (platform.includes('windows') || platform.includes('pc')) { cls = 'windows'; icon = 'fab fa-windows'; }
@@ -59,28 +129,69 @@
 
             return `<a class="btn ${cls}" href="${url}" ${!isQR ? 'download' : ''} target="_blank">
                         <i class="${icon}"></i>
-                        ${item.btnNames[i] || 'Download'}
+                        ${btnNames[i] || langData[currentLang].download}
                     </a>`;
         }).join('');
 
         card.innerHTML = `
           <div class="logo-area">
-            <img src="${logoSrc}" alt="${item.name}">
+            <img src="${logoSrc}" alt="${name}">
             <div class="title-area">
-              <h2>${item.name}</h2>
+              <h2>${name}</h2>
               <small>${item.version}</small>
             </div>
           </div>
-          <p class="desc">${item.desc}</p>
+          <p class="desc">${desc}</p>
           <div class="buttons">${btns}</div>
         `;
         list.appendChild(card);
       });
     } catch (e) {
-      document.getElementById('list').textContent = '加载失败，请检查 data.json 是否存在且格式正确。';
+      document.getElementById('list').innerHTML = `<p>${langData[currentLang].loadFailed}</p>`;
       console.error(e);
     }
-  })();
+  }
+
+  // 页面加载完成后初始化
+  document.addEventListener('DOMContentLoaded', () => {
+    // 设置当前语言
+    setLanguage(currentLang);
+    
+    // 绑定语言切换事件
+    document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+    document.getElementById('lang-zh').addEventListener('click', () => setLanguage('zh'));
+  });
   </script>
+  
+  <style>
+    .language-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .lang-btn {
+      padding: 8px 16px;
+      border: 1px solid #ddd;
+      background-color: #f5f5f5;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .lang-btn.active {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+    
+    @media (max-width: 768px) {
+      .language-switch {
+        display: none;
+      }
+    }
+  </style>
 </body>
 </html>
