@@ -123,7 +123,7 @@
             const platform = btnNames[i]?.toLowerCase() || 'download';
             let cls = '', icon = '';
             if (platform.includes('android')) { cls = 'android'; icon = 'fab fa-android'; }
-            else if (platform.includes('windows') || platform.includes('pc')) { cls = 'windows'; icon = 'fab fa-windows'; }
+            else if (platform.includes('win') || platform.includes('pc')) { cls = 'windows'; icon = 'fab fa-windows'; }
             else if (isQR) { cls = 'qr'; icon = 'fas fa-qrcode'; }
             else { cls = ''; icon = 'fas fa-download'; }
 
