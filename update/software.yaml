@@ -15,7 +15,7 @@ xr-controller:
 
 test_app:
   name: "xr-test"
-  version: 20
+  version: 1
   url: software/android/wulibot.apk
   forceUpdate: false
   updateMsg:
@@ -24,7 +24,7 @@ test_app:
 
 VortaDroid:
   name: "VortaDroid"
-  version: 20
+  version: 1
   url: software/android/wulibot.apk
   forceUpdate: true
   updateMsg:
