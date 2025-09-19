@@ -1,6 +1,6 @@
 [
     {
-        "logoSrc": "./software/image/robomanager.png",
+        "logoSrc": "./software/image/RoboManager.png",
         "name": {
             "en": "RoboManager for SamuRoid",
             "zh": "RoboManager机甲武士动作组编辑软件"
