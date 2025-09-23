@@ -1,5 +1,24 @@
 [
     {
+        "logoSrc": "./software/image/VortaDroid.png",
+        "name": {
+            "en": "VortaDroid for Android",
+            "zh": "VortaDroid ROS机器人android控制软件"
+        },
+        "version": "v1.0.36",
+        "desc": {
+            "en": "support SamuRoid humanoid bipedal robot",
+            "zh": "支持SamuRoid机甲武士人形双足机器人"
+        },
+        "link": [
+            "./software/android/VortaDroid-1.0.36.250922.1dc364f-release.apk"
+        ],
+        "btnNames": {
+            "en": ["Android"],
+            "zh": ["Android"]
+        }
+    },
+    {
         "logoSrc": "./software/image/RoboManager.png",
         "name": {
             "en": "RoboManager for SamuRoid",
@@ -11,7 +30,6 @@
             "zh": "支持SamuRoid机甲武士人形双足机器人"
         },
         "link": [
-            "./software/pc/RoboManager机器人动作组编辑工具V1.0.0.16.zip",
             "./software/pc/RoboManager机器人动作组编辑工具V1.0.0.16.zip"
         ],
         "btnNames": {

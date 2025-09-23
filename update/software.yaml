@@ -24,9 +24,9 @@ test_app:
 
 VortaDroid:
   name: "VortaDroid"
-  version: 1
-  url: software/android/wulibot.apk
+  version: 36
+  url: software/android/VortaDroid-1.0.36.250922.1dc364f-release.apk
   forceUpdate: true
   updateMsg:
-    chinese: "update text"
-    english: "Updated test app"
+    chinese: "支持舵机偏差调整"
+    english: "support servo deviation adjustment"
