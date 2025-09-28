@@ -24,13 +24,13 @@
             "en": "RoboManager for SamuRoid",
             "zh": "RoboManager机甲武士动作组编辑软件"
         },
-        "version": "v1.0.0.16",
+        "version": "v1.0.0.17",
         "desc": {
             "en": "support SamuRoid humanoid bipedal robot",
             "zh": "支持SamuRoid机甲武士人形双足机器人"
         },
         "link": [
-            "./software/pc/RoboManager机器人动作组编辑工具V1.0.0.16.zip"
+            "./software/pc/RoboManager机器人动作组编辑工具V1.0.0.17.zip"
         ],
         "btnNames": {
             "en": ["Windows"],
