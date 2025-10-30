@@ -293,13 +293,13 @@
             "en": "A Bus Servo Control Terminal Software",
             "zh": "小R总线舵机控制终端软件"
         },
-        "version": "v1.2.3",
+        "version": "v1.2.5",
         "desc": {
             "en": "A software for Bus Servo. Support win 7+",
             "zh": "小R总线舵机软件。支持XR-3230等舵机，适用于win 7以上系统"
         },
         "link": [
-            "./software/pc/xr-servo-1.2.3.exe"
+            "./software/pc/xr-servo-1.2.5.exe"
         ],
         "btnNames": {
             "en": ["Windows"],
