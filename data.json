@@ -5,13 +5,13 @@
             "en": "RoboManager for Android",
             "zh": "RoboManager ROS人形双足机器人android控制软件"
         },
-        "version": "v1.0.47",
+        "version": "v1.0.48",
         "desc": {
             "en": "support SamuRoid humanoid bipedal robot",
             "zh": "支持SamuRoid机甲武士人形双足机器人"
         },
         "link": [
-            "./software/android/RoboManager-1.0.47.251015.cfd5c39-releasee.apk"
+            "./software/android/RoboManager-1.0.48.251031.b983c84-release.apk"
         ],
         "btnNames": {
             "en": ["Android"],
