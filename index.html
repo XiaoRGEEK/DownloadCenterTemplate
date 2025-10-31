@@ -42,7 +42,10 @@
       "android": "Android",
       "iosCode": "iOS Code",
       "windows": "Windows",
-      "download": "Download"
+      "download": "Download",
+      "history": "History",
+      "oldVersions": "Old Versions",
+      "close": "Close"
     },
     "zh": {
       "loading": "加载中…",
@@ -50,7 +53,10 @@
       "android": "Android",
       "iosCode": "iOS Code",
       "windows": "Windows",
-      "download": "下载"
+      "download": "下载",
+      "history": "历史版本",
+      "oldVersions": "旧版本",
+      "close": "关闭"
     }
   };
 
@@ -92,6 +98,127 @@
     loadData();
   }
 
+  // 按软件名称分组数据
+  function groupBySoftware(data) {
+    const grouped = {};
+    
+    data.forEach(item => {
+      const softwareName = item.name[currentLang] || item.name.en;
+      
+      if (!grouped[softwareName]) {
+        grouped[softwareName] = {
+          name: item.name,
+          desc: item.desc,
+          logoSrc: item.logoSrc,
+          platforms: {},
+          platformVersions: item.platformVersions || {} // 从JSON中获取平台版本信息
+        };
+      }
+      
+      // 根据链接判断平台
+      let platform = 'other';
+      const links = item.link || [];
+      
+      for (const link of links) {
+        if (link.includes('android')) {
+          platform = 'android';
+          break;
+        } else if (link.includes('pc') ||
+                  (item.btnNames && item.btnNames.en &&
+                   item.btnNames.en.some(name => name.toLowerCase().includes('windows')))) {
+          platform = 'pc';
+          break;
+        } else if (link.includes('.png') || link.includes('.jpg') || link.includes('.jpeg')) {
+          platform = 'ios';
+          break;
+        }
+      }
+      
+      if (!grouped[softwareName].platforms[platform]) {
+        grouped[softwareName].platforms[platform] = [];
+      }
+      
+      grouped[softwareName].platforms[platform].push(item);
+    });
+    
+    return grouped;
+  }
+
+  // 显示历史版本
+  function showHistoryVersions(softwareName, platform, oldVersions, event) {
+    // 防止点击事件冒泡
+    event.stopPropagation();
+    
+    // 检查是否已经存在历史版本弹窗
+    const existingModal = document.getElementById('history-modal');
+    if (existingModal) {
+      existingModal.remove();
+    }
+    
+    // 创建弹窗
+    const modal = document.createElement('div');
+    modal.id = 'history-modal';
+    modal.className = 'history-modal';
+    
+    // 创建弹窗内容
+    const modalContent = document.createElement('div');
+    modalContent.className = 'history-modal-content';
+    
+    // 弹窗标题
+    const title = document.createElement('h3');
+    title.textContent = `${softwareName} - ${langData[currentLang].oldVersions}`;
+    
+    // 版本列表
+    const versionList = document.createElement('div');
+    versionList.className = 'version-list';
+    
+    if (oldVersions && oldVersions.length > 0) {
+      oldVersions.forEach(version => {
+        const versionItem = document.createElement('div');
+        versionItem.className = 'version-item';
+        
+        // 提取文件名
+        const fileName = version.split('/').pop();
+        
+        const versionLink = document.createElement('a');
+        versionLink.href = version;
+        versionLink.download = fileName;
+        versionLink.target = '_blank';
+        versionLink.textContent = fileName;
+        versionLink.className = 'version-link';
+        
+        versionItem.appendChild(versionLink);
+        versionList.appendChild(versionItem);
+      });
+    } else {
+      const noVersions = document.createElement('p');
+      noVersions.textContent = currentLang === 'zh' ? '暂无旧版本' : 'No old versions available';
+      noVersions.className = 'no-versions';
+      versionList.appendChild(noVersions);
+    }
+    
+    // 关闭按钮
+    const closeButton = document.createElement('button');
+    closeButton.textContent = langData[currentLang].close;
+    closeButton.className = 'close-history-btn';
+    closeButton.onclick = () => modal.remove();
+    
+    // 组装弹窗
+    modalContent.appendChild(title);
+    modalContent.appendChild(versionList);
+    modalContent.appendChild(closeButton);
+    modal.appendChild(modalContent);
+    
+    // 点击弹窗外部关闭
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.remove();
+      }
+    };
+    
+    document.body.appendChild(modal);
+  }
+
   // 加载数据
   async function loadData() {
     try {
@@ -103,53 +230,209 @@
 
       list.innerHTML = '';
 
-      data.forEach(item => {
+      // 按软件名称分组
+      const groupedData = groupBySoftware(data);
+      
+      // 为每个软件创建卡片
+      Object.keys(groupedData).forEach(softwareName => {
+        const software = groupedData[softwareName];
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = 'software-card';
 
         // 处理 logo 地址：如果包含 <url …> 则提取 src
-        let logoSrc = item.logoSrc;
+        let logoSrc = software.logoSrc;
         const urlMatch = logoSrc.match(/src="([^"]+)"/);
         if (urlMatch) logoSrc = urlMatch[1];
 
         // 获取当前语言的名称和描述
-        const name = getTextByLang(item.name, currentLang);
-        const desc = getTextByLang(item.desc, currentLang);
-        const btnNames = getTextByLang(item.btnNames, currentLang);
+        const name = getTextByLang(software.name, currentLang);
+        const desc = getTextByLang(software.desc, currentLang);
 
-        // 生成按钮
-        const btns = item.link.map((url, i) => {
-            const isQR = url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg');
-            const platform = btnNames[i]?.toLowerCase() || 'download';
-            let cls = '', icon = '';
-            if (platform.includes('android')) { cls = 'android'; icon = 'fab fa-android'; }
-            else if (platform.includes('win') || platform.includes('pc')) { cls = 'windows'; icon = 'fab fa-windows'; }
-            else if (isQR) { cls = 'qr'; icon = 'fas fa-qrcode'; }
-            else { cls = ''; icon = 'fas fa-download'; }
-
-            return `<a class="btn ${cls}" href="${url}" ${!isQR ? 'download' : ''} target="_blank">
-                        <i class="${icon}"></i>
-                        ${btnNames[i] || langData[currentLang].download}
-                    </a>`;
+        // 生成平台按钮区域
+        const platformsHTML = Object.keys(software.platforms).map(platform => {
+          const platformItems = software.platforms[platform];
+          
+          return platformItems.map(item => {
+            const btnNames = getTextByLang(item.btnNames, currentLang);
+            const links = item.link || [];
+            const oldVersions = item.oldVersion || [];
+            
+            // 为每个链接创建按钮
+            return links.map((url, i) => {
+              const isImage = url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg');
+              const platformName = btnNames[i]?.toLowerCase() || 'download';
+              let cls = '', icon = '';
+              
+              if (platformName.includes('android')) {
+                cls = 'android';
+                icon = 'fab fa-android';
+              }
+              else if (platformName.includes('win') || platformName.includes('pc')) {
+                cls = 'windows';
+                icon = 'fab fa-windows';
+              }
+              else if (isImage) {
+                cls = 'qr';
+                icon = 'fas fa-qrcode';
+              }
+              else {
+                cls = '';
+                icon = 'fas fa-download';
+              }
+              
+              // 如果有旧版本，添加历史版本按钮
+              const historyButton = oldVersions.length > 0 ?
+                `<button class="history-btn" data-software="${name}" data-platform="${platform}" data-versions='${JSON.stringify(oldVersions)}'>
+                  <i class="fas fa-history"></i>
+                  ${langData[currentLang].history}
+                </button>` : '';
+              
+              // 如果是图片，使用弹窗显示，否则正常下载
+              const buttonHTML = isImage ?
+                `<button class="btn ${cls} image-btn" data-image="${url}">
+                  <i class="${icon}"></i>
+                  ${btnNames[i] || langData[currentLang].download}
+                </button>` :
+                `<a class="btn ${cls}" href="${url}" download target="_blank">
+                  <i class="${icon}"></i>
+                  ${btnNames[i] || langData[currentLang].download}
+                </a>`;
+              
+              return `
+                <div class="platform-button-group">
+                  ${buttonHTML}
+                  ${historyButton}
+                </div>
+              `;
+            }).join('');
+          }).join('');
         }).join('');
 
+        // 生成版本信息 - 使用从JSON中获取的平台版本信息
+        let versionHTML = '';
+        const platformLabels = {
+          android: currentLang === 'zh' ? 'Android' : 'Android',
+          windows: currentLang === 'zh' ? 'Windows' : 'Windows',
+          mac: currentLang === 'zh' ? 'Mac' : 'Mac',
+          ios: currentLang === 'zh' ? 'iOS' : 'iOS'
+        };
+        
+        // 使用从JSON数据中获取的平台版本信息
+        Object.keys(software.platformVersions).forEach(platform => {
+          const version = software.platformVersions[platform];
+          if (version && version !== 'v1.0' && version !== 'vunknown') {
+            const platformName = platformLabels[platform] || platform;
+            versionHTML += `<span class="version-tag ${platform}">${platformName}: ${version}</span>`;
+          }
+        });
+        
+        const versionSection = versionHTML ? `
+          <div class="version-info">
+            ${versionHTML}
+          </div>
+        ` : '';
+        
         card.innerHTML = `
-          <div class="logo-area">
-            <img src="${logoSrc}" alt="${name}">
+          <div class="software-header">
+            <div class="logo-area">
+              <img src="${logoSrc}" alt="${name}">
+            </div>
             <div class="title-area">
               <h2>${name}</h2>
-              <small>${item.version}</small>
+              <p class="desc">${desc}</p>
+              ${versionSection}
             </div>
           </div>
-          <p class="desc">${desc}</p>
-          <div class="buttons">${btns}</div>
+          <div class="platforms-area">
+            ${platformsHTML}
+          </div>
         `;
+        
         list.appendChild(card);
+      });
+
+      // 绑定历史版本按钮事件
+      document.querySelectorAll('.history-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          const softwareName = this.getAttribute('data-software');
+          const platform = this.getAttribute('data-platform');
+          const oldVersions = JSON.parse(this.getAttribute('data-versions'));
+          showHistoryVersions(softwareName, platform, oldVersions, e);
+        });
+      });
+
+      // 绑定图片按钮事件
+      document.querySelectorAll('.image-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          const imageUrl = this.getAttribute('data-image');
+          showImageModal(imageUrl, e);
+        });
       });
     } catch (e) {
       document.getElementById('list').innerHTML = `<p>${langData[currentLang].loadFailed}</p>`;
       console.error(e);
     }
+  }
+
+  // 显示图片弹窗
+  function showImageModal(imageUrl, event) {
+    // 防止点击事件冒泡
+    event.stopPropagation();
+    
+    // 检查是否已经存在图片弹窗
+    const existingModal = document.getElementById('image-modal');
+    if (existingModal) {
+      existingModal.remove();
+    }
+    
+    // 创建弹窗
+    const modal = document.createElement('div');
+    modal.id = 'image-modal';
+    modal.className = 'image-modal';
+    
+    // 创建弹窗内容
+    const modalContent = document.createElement('div');
+    modalContent.className = 'image-modal-content';
+    
+    // 图片容器
+    const imageContainer = document.createElement('div');
+    imageContainer.className = 'image-container';
+    
+    // 图片
+    const image = document.createElement('img');
+    image.src = imageUrl;
+    image.alt = 'QR Code';
+    image.className = 'modal-image';
+    
+    // 关闭按钮
+    const closeButton = document.createElement('button');
+    closeButton.innerHTML = '<i class="fas fa-times"></i>';
+    closeButton.className = 'close-image-btn';
+    closeButton.onclick = () => modal.remove();
+    
+    // 组装弹窗
+    imageContainer.appendChild(image);
+    modalContent.appendChild(closeButton);
+    modalContent.appendChild(imageContainer);
+    modal.appendChild(modalContent);
+    
+    // 点击弹窗外部关闭
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.remove();
+      }
+    };
+    
+    // 按ESC键关闭
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        modal.remove();
+        document.removeEventListener('keydown', handleKeyDown);
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    document.body.appendChild(modal);
   }
 
   // 页面加载完成后初始化
@@ -187,9 +470,301 @@
       border-color: #007bff;
     }
     
+    /* 软件卡片样式 */
+    .software-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border: 1px solid #eaeaea;
+    }
+    
+    .software-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    
+    .logo-area img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-right: 20px;
+    }
+    
+    .title-area h2 {
+      margin: 0 0 8px 0;
+      font-size: 1.5rem;
+      color: #333;
+    }
+    
+    .title-area .desc {
+      margin: 0;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .platforms-area {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .platform-button-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .history-btn {
+      padding: 8px 12px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: background-color 0.2s;
+    }
+    
+    .history-btn:hover {
+      background-color: #5a6268;
+    }
+    
+    /* 历史版本弹窗样式 */
+    .history-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .history-modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+    
+    .history-modal-content h3 {
+      margin: 0 0 16px 0;
+      color: #333;
+      border-bottom: 1px solid #eaeaea;
+      padding-bottom: 8px;
+    }
+    
+    .version-list {
+      margin-bottom: 20px;
+    }
+    
+    .version-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .version-link {
+      color: #007bff;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    
+    .version-link:hover {
+      text-decoration: underline;
+    }
+    
+    .no-versions {
+      color: #666;
+      font-style: italic;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .close-history-btn {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 14px;
+    }
+    
+    .close-history-btn:hover {
+      background-color: #0056b3;
+    }
+    
+    /* 版本信息样式 */
+    .version-info {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .version-tag {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      color: #495057;
+    }
+    
+    .version-tag.android {
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+      color: #155724;
+    }
+    
+    .version-tag.pc {
+      background-color: #cce7ff;
+      border-color: #b3d9ff;
+      color: #004085;
+    }
+    
+    .version-tag.ios {
+      background-color: #fff3cd;
+      border-color: #ffeaa7;
+      color: #856404;
+    }
+
+    /* 图片弹窗样式 */
+    .image-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      animation: fadeIn 0.3s ease forwards;
+    }
+    
+    .image-modal-content {
+      position: relative;
+      background: white;
+      border-radius: 12px;
+      padding: 0;
+      max-width: 90%;
+      max-height: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transform: scale(0.8);
+      animation: scaleIn 0.3s ease forwards;
+    }
+    
+    .image-container {
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 100%;
+      max-height: calc(90vh - 60px);
+      overflow: auto;
+    }
+    
+    .modal-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    
+    .close-image-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      z-index: 10;
+      transition: all 0.2s ease;
+    }
+    
+    .close-image-btn:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.1);
+    }
+    
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+    
+    @keyframes scaleIn {
+      to {
+        transform: scale(1);
+      }
+    }
+    
     @media (max-width: 768px) {
       .language-switch {
         display: none;
+      }
+      
+      .software-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .logo-area img {
+        margin-right: 0;
+        margin-bottom: 15px;
+      }
+      
+      .platforms-area {
+        flex-direction: column;
+      }
+      
+      .platform-button-group {
+        justify-content: center;
+      }
+      
+      .image-modal-content {
+        max-width: 95%;
+        max-height: 95%;
+      }
+      
+      .image-container {
+        padding: 20px;
+        max-height: calc(95vh - 40px);
+      }
+      
+      .close-image-btn {
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
       }
     }
   </style>

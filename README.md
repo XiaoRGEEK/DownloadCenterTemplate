@@ -10,3 +10,9 @@ XiaoRGEEK Software DownloadCenter website
 
 ## Deployed Website
 [https://xiaorgeek.github.io/DownloadCenterTemplate/](https://xiaorgeek.github.io/DownloadCenterTemplate/)
+
+## 生成data.json
+
+```shell
+python generate_data.py
+```

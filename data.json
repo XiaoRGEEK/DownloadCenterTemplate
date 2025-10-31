@@ -1,309 +1,514 @@
 [
     {
-        "logoSrc": "./software/image/VortaDroid.png",
+        "logoSrc": "./software/image/donkeycar.png",
         "name": {
-            "en": "RoboManager for Android",
-            "zh": "RoboManager ROS人形双足机器人android控制软件"
+            "en": "XR-DonkeyCar",
+            "zh": "XR-DonkeyCar驴车控制"
         },
-        "version": "v1.0.48",
+        "version": "v1.3.0",
         "desc": {
-            "en": "support SamuRoid humanoid bipedal robot",
-            "zh": "支持SamuRoid机甲武士人形双足机器人"
+            "en": "DonkeyCar control application",
+            "zh": "驴车APP控制软件"
         },
         "link": [
-            "./software/android/RoboManager-1.0.48.251031.b983c84-release.apk"
+            "software/android/DonkeyCar_V1.3.0.apk"
         ],
         "btnNames": {
-            "en": ["Android"],
-            "zh": ["Android"]
+            "en": [
+                "Android"
+            ],
+            "zh": [
+                "Android"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "android",
+        "platformVersions": {
+            "android": "v1.3.0"
         }
     },
     {
         "logoSrc": "./software/image/RoboManager.png",
         "name": {
-            "en": "RoboManager for SamuRoid and VortaBot",
-            "zh": "RoboManager人形机器人动作组编辑软件"
+            "en": "RoboManager",
+            "zh": "RoboManager机器人控制软件"
         },
-        "version": "v1.0.0.17",
+        "version": "v1.0.48",
         "desc": {
-            "en": "support SamuRoid and VortaBot humanoid bipedal robot",
-            "zh": "用于SamuRoid机甲武士和VortaBot人形双足机器人自定义动作组编辑。"
+            "en": "Support SamuRoid and VortaBot humanoid bipedal robots",
+            "zh": "支持SamuRoid机甲武士和VortaBot人形双足机器人"
         },
         "link": [
-            "./software/pc/RoboManager机器人动作组编辑工具V1.0.1.1.zip"
+            "software/android/RoboManager-1.0.48.251031.b983c84-release.apk"
         ],
         "btnNames": {
-            "en": ["Windows"],
-            "zh": ["Windows"]
+            "en": [
+                "Android"
+            ],
+            "zh": [
+                "Android"
+            ]
+        },
+        "oldVersion": [
+            "software/android/RoboManager-1.0.47.251015.cfd5c39-release.apk",
+            "software/android/RoboManager-1.0.40.250930.ec3dcff-release.apk",
+            "software/android/RoboManager-1.0.37.250923.1dc364f-release.apk"
+        ],
+        "platform": "android",
+        "platformVersions": {
+            "android": "v1.0.48",
+            "windows": "v1.0.1"
         }
     },
     {
-        "logoSrc": "./software/image/xr-controller.png",
+        "logoSrc": "./software/image/RoboManager.png",
         "name": {
-            "en": "XR-Controller for Android",
-            "zh": "XR-Controller for Android"
+            "en": "RoboManager",
+            "zh": "RoboManager机器人控制软件"
         },
-        "version": "v1.4.144,arm64,armv7a",
+        "version": "v1.0.1",
         "desc": {
-            "en": "support X-series、Jetbot V2.0、DonkeyCar and Bionic robots",
-            "zh": "支持 X 系列、Jetbot V2.0、DonkeyCar 和仿生机器人"
+            "en": "Support SamuRoid and VortaBot humanoid bipedal robots",
+            "zh": "支持SamuRoid机甲武士和VortaBot人形双足机器人"
         },
         "link": [
-            "./software/android/XR-Controller_V1.4.144.251030.ac19f2c_arm64-v8a-release.apk",
-            "./software/android/XR-Controller_V1.4.144.251030.ac19f2c_armeabi-v7a-release.apk"
+            "software/pc/RoboManager机器人动作组编辑工具V1.0.1.1.zip"
         ],
         "btnNames": {
-            "en": ["Android 64-bit", "Android 32-bit"],
-            "zh": ["Android 64位", "Android 32位"]
-        }
-    },
-    {
-        "logoSrc": "./software/image/xr-controller.png",
-        "name": {
-            "en": "Corgi for iOS",
-            "zh": "Corgi for iOS"
+            "en": [
+                "Windows"
+            ],
+            "zh": [
+                "Windows"
+            ]
         },
-        "version": "v1.2.0",
-        "desc": {
-            "en": "support Bionic robots like hexapod、corgi dog.This is part of the iOS implementation of the xr-controller",
-            "zh": "支持六足机器人、柯基狗等仿生机器人的苹果APP"
-        },
-        "link": [
-            "./software/image/xr-controller_IOS.png"
+        "oldVersion": [
+            "software/pc/RoboManager机器人动作组编辑工具V1.0.0.18.zip"
         ],
-        "btnNames": {
-            "en": ["iOS Code"],
-            "zh": ["iOS 二维码"]
-        }
-    },
-    {
-        "logoSrc": "./software/image/rosxrmobile.png",
-        "name": {
-            "en": "ROSXRMobile for Android",
-            "zh": "ROSXRMobile Android 版"
-        },
-        "version": "v1.6.87",
-        "desc": {
-            "en": "support jetson nano、raspberry pi and sunrise ros series robot. Software is only android support",
-            "zh": "支持 jetson nano、树莓派和地平线等ros 系列机器人。软件仅支持 Android"
-        },
-        "link": [
-            "./software/android/ROSXRMobile V1.6.87.250115.cf4f37a.apk"
-        ],
-        "btnNames": {
-            "en": ["Android"],
-            "zh": ["Android"]
+        "platform": "windows",
+        "platformVersions": {
+            "android": "v1.0.48",
+            "windows": "v1.0.1"
         }
     },
     {
         "logoSrc": "./software/image/ros2mobile.png",
         "name": {
-            "en": "ROS2Mobile for Android",
-            "zh": "ROS2Mobile Android 版"
+            "en": "ROS2Mobile",
+            "zh": "ROS2Mobile移动端控制软件"
         },
-        "version": "v1.0.21,arm64",
+        "version": "v1.0.21",
         "desc": {
             "en": "A ROS2 Android App",
             "zh": "ROS2机器人控制APP"
         },
         "link": [
-            "./software/android/ROS2Mobile_V1.0.21.240604.ee1d8af_arm64-v8a-release.apk"
+            "software/android/ROS2Mobile_V1.0.21.240604.ee1d8af_arm64-v8a-release.apk"
         ],
         "btnNames": {
-            "en": ["Android"],
-            "zh": ["Android"]
+            "en": [
+                "Android"
+            ],
+            "zh": [
+                "Android"
+            ]
+        },
+        "oldVersion": [
+            "software/android/ROS2Mobile_V1.0.20.240312.ee1d8af.apk"
+        ],
+        "platform": "android",
+        "platformVersions": {
+            "android": "v1.0.21"
         }
     },
     {
         "logoSrc": "./software/image/roscollie.png",
         "name": {
-            "en": "ROSCollie for Android",
-            "zh": "ROSCollie Android 版"
+            "en": "ROSCollie",
+            "zh": "ROSCollie四足机器人控制"
         },
-        "version": "v1.6.60",
+        "version": "v1.0",
         "desc": {
-            "en": "colie dog ros application",
+            "en": "Collie dog ROS application",
             "zh": "ROS大四足狗应用"
         },
         "link": [
-            "./software/android/roscollie.apk"
+            "software/android/roscollie.apk"
         ],
         "btnNames": {
-            "en": ["Android"],
-            "zh": ["Android"]
+            "en": [
+                "Android"
+            ],
+            "zh": [
+                "Android"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "android",
+        "platformVersions": {
+            "android": "v1.0"
+        }
+    },
+    {
+        "logoSrc": "./software/image/rosxrmobile.png",
+        "name": {
+            "en": "ROSXRMobile",
+            "zh": "ROSXRMobile移动端控制软件"
+        },
+        "version": "v1.6.87",
+        "desc": {
+            "en": "Support jetson nano, raspberry pi and sunrise ros series robot",
+            "zh": "支持 jetson nano、树莓派和地平线等ros系列机器人"
+        },
+        "link": [
+            "software/android/ROSXRMobile V1.6.87.250115.cf4f37a.apk"
+        ],
+        "btnNames": {
+            "en": [
+                "Android"
+            ],
+            "zh": [
+                "Android"
+            ]
+        },
+        "oldVersion": [
+            "software/android/ROSXRMobile V1.6.86.250107.8e48d4d.apk",
+            "software/android/ROSXRMobile V1.6.71.230508.97a7d55.apk"
+        ],
+        "platform": "android",
+        "platformVersions": {
+            "android": "v1.6.87"
         }
     },
     {
         "logoSrc": "./software/image/wifirobot.png",
         "name": {
-            "en": "WifiRobot for iOS/Android",
-            "zh": "WifiRobot iOS/Android 版"
+            "en": "WifiRobot",
+            "zh": "WifiRobot无线机器人控制"
         },
         "version": "v2.37",
         "desc": {
-            "en": "Wireless Robot Car. <span style='color:red'>Android software no longer maintained, use xr-controller ASAP.</span>",
-            "zh": "无线机器人小车。<span style='color:red'>Android 软件不再维护，请尽快使用 xr-controller。</span>"
+            "en": "Wireless Robot Car control software",
+            "zh": "无线机器人小车控制软件"
         },
         "link": [
-            "./software/android/WiFiRobot_V2.37.apk",
-            "./software/image/wifirobot-ios.png"
+            "software/android/WiFiRobot_V2.37.apk"
         ],
         "btnNames": {
-            "en": ["Android", "iOS Code"],
-            "zh": ["Android", "iOS 二维码"]
+            "en": [
+                "Android"
+            ],
+            "zh": [
+                "Android"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "android",
+        "platformVersions": {
+            "android": "v2.37",
+            "windows": "v2.7.1",
+            "ios": "v1.0"
         }
     },
     {
-        "logoSrc": "./software/image/wifirobot-pc.png",
+        "logoSrc": "./software/image/wifirobot.png",
         "name": {
-            "en": "WifiRobot for Window",
-            "zh": "WifiRobot Windows 版"
+            "en": "WifiRobot",
+            "zh": "WifiRobot无线机器人控制"
         },
-        "version": "V2.7.1",
+        "version": "v2.7.1",
         "desc": {
-            "en": "support win7、win8、win10 and win11. Suitable for most products, please contact customer service for details",
-            "zh": "支持 win7、win8、win10 和 win11。适用于大多数产品，详情请联系客服"
+            "en": "Wireless Robot Car control software",
+            "zh": "无线机器人小车控制软件"
         },
         "link": [
-            "./software/pc/WIFIRobot_V2.7.1_Setup.exe"
+            "software/pc/WIFIRobot_V2.7.1_Setup.exe"
         ],
         "btnNames": {
-            "en": ["Windows"],
-            "zh": ["Windows"]
+            "en": [
+                "Windows"
+            ],
+            "zh": [
+                "Windows"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "windows",
+        "platformVersions": {
+            "android": "v2.37",
+            "windows": "v2.7.1",
+            "ios": "v1.0"
         }
     },
     {
-        "logoSrc": "./software/image/donkeycar.png",
+        "logoSrc": "./software/image/wifirobot.png",
         "name": {
-            "en": "XR-DonkeyCar for Android",
-            "zh": "XR-DonkeyCar Android 版"
+            "en": "WifiRobot",
+            "zh": "WifiRobot无线机器人控制"
         },
-        "version": "v1.6",
+        "version": "v1.0",
         "desc": {
-            "en": "only android support. <span style='color:red'>No longer maintained, use xr-controller ASAP.</span>",
-            "zh": "驴车APP，仅支持Android。<span style='color:red'>目前不再维护，请使用 xr-controller。</span>"
+            "en": "Wireless Robot Car control software",
+            "zh": "无线机器人小车控制软件"
         },
         "link": [
-            "./software/android/DonkeyCar_V1.3.0.apk"
+            "software/ios/wifirobot-ios.png"
         ],
         "btnNames": {
-            "en": ["Android"],
-            "zh": ["Android"]
+            "en": [
+                "iOS Code"
+            ],
+            "zh": [
+                "iOS 二维码"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "ios",
+        "platformVersions": {
+            "android": "v2.37",
+            "windows": "v2.7.1",
+            "ios": "v1.0"
         }
     },
     {
         "logoSrc": "./software/image/wulibot.png",
         "name": {
-            "en": "WuliBot for Android",
-            "zh": "WuliBot Android"
+            "en": "WuliBot",
+            "zh": "WuliBot瓦力机器人控制"
         },
-        "version": "v1.1",
+        "version": "v1.0",
         "desc": {
-            "en": "support wulibot robot",
+            "en": "Support wulibot robot",
             "zh": "支持瓦力机器人"
         },
         "link": [
-            "./software/android/wulibot.apk"
+            "software/android/wulibot.apk"
         ],
         "btnNames": {
-            "en": ["Android"],
-            "zh": ["Android"]
+            "en": [
+                "Android"
+            ],
+            "zh": [
+                "Android"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "android",
+        "platformVersions": {
+            "android": "v1.0",
+            "ios": "v1.0"
+        }
+    },
+    {
+        "logoSrc": "./software/image/wulibot.png",
+        "name": {
+            "en": "WuliBot",
+            "zh": "WuliBot瓦力机器人控制"
+        },
+        "version": "v1.0",
+        "desc": {
+            "en": "Support wulibot robot",
+            "zh": "支持瓦力机器人"
+        },
+        "link": [
+            "software/ios/wulibot-code.png"
+        ],
+        "btnNames": {
+            "en": [
+                "iOS Code"
+            ],
+            "zh": [
+                "iOS 二维码"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "ios",
+        "platformVersions": {
+            "android": "v1.0",
+            "ios": "v1.0"
+        }
+    },
+    {
+        "logoSrc": "./software/image/xr-controller.png",
+        "name": {
+            "en": "XR-Controller",
+            "zh": "XR-Controller机器人控制器"
+        },
+        "version": "v1.4.144",
+        "desc": {
+            "en": "Support X-series, Jetbot V2.0, DonkeyCar and Bionic robots",
+            "zh": "支持 X 系列、Jetbot V2.0、DonkeyCar 和仿生机器人"
+        },
+        "link": [
+            "software/android/XR-Controller_V1.4.144.251030.ac19f2c_arm64-v8a-release.apk"
+        ],
+        "btnNames": {
+            "en": [
+                "Android"
+            ],
+            "zh": [
+                "Android"
+            ]
+        },
+        "oldVersion": [
+            "software/android/XR-Controller_V1.4.144.251030.ac19f2c_armeabi-v7a-release.apk",
+            "software/android/XR-Controller_V1.4.143.250603.91316e0_arm64-v8a-release.apk",
+            "software/android/XR-Controller_V1.4.143.250603.91316e0_armeabi-v7a-release.apk",
+            "software/android/XR-Controller_V1.4.141.250107.dd4f546_arm64-v8a-release.apk",
+            "software/android/XR-Controller_V1.4.141.250107.dd4f546_armeabi-v7a-release.apk",
+            "software/android/XR-Controller_V1.4.139.240604.1d1b340_arm64-v8a-release.apk",
+            "software/android/XR-Controller_V1.4.139.240604.1d1b340_armeabi-v7a-release.apk",
+            "software/android/XR-Controller V1.4.136.240510.48048d8.apk",
+            "software/android/XR-Controller V1.4.134.240509.aa5a471.apk",
+            "software/android/XR-Controller V1.4.133.240328.5e14feb.apk"
+        ],
+        "platform": "android",
+        "platformVersions": {
+            "android": "v1.4.144",
+            "ios": "v1.0"
+        }
+    },
+    {
+        "logoSrc": "./software/image/xr-controller.png",
+        "name": {
+            "en": "XR-Controller",
+            "zh": "XR-Controller机器人控制器"
+        },
+        "version": "v1.0",
+        "desc": {
+            "en": "Support X-series, Jetbot V2.0, DonkeyCar and Bionic robots",
+            "zh": "支持 X 系列、Jetbot V2.0、DonkeyCar 和仿生机器人"
+        },
+        "link": [
+            "software/ios/xr-controller_IOS.png"
+        ],
+        "btnNames": {
+            "en": [
+                "iOS Code"
+            ],
+            "zh": [
+                "iOS 二维码"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "ios",
+        "platformVersions": {
+            "android": "v1.4.144",
+            "ios": "v1.0"
         }
     },
     {
         "logoSrc": "./software/image/xrbitcar.png",
         "name": {
-            "en": "XRBitCar for iOS/Android",
-            "zh": "XRBitCar iOS/Android 版"
+            "en": "XRBitCar",
+            "zh": "XRBitCar Micro:bit编程"
         },
-        "version": "v3.2.1",
+        "version": "v1.0",
         "desc": {
             "en": "Micro:bit Robot Control and programming APP",
             "zh": "Micro:bit图形化编程APP"
         },
         "link": [
-            "./software/android/xrbitcar.apk",
-            "./software/image/xrbitcar-ios.png"
+            "software/android/xrbitcar.apk"
         ],
         "btnNames": {
-            "en": ["Android", "iOS Code"],
-            "zh": ["Android", "iOS 二维码"]
+            "en": [
+                "Android"
+            ],
+            "zh": [
+                "Android"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "android",
+        "platformVersions": {
+            "android": "v1.0",
+            "ios": "v1.0"
+        }
+    },
+    {
+        "logoSrc": "./software/image/xrbitcar.png",
+        "name": {
+            "en": "XRBitCar",
+            "zh": "XRBitCar Micro:bit编程"
+        },
+        "version": "v1.0",
+        "desc": {
+            "en": "Micro:bit Robot Control and programming APP",
+            "zh": "Micro:bit图形化编程APP"
+        },
+        "link": [
+            "software/ios/xrbitcar-ios.png"
+        ],
+        "btnNames": {
+            "en": [
+                "iOS Code"
+            ],
+            "zh": [
+                "iOS 二维码"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "ios",
+        "platformVersions": {
+            "android": "v1.0",
+            "ios": "v1.0"
         }
     },
     {
         "logoSrc": "./software/image/hexapod.png",
         "name": {
-            "en": "Hexapod For PC",
-            "zh": "Hexapod For PC"
+            "en": "Hexapod",
+            "zh": "Hexapod六足机器人"
         },
         "version": "v1.0.2",
         "desc": {
-            "en": "Hexapod for Window. The software provides a simulation system but is <span style='color:red'>no longer maintained</span>",
-            "zh": "六足机器人 Windows 版。该软件提供仿真系统，<span style='color:red'>目前不再维护</span>"
+            "en": "Hexapod robot control software",
+            "zh": "六足机器人控制软件"
         },
         "link": [
-            "./software/pc/hexapod-1.0.2.zip"
+            "software/pc/hexapod-1.0.2.zip"
         ],
         "btnNames": {
-            "en": ["Windows"],
-            "zh": ["Windows"]
-        }
-    },
-    {
-        "logoSrc": "./software/image/smart-arm.png",
-        "name": {
-            "en": "AI Robotic-Arm Software",
-            "zh": "AI Robotic-Arm Software"
+            "en": [
+                "Windows"
+            ],
+            "zh": [
+                "Windows"
+            ]
         },
-        "version": "v1.0.9",
-        "desc": {
-            "en": "A software for AI Robotic-Arm serial product. Support win7、win10、win11",
-            "zh": "AI 六自由度树莓派机械臂系列产品软件。支持 win7、win10、win11"
-        },
-        "link": [
-            "./software/pc/smart-arm Setup 1.0.9.exe"
-        ],
-        "btnNames": {
-            "en": ["Windows"],
-            "zh": ["Windows"]
+        "oldVersion": [],
+        "platform": "windows",
+        "platformVersions": {
+            "windows": "v1.0.2"
         }
     },
     {
         "logoSrc": "https://www.cleverfiles.com/howto/wp-content/uploads/2018/04/what-is-zip.png",
         "name": {
-            "en": "A RobotKit Software",
-            "zh": "RobotKit 软件"
+            "en": "RobotKit",
+            "zh": "RobotKit编程软件"
         },
-        "version": "v2.0.0",
+        "version": "v1.0",
         "desc": {
-            "en": "A software for PWM Servo. Support win all",
-            "zh": "24路PWM舵机变成软件。支持所有 Windows 系统"
+            "en": "PWM Servo programming software",
+            "zh": "24路PWM舵机编程软件"
         },
         "link": [
-            "./software/pc/Robotkit.zip"
+            "software/pc/Robotkit.zip"
         ],
         "btnNames": {
-            "en": ["Windows"],
-            "zh": ["Windows"]
-        }
-    },
-    {
-        "logoSrc": "./software/image/xr-servo.png",
-        "name": {
-            "en": "A Bus Servo Control Terminal Software",
-            "zh": "小R总线舵机控制终端软件"
+            "en": [
+                "Windows"
+            ],
+            "zh": [
+                "Windows"
+            ]
         },
-        "version": "v1.2.5",
-        "desc": {
-            "en": "A software for Bus Servo. Support win 7+",
-            "zh": "小R总线舵机软件。支持XR-3230等舵机，适用于win 7以上系统"
-        },
-        "link": [
-            "./software/pc/xr-servo-1.2.5.exe"
-        ],
-        "btnNames": {
-            "en": ["Windows"],
-            "zh": ["Windows"]
+        "oldVersion": [],
+        "platform": "windows",
+        "platformVersions": {
+            "windows": "v1.0"
         }
     }
 ]
