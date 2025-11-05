@@ -97,7 +97,7 @@ SOFTWARE_INFO = {
         "desc_zh": "24路PWM舵机编程软件",
         "logo": "https://www.cleverfiles.com/howto/wp-content/uploads/2018/04/what-is-zip.png"
     },
-    "XRServo": {
+    "xr-servo": {
         "en": "XR Servo Control Terminal",
         "zh": "小R总线舵机控制终端",
         "desc_en": "Bus Servo control terminal software",
