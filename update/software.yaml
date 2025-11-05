@@ -1,3 +1,8 @@
+humanoid:
+  name: Samuroid
+  version: 1.1.1
+  url: firmware/Samuroid_action-1.2.5.bin
+  
 xr-servo:
   name: xr-servo
   version: 1.2.5
