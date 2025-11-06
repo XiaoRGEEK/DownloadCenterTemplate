@@ -1,8 +1,9 @@
-humanoid:
+Samuroid_action_file:
   name: Samuroid
   version: 1.2.5
   url: firmware/Samuroid_action-1.2.5.bin
 
+Vortabot_action_file:
   name: Vortabot
   version: 1.2.5
   url: firmware/Vortabot_action-1.2.5.bin
