@@ -3,7 +3,7 @@ humanoid:
   version: 1.2.5
   url: firmware/Samuroid_action-1.2.5.bin
 
-  name: VortaBot
+  name: Vortabot
   version: 1.2.5
   url: firmware/VortaBot_action-1.2.5.bin
   
