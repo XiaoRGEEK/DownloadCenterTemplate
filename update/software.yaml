@@ -5,7 +5,7 @@ humanoid:
 
   name: Vortabot
   version: 1.2.5
-  url: firmware/VortaBot_action-1.2.5.bin
+  url: firmware/Vortabot_action-1.2.5.bin
   
 xr-servo:
   name: xr-servo
