@@ -49,15 +49,15 @@ SOFTWARE_INFO = {
         "logo": "./software/image/roscollie.png"
     },
     "WifiRobot": {
-        "en": "WifiRobot",
+        "en": "WifiRobot(No longer maintained, use XR-Controller)",
         "zh": "WifiRobot无线机器人控制",
         "desc_en": "Wireless Robot Car control software",
         "desc_zh": "无线机器人小车控制软件",
         "logo": "./software/image/wifirobot.png"
     },
     "DonkeyCar": {
-        "en": "XR-DonkeyCar",
-        "zh": "XR-DonkeyCar驴车控制",
+        "en": "XR-DonkeyCar (No longer maintained)",
+        "zh": "XR-DonkeyCar驴车控制(不再维护)",
         "desc_en": "DonkeyCar control application",
         "desc_zh": "驴车APP控制软件",
         "logo": "./software/image/donkeycar.png"
@@ -83,7 +83,7 @@ SOFTWARE_INFO = {
         "desc_zh": "六足机器人控制软件",
         "logo": "./software/image/hexapod.png"
     },
-    "SmartArm": {
+    "smart-arm": {
         "en": "AI Robotic-Arm",
         "zh": "AI机械臂控制软件",
         "desc_en": "AI Robotic-Arm control software",

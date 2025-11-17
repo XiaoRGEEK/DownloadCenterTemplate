@@ -2,8 +2,8 @@
     {
         "logoSrc": "./software/image/donkeycar.png",
         "name": {
-            "en": "XR-DonkeyCar",
-            "zh": "XR-DonkeyCar驴车控制"
+            "en": "XR-DonkeyCar (No longer maintained)",
+            "zh": "XR-DonkeyCar驴车控制(不再维护)"
         },
         "version": "v1.3.0",
         "desc": {
@@ -185,7 +185,7 @@
     {
         "logoSrc": "./software/image/wifirobot.png",
         "name": {
-            "en": "WifiRobot",
+            "en": "WifiRobot(No longer maintained, use XR-Controller)",
             "zh": "WifiRobot无线机器人控制"
         },
         "version": "v2.37",
@@ -215,7 +215,7 @@
     {
         "logoSrc": "./software/image/wifirobot.png",
         "name": {
-            "en": "WifiRobot",
+            "en": "WifiRobot(No longer maintained, use XR-Controller)",
             "zh": "WifiRobot无线机器人控制"
         },
         "version": "v2.7.1",
@@ -245,7 +245,7 @@
     {
         "logoSrc": "./software/image/wifirobot.png",
         "name": {
-            "en": "WifiRobot",
+            "en": "WifiRobot(No longer maintained, use XR-Controller)",
             "zh": "WifiRobot无线机器人控制"
         },
         "version": "v1.0",
@@ -511,6 +511,64 @@
         "platform": "windows",
         "platformVersions": {
             "windows": "v1.0"
+        }
+    },
+    {
+        "logoSrc": "./software/image/smart-arm.png",
+        "name": {
+            "en": "AI Robotic-Arm",
+            "zh": "AI机械臂控制软件"
+        },
+        "version": "v1.0.9",
+        "desc": {
+            "en": "AI Robotic-Arm control software",
+            "zh": "AI六自由度树莓派机械臂控制软件"
+        },
+        "link": [
+            "software/pc/smart-arm Setup 1.0.9.exe"
+        ],
+        "btnNames": {
+            "en": [
+                "Windows"
+            ],
+            "zh": [
+                "Windows"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "windows",
+        "platformVersions": {
+            "windows": "v1.0.9",
+            "mac": "v1.0.5"
+        }
+    },
+    {
+        "logoSrc": "./software/image/smart-arm.png",
+        "name": {
+            "en": "AI Robotic-Arm",
+            "zh": "AI机械臂控制软件"
+        },
+        "version": "v1.0.5",
+        "desc": {
+            "en": "AI Robotic-Arm control software",
+            "zh": "AI六自由度树莓派机械臂控制软件"
+        },
+        "link": [
+            "software/pc/smart-arm-1.0.5.dmg"
+        ],
+        "btnNames": {
+            "en": [
+                "Mac"
+            ],
+            "zh": [
+                "Mac"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "mac",
+        "platformVersions": {
+            "windows": "v1.0.9",
+            "mac": "v1.0.5"
         }
     },
     {
