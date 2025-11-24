@@ -577,13 +577,13 @@
             "en": "XR Servo Control Terminal",
             "zh": "小R总线舵机控制终端"
         },
-        "version": "v1.2.5",
+        "version": "v1.2.6",
         "desc": {
             "en": "Bus Servo control terminal software",
             "zh": "小R总线舵机控制终端软件"
         },
         "link": [
-            "software/pc/xr-servo-1.2.5.exe"
+            "software/pc/xr-servo-1.2.6.exe"
         ],
         "btnNames": {
             "en": [
@@ -594,6 +594,7 @@
             ]
         },
         "oldVersion": [
+            "software/pc/xr-servo-1.2.5.exe",
             "software/pc/xr-servo-1.2.3.exe",
             "software/pc/xr-servo-1.2.2.exe",
             "software/pc/xr-servo-1.2.1.exe",
@@ -602,7 +603,7 @@
         ],
         "platform": "windows",
         "platformVersions": {
-            "windows": "v1.2.5"
+            "windows": "v1.2.6"
         }
     }
 ]
