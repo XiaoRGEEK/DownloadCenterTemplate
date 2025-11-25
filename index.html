@@ -45,7 +45,10 @@
       "download": "Download",
       "history": "History",
       "oldVersions": "Old Versions",
-      "close": "Close"
+      "close": "Close",
+      "tools": "Tools",
+      "toolsList": "Tools List",
+      "noTools": "No tools available"
     },
     "zh": {
       "loading": "加载中…",
@@ -56,7 +59,10 @@
       "download": "下载",
       "history": "历史版本",
       "oldVersions": "旧版本",
-      "close": "关闭"
+      "close": "关闭",
+      "tools": "工具",
+      "toolsList": "工具列表",
+      "noTools": "暂无工具"
     }
   };
 
@@ -256,6 +262,8 @@
             const btnNames = getTextByLang(item.btnNames, currentLang);
             const links = item.link || [];
             const oldVersions = item.oldVersion || [];
+            const hasTools = item.hasTools || false;
+            const tools = item.tools || [];
             
             // 为每个链接创建按钮
             return links.map((url, i) => {
@@ -287,6 +295,13 @@
                   ${langData[currentLang].history}
                 </button>` : '';
               
+              // 如果有工具，添加工具按钮
+              const toolsButton = hasTools && tools.length > 0 ?
+                `<button class="tools-btn" data-software="${name}" data-tools='${JSON.stringify(tools)}'>
+                  <i class="fas fa-tools"></i>
+                  ${langData[currentLang].tools}
+                </button>` : '';
+              
               // 如果是图片，使用弹窗显示，否则正常下载
               const buttonHTML = isImage ?
                 `<button class="btn ${cls} image-btn" data-image="${url}">
@@ -302,6 +317,7 @@
                 <div class="platform-button-group">
                   ${buttonHTML}
                   ${historyButton}
+                  ${toolsButton}
                 </div>
               `;
             }).join('');
@@ -358,6 +374,15 @@
           const platform = this.getAttribute('data-platform');
           const oldVersions = JSON.parse(this.getAttribute('data-versions'));
           showHistoryVersions(softwareName, platform, oldVersions, e);
+        });
+      });
+
+      // 绑定工具按钮事件
+      document.querySelectorAll('.tools-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          const softwareName = this.getAttribute('data-software');
+          const tools = JSON.parse(this.getAttribute('data-tools'));
+          showToolsModal(softwareName, tools, e);
         });
       });
 
@@ -432,6 +457,108 @@
     };
     
     document.addEventListener('keydown', handleKeyDown);
+    document.body.appendChild(modal);
+  }
+
+  // 显示工具弹窗
+  function showToolsModal(softwareName, tools, event) {
+    // 防止点击事件冒泡
+    event.stopPropagation();
+    
+    // 检查是否已经存在工具弹窗
+    const existingModal = document.getElementById('tools-modal');
+    if (existingModal) {
+      existingModal.remove();
+    }
+    
+    // 创建弹窗
+    const modal = document.createElement('div');
+    modal.id = 'tools-modal';
+    modal.className = 'tools-modal';
+    
+    // 创建弹窗内容
+    const modalContent = document.createElement('div');
+    modalContent.className = 'tools-modal-content';
+    
+    // 弹窗标题
+    const title = document.createElement('h3');
+    title.textContent = `${softwareName} - ${langData[currentLang].toolsList}`;
+    
+    // 工具列表
+    const toolsList = document.createElement('div');
+    toolsList.className = 'tools-list';
+    
+    if (tools && tools.length > 0) {
+      tools.forEach(tool => {
+        const toolItem = document.createElement('div');
+        toolItem.className = 'tool-item';
+        
+        // 工具图标和名称
+        const toolHeader = document.createElement('div');
+        toolHeader.className = 'tool-header';
+        
+        const toolIcon = document.createElement('img');
+        toolIcon.src = tool.logo || './software/image/xr-controller.png';
+        toolIcon.alt = tool.name;
+        toolIcon.className = 'tool-icon';
+        
+        const toolName = document.createElement('div');
+        toolName.className = 'tool-name';
+        toolName.textContent = tool.name;
+        
+        toolHeader.appendChild(toolIcon);
+        toolHeader.appendChild(toolName);
+        
+        // 工具描述
+        const toolDesc = document.createElement('div');
+        toolDesc.className = 'tool-desc';
+        toolDesc.textContent = getTextByLang({en: tool.desc_en, zh: tool.desc_zh}, currentLang);
+        
+        // 工具版本和平台
+        const toolInfo = document.createElement('div');
+        toolInfo.className = 'tool-info';
+        toolInfo.textContent = `${langData[currentLang].download} (${tool.platform} v${tool.version})`;
+        
+        // 下载按钮
+        const downloadButton = document.createElement('a');
+        downloadButton.href = tool.file_path;
+        downloadButton.download = tool.file_path.split('/').pop();
+        downloadButton.target = '_blank';
+        downloadButton.className = 'tool-download-btn';
+        downloadButton.textContent = langData[currentLang].download;
+        
+        toolItem.appendChild(toolHeader);
+        toolItem.appendChild(toolDesc);
+        toolItem.appendChild(toolInfo);
+        toolItem.appendChild(downloadButton);
+        toolsList.appendChild(toolItem);
+      });
+    } else {
+      const noTools = document.createElement('p');
+      noTools.textContent = langData[currentLang].noTools;
+      noTools.className = 'no-tools';
+      toolsList.appendChild(noTools);
+    }
+    
+    // 关闭按钮
+    const closeButton = document.createElement('button');
+    closeButton.textContent = langData[currentLang].close;
+    closeButton.className = 'close-tools-btn';
+    closeButton.onclick = () => modal.remove();
+    
+    // 组装弹窗
+    modalContent.appendChild(title);
+    modalContent.appendChild(toolsList);
+    modalContent.appendChild(closeButton);
+    modal.appendChild(modalContent);
+    
+    // 点击弹窗外部关闭
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.remove();
+      }
+    };
+    
     document.body.appendChild(modal);
   }
 
@@ -643,6 +770,143 @@
       background-color: #fff3cd;
       border-color: #ffeaa7;
       color: #856404;
+    }
+
+    /* 工具按钮样式 */
+    .tools-btn {
+      padding: 8px 12px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: background-color 0.2s;
+    }
+
+    .tools-btn:hover {
+      background-color: #218838;
+    }
+
+    /* 工具弹窗样式 */
+    .tools-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .tools-modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .tools-modal-content h3 {
+      margin: 0 0 16px 0;
+      color: #333;
+      border-bottom: 1px solid #eaeaea;
+      padding-bottom: 8px;
+    }
+
+    .tools-list {
+      margin-bottom: 20px;
+    }
+
+    .tool-item {
+      padding: 16px;
+      border: 1px solid #eaeaea;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background-color: #f8f9fa;
+    }
+
+    .tool-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .tool-icon {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+
+    .tool-name {
+      font-weight: 600;
+      color: #333;
+      font-size: 16px;
+    }
+
+    .tool-desc {
+      color: #666;
+      margin-bottom: 8px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .tool-info {
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .tool-download-btn {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+
+    .tool-download-btn:hover {
+      background-color: #0056b3;
+      color: white;
+      text-decoration: none;
+    }
+
+    .no-tools {
+      color: #666;
+      font-style: italic;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .close-tools-btn {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    .close-tools-btn:hover {
+      background-color: #0056b3;
     }
 
     /* 图片弹窗样式 */

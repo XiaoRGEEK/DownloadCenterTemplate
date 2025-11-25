@@ -46,7 +46,15 @@ SOFTWARE_INFO = {
         "zh": "ROSCollie四足机器人控制",
         "desc_en": "Collie dog ROS application",
         "desc_zh": "ROS大四足狗应用",
-        "logo": "./software/image/roscollie.png"
+        "logo": "./software/image/roscollie.png",
+        "tools": [
+            {
+                "name": "XRCollieTool",
+                "desc_zh": "舵机偏差调节工具",
+                "desc_en": "Servo deviation adjustment tool",
+                "logo": "./software/image/XRCollieTool.png"
+            }
+        ]
     },
     "WifiRobot": {
         "en": "WifiRobot(No longer maintained, use XR-Controller)",
@@ -251,7 +259,57 @@ def get_latest_versions(software_data: Dict) -> Dict[str, Dict]:
     return latest_versions
 
 
-def generate_data_json(latest_versions: Dict) -> List[Dict]:
+def scan_tools_files(software_data: Dict) -> Dict[str, Dict]:
+    """扫描并处理工具软件文件"""
+    tools_data = {}
+    
+    print("扫描工具软件文件...")
+    
+    # 检查SOFTWARE_INFO中哪些软件有tools字段
+    for software_name, software_info in SOFTWARE_INFO.items():
+        if 'tools' in software_info and software_info['tools']:
+            print(f"软件 {software_name} 包含工具: {[tool['name'] for tool in software_info['tools']]}")
+            
+            for tool_info in software_info['tools']:
+                tool_name = tool_info['name']
+                
+                # 在软件数据中查找对应的工具软件
+                if tool_name in software_data:
+                    tool_platforms = software_data[tool_name]
+                    
+                    # 获取工具的最新版本信息
+                    latest_tool_version = None
+                    for platform, files in tool_platforms.items():
+                        if files:
+                            # 按版本号排序，获取最新版本
+                            sorted_files = sorted(files, key=lambda x: parse_version(x['version']), reverse=True)
+                            latest_tool_version = sorted_files[0]
+                            break
+                    
+                    if latest_tool_version:
+                        if software_name not in tools_data:
+                            tools_data[software_name] = []
+                        
+                        tools_data[software_name].append({
+                            'name': tool_name,
+                            'desc_zh': tool_info.get('desc_zh', ''),
+                            'desc_en': tool_info.get('desc_en', ''),
+                            'logo': tool_info.get('logo', ''),
+                            'version': latest_tool_version['version'],
+                            'file_path': latest_tool_version['file_path'],
+                            'platform': latest_tool_version['platform']
+                        })
+                        print(f"找到工具: {tool_name} 版本: {latest_tool_version['version']} 平台: {latest_tool_version['platform']}")
+                    else:
+                        print(f"警告: 未找到工具 {tool_name} 的软件文件")
+                else:
+                    print(f"警告: 工具 {tool_name} 在软件数据中不存在")
+    
+    print(f"扫描完成，共找到 {sum(len(tools) for tools in tools_data.values())} 个工具")
+    return tools_data
+
+
+def generate_data_json(latest_versions: Dict, tools_data: Dict) -> List[Dict]:
     """生成data.json数据结构"""
     data = []
     
@@ -267,6 +325,9 @@ def generate_data_json(latest_versions: Dict) -> List[Dict]:
             if versions:
                 latest = versions['latest']
                 platform_versions[platform] = f"v{latest['version']}" if latest['version'] != "unknown" else "v1.0"
+        
+        # 检查该软件是否有工具
+        has_tools = software_name in tools_data and len(tools_data[software_name]) > 0
         
         # 为每个平台创建单独的条目
         for platform, versions in platforms.items():
@@ -320,11 +381,13 @@ def generate_data_json(latest_versions: Dict) -> List[Dict]:
                 },
                 "oldVersion": old_version_links,
                 "platform": platform,
-                "platformVersions": platform_versions  # 添加各平台版本信息
+                "platformVersions": platform_versions,  # 添加各平台版本信息
+                "hasTools": has_tools,  # 标记该软件是否有工具
+                "tools": tools_data.get(software_name, [])  # 添加工具信息
             }
             
             data.append(entry)
-            print(f"生成条目: {software_info['en']} - {platform} - 版本: {latest['version']} - 旧版本: {len(old_versions)}")
+            print(f"生成条目: {software_info['en']} - {platform} - 版本: {latest['version']} - 旧版本: {len(old_versions)} - 工具: {len(tools_data.get(software_name, []))}")
     
     return data
 
@@ -339,8 +402,11 @@ def main():
     # 获取最新版本
     latest_versions = get_latest_versions(software_data)
     
+    # 扫描工具文件
+    tools_data = scan_tools_files(software_data)
+    
     # 生成data.json数据
-    data = generate_data_json(latest_versions)
+    data = generate_data_json(latest_versions, tools_data)
     
     # 保存到文件
     with open("data.json", 'w', encoding='utf-8') as f:
@@ -348,6 +414,7 @@ def main():
     
     print(f"\n=== 完成 ===")
     print(f"已生成包含 {len(data)} 个条目的data.json文件")
+    print(f"包含工具信息的软件: {[name for name, tools in tools_data.items() if tools]}")
     print("现在可以修改index.html实现新的界面设计")
 
 

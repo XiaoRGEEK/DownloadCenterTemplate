@@ -25,7 +25,9 @@
         "platform": "android",
         "platformVersions": {
             "android": "v1.3.0"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/RoboManager.png",
@@ -60,7 +62,9 @@
         "platformVersions": {
             "android": "v1.0.52",
             "windows": "v1.0.1"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/RoboManager.png",
@@ -91,7 +95,9 @@
         "platformVersions": {
             "android": "v1.0.52",
             "windows": "v1.0.1"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/ros2mobile.png",
@@ -121,7 +127,9 @@
         "platform": "android",
         "platformVersions": {
             "android": "v1.0.21"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/roscollie.png",
@@ -149,7 +157,19 @@
         "platform": "android",
         "platformVersions": {
             "android": "v1.0"
-        }
+        },
+        "hasTools": true,
+        "tools": [
+            {
+                "name": "XRCollieTool",
+                "desc_zh": "舵机偏差调节工具",
+                "desc_en": "Servo deviation adjustment tool",
+                "logo": "./software/image/XRCollieTool.png",
+                "version": "1.0.28",
+                "file_path": "software/android/XRCollieTool_V1.0.28.apk",
+                "platform": "android"
+            }
+        ]
     },
     {
         "logoSrc": "./software/image/rosxrmobile.png",
@@ -180,7 +200,9 @@
         "platform": "android",
         "platformVersions": {
             "android": "v1.6.87"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/wifirobot.png",
@@ -210,7 +232,9 @@
             "android": "v2.37",
             "windows": "v2.7.1",
             "ios": "v1.0"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/wifirobot.png",
@@ -240,7 +264,9 @@
             "android": "v2.37",
             "windows": "v2.7.1",
             "ios": "v1.0"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/wifirobot.png",
@@ -270,7 +296,9 @@
             "android": "v2.37",
             "windows": "v2.7.1",
             "ios": "v1.0"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/wulibot.png",
@@ -299,7 +327,9 @@
         "platformVersions": {
             "android": "v1.0",
             "ios": "v1.0"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/wulibot.png",
@@ -328,7 +358,9 @@
         "platformVersions": {
             "android": "v1.0",
             "ios": "v1.0"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/xr-controller.png",
@@ -368,7 +400,9 @@
         "platformVersions": {
             "android": "v1.4.144",
             "ios": "v1.0"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/xr-controller.png",
@@ -397,7 +431,9 @@
         "platformVersions": {
             "android": "v1.4.144",
             "ios": "v1.0"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/xrbitcar.png",
@@ -426,7 +462,9 @@
         "platformVersions": {
             "android": "v1.0",
             "ios": "v1.0"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/xrbitcar.png",
@@ -455,7 +493,9 @@
         "platformVersions": {
             "android": "v1.0",
             "ios": "v1.0"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/hexapod.png",
@@ -483,7 +523,9 @@
         "platform": "windows",
         "platformVersions": {
             "windows": "v1.0.2"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "https://www.cleverfiles.com/howto/wp-content/uploads/2018/04/what-is-zip.png",
@@ -511,7 +553,9 @@
         "platform": "windows",
         "platformVersions": {
             "windows": "v1.0"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/smart-arm.png",
@@ -540,7 +584,9 @@
         "platformVersions": {
             "windows": "v1.0.9",
             "mac": "v1.0.5"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/smart-arm.png",
@@ -569,7 +615,9 @@
         "platformVersions": {
             "windows": "v1.0.9",
             "mac": "v1.0.5"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     },
     {
         "logoSrc": "./software/image/xr-servo.png",
@@ -604,6 +652,8 @@
         "platform": "windows",
         "platformVersions": {
             "windows": "v1.2.6"
-        }
+        },
+        "hasTools": false,
+        "tools": []
     }
 ]
