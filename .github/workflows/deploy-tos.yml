@@ -1,0 +1,49 @@
+# Workflow for deploying static content to Volcengine TOS
+name: Deploy to Volcengine TOS
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow reading repository contents
+permissions:
+  contents: read
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "tos"
+  cancel-in-progress: false
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup tosutil
+        uses: banyudu/actions-setup-tosutil@v0
+        with:
+          endpoint: ${{ secrets.TOS_ENDPOINT }}
+          region: ${{ secrets.TOS_REGION }}
+          access-key-id: ${{ secrets.TOS_ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.TOS_SECRET_ACCESS_KEY }}
+          # token is optional, omit if not needed
+
+      - name: Upload to Volcengine TOS
+        run: |
+          # Copy entire repository to TOS bucket, excluding .git and .map files
+          tosutil cp -r ./ tos://${{ secrets.TOS_BUCKET }}/ \
+            -cacheControl="public,max-age=31536000,immutable" \
+            --exclude "*.map" \
+            --exclude ".git" \
+            --exclude ".git/**"
+        env:
+          TOS_ACCESS_KEY_ID: ${{ secrets.TOS_ACCESS_KEY_ID }}
+          TOS_SECRET_ACCESS_KEY: ${{ secrets.TOS_SECRET_ACCESS_KEY }}

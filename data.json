@@ -35,13 +35,13 @@
             "en": "RoboManager",
             "zh": "RoboManager机器人控制软件"
         },
-        "version": "v1.0.52",
+        "version": "v1.0.56",
         "desc": {
             "en": "Support SamuRoid and VortaBot humanoid bipedal robots",
             "zh": "支持SamuRoid机甲武士和VortaBot人形双足机器人"
         },
         "link": [
-            "software/android/RoboManager-1.0.52.251106.d6f40e8-release.apk"
+            "software/android/RoboManager-1.0.56.251202.ca5668d-release.apk"
         ],
         "btnNames": {
             "en": [
@@ -52,6 +52,7 @@
             ]
         },
         "oldVersion": [
+            "software/android/RoboManager-1.0.52.251106.d6f40e8-release.apk",
             "software/android/RoboManager-1.0.51.251106.26819f5-release.apk",
             "software/android/RoboManager-1.0.48.251031.b983c84-release.apk",
             "software/android/RoboManager-1.0.47.251015.cfd5c39-release.apk",
@@ -60,7 +61,7 @@
         ],
         "platform": "android",
         "platformVersions": {
-            "android": "v1.0.52",
+            "android": "v1.0.56",
             "windows": "v1.0.1"
         },
         "hasTools": false,
@@ -93,7 +94,7 @@
         ],
         "platform": "windows",
         "platformVersions": {
-            "android": "v1.0.52",
+            "android": "v1.0.56",
             "windows": "v1.0.1"
         },
         "hasTools": false,
