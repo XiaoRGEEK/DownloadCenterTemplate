@@ -26,6 +26,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Get repository name
+        id: repo-info
+        run: |
+          # get the repository name
+          REPO_NAME="${{ github.event.repository.name }}"
+          echo "repo_name=${REPO_NAME}" >> $GITHUB_OUTPUT
+          echo "Deploying repository: ${REPO_NAME}"
 
       - name: Setup tosutil
         uses: banyudu/actions-setup-tosutil@v0
@@ -39,6 +47,7 @@ jobs:
       - name: Upload to Volcengine TOS
         run: |
           # Copy entire repository to TOS bucket, excluding .git and .map files
+          cd ${REPO_NAME}/
           tosutil cp -r ./ tos://${{ secrets.TOS_BUCKET }}/ \
             -cacheControl="public,max-age=31536000,immutable" \
             --exclude "*.map" \
