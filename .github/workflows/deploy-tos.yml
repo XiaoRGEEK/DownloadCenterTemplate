@@ -38,14 +38,12 @@ jobs:
 
       - name: Upload to Volcengine TOS
         run: |
-          REPO_NAME="${{ github.event.repository.name }}"
-          echo "Deploying repository: ${REPO_NAME}"
-          ls
-          # tosutil cp -r ./ tos://${{ secrets.TOS_BUCKET }}/ \
-          #   -cacheControl="public,max-age=31536000,immutable" \
-          #   --exclude "*.map" \
-          #   --exclude ".git" \
-          #   --exclude ".git/**"
+          rm -rf .git
+          tosutil cp -r ./ tos://${{ secrets.TOS_BUCKET }}/ -flat \
+            -cacheControl="public,max-age=31536000,immutable" \
+            --exclude "*.map" \
+            --exclude ".git" \
+            --exclude ".git/**"
         env:
           TOS_ACCESS_KEY_ID: ${{ secrets.TOS_ACCESS_KEY_ID }}
           TOS_SECRET_ACCESS_KEY: ${{ secrets.TOS_SECRET_ACCESS_KEY }}
