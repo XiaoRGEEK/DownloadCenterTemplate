@@ -6,6 +6,7 @@
     --muted: #666;
     --android: #3DDB85;
     --windows: #00A4EF;
+    --mac: #A2AAAD;
 }
 
 * {
@@ -134,6 +135,10 @@ header h1 {
 
 .btn.windows {
     background: var(--windows)
+}
+
+.btn.mac {
+    background: var(--mac)
 }
 
 .btn.qr {

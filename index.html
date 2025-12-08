@@ -279,6 +279,10 @@
                 cls = 'windows';
                 icon = 'fab fa-windows';
               }
+              else if (platformName.includes('mac')) {
+                cls = 'mac';
+                icon = 'fab fa-apple';
+              }
               else if (isImage) {
                 cls = 'qr';
                 icon = 'fas fa-qrcode';

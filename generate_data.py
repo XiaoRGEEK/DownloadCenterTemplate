@@ -10,6 +10,20 @@ import re
 import json
 from typing import List, Dict, Any, Tuple
 
+# 外部链接, 如果有其他的产品，没有在本地的，可以通过外部链接的方式添加进来，一个典型的示例如下
+External_Links = {
+    "XRBlock": {
+        "en": "XRBlock Scratch3.0Software",
+        "zh": "XRBlock 图像化编程PC端软件",
+        "desc_en": "Support Scratch3.0 porducts",
+        "desc_zh": "支持图形化编程系列产品",
+        "logo": "./software/image/xrblock.jpg",
+        # 各个平台对应的版本以及url和平台
+        "version": ["v2.1.9"],
+        "url": ["http://software.xiao-r.com/software/pc/XR Block v2.1.9.exe"],
+        "platform": ["Windows"]
+    },
+}
 
 # 软件信息字典
 SOFTWARE_INFO = {
@@ -392,6 +406,106 @@ def generate_data_json(latest_versions: Dict, tools_data: Dict) -> List[Dict]:
     return data
 
 
+def generate_external_links_data() -> List[Dict]:
+    """生成External_Links的数据条目"""
+    data = []
+    
+    for software_name, info in External_Links.items():
+        # 获取基本信息
+        en_name = info.get('en', software_name)
+        zh_name = info.get('zh', software_name)
+        desc_en = info.get('desc_en', '')
+        desc_zh = info.get('desc_zh', '')
+        logo = info.get('logo', '')
+        versions = info.get('version', ['v1.0'])
+        urls = info.get('url', [])
+        platforms = info.get('platform', [])
+        
+        # 确保versions, urls, platforms是列表
+        if not isinstance(versions, list):
+            versions = [versions]
+        if not isinstance(urls, list):
+            urls = [urls]
+        if not isinstance(platforms, list):
+            platforms = [platforms]
+        
+        # 确定最大长度
+        length = min(len(versions), len(urls), len(platforms))
+        if length == 0:
+            print(f"警告: External_Links 条目 {software_name} 缺少version、url或platform，跳过")
+            continue
+        
+        for i in range(length):
+            version = versions[i]
+            url = urls[i]
+            platform_raw = platforms[i]
+            
+            # 标准化平台字符串为小写
+            platform_lower = platform_raw.lower()
+            platform = None
+            if platform_lower in ['android', 'windows', 'mac', 'ios']:
+                platform = platform_lower
+            else:
+                # 尝试映射常见平台名称
+                if 'android' in platform_lower:
+                    platform = 'android'
+                elif 'windows' in platform_lower:
+                    platform = 'windows'
+                elif 'mac' in platform_lower or 'osx' in platform_lower:
+                    platform = 'mac'
+                elif 'ios' in platform_lower or 'iphone' in platform_lower:
+                    platform = 'ios'
+                else:
+                    print(f"警告: External_Links 条目 {software_name} 平台 '{platform_raw}' 无法识别，跳过")
+                    continue
+            
+            # 确定按钮名称
+            btn_names_en = []
+            btn_names_zh = []
+            if platform == "android":
+                btn_names_en = ["Android"]
+                btn_names_zh = ["Android"]
+            elif platform == "windows":
+                btn_names_en = ["Windows"]
+                btn_names_zh = ["Windows"]
+            elif platform == "mac":
+                btn_names_en = ["Mac"]
+                btn_names_zh = ["Mac"]
+            elif platform == "ios":
+                btn_names_en = ["iOS Code"]
+                btn_names_zh = ["iOS 二维码"]
+            
+            # 平台版本信息（仅当前平台）
+            platform_versions = {platform: version}
+            
+            entry = {
+                "logoSrc": logo,
+                "name": {
+                    "en": en_name,
+                    "zh": zh_name
+                },
+                "version": version,
+                "desc": {
+                    "en": desc_en,
+                    "zh": desc_zh
+                },
+                "link": [url],
+                "btnNames": {
+                    "en": btn_names_en,
+                    "zh": btn_names_zh
+                },
+                "oldVersion": [],
+                "platform": platform,
+                "platformVersions": platform_versions,
+                "hasTools": False,
+                "tools": []
+            }
+            data.append(entry)
+            print(f"生成外部链接条目: {en_name} - {platform} - 版本: {version}")
+    
+    return data
+
+
 def main():
     """主函数"""
     print("=== 从零开始生成data.json (仅根据文件后缀区分平台) ===")
@@ -408,6 +522,10 @@ def main():
     # 生成data.json数据
     data = generate_data_json(latest_versions, tools_data)
     
+    # 添加外部链接数据
+    external_data = generate_external_links_data()
+    data.extend(external_data)
+    
     # 保存到文件
     with open("data.json", 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
@@ -415,6 +533,7 @@ def main():
     print(f"\n=== 完成 ===")
     print(f"已生成包含 {len(data)} 个条目的data.json文件")
     print(f"包含工具信息的软件: {[name for name, tools in tools_data.items() if tools]}")
+    print(f"外部链接条目: {len(external_data)} 个")
     print("现在可以修改index.html实现新的界面设计")
 
 
