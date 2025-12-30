@@ -13,14 +13,14 @@ from typing import List, Dict, Any, Tuple
 # 外部链接, 如果有其他的产品，没有在本地的，可以通过外部链接的方式添加进来，一个典型的示例如下
 External_Links = {
     "XRBlock": {
-        "en": "XRBlock Scratch3.0Software",
-        "zh": "XRBlock 图像化编程PC端软件",
+        "en": "XRBlock Scratch3.0 Software",
+        "zh": "XRBlock 图形化编程PC端软件",
         "desc_en": "Support Scratch3.0 porducts",
         "desc_zh": "支持图形化编程系列产品",
-        "logo": "./software/image/xrblock.jpg",
+        "logo": "./software/image/xrblock.png",
         # 各个平台对应的版本以及url和平台
-        "version": ["v2.1.9"],
-        "url": ["http://software.xiao-r.com/software/pc/XR Block v2.1.9.exe"],
+        "version": ["v2.2.5"],
+        "url": ["//software.xiao-r.com/software/pc/XR Block v2.2.5.exe"],
         "platform": ["Windows"]
     },
 }

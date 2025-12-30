@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # 获取最近2次提交，用于比较差异
 
       - name: Setup tosutil
         uses: banyudu/actions-setup-tosutil@v0
@@ -36,14 +38,102 @@ jobs:
           access-key-secret: ${{ secrets.TOS_SECRET_ACCESS_KEY }}
           # token is optional, omit if not needed
 
-      - name: Upload to Volcengine TOS
+      - name: Get changed files
+        id: changed-files
         run: |
+          # 对于push事件，获取本次提交中修改的文件
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "获取修改的文件列表..."
+            
+            # 检查是否有上一个提交
+            if git rev-parse HEAD~1 >/dev/null 2>&1; then
+              # 获取当前提交和上一个提交之间的差异
+              git diff --name-only HEAD~1 HEAD > changed_files.txt
+            else
+              # 首次提交，没有上一个提交，上传所有文件
+              echo "首次提交，上传所有文件..."
+              find . -type f -not -path "./.git/*" -not -name "*.map" > changed_files.txt
+            fi
+          else
+            # 对于手动触发，上传所有文件
+            echo "手动触发，上传所有文件..."
+            find . -type f -not -path "./.git/*" -not -name "*.map" > changed_files.txt
+          fi
+          
+          # 统计文件数量
+          FILE_COUNT=$(wc -l < changed_files.txt 2>/dev/null || echo 0)
+          echo "找到 $FILE_COUNT 个文件需要处理"
+          
+          # 输出文件列表（前10个）
+          if [[ $FILE_COUNT -gt 0 ]]; then
+            echo "文件列表（前10个）:"
+            head -10 changed_files.txt
+          else
+            echo "没有找到需要处理的文件"
+            # 创建一个空文件，避免后续步骤出错
+            touch changed_files.txt
+          fi
+          
+          # 设置输出变量
+          echo "FILE_COUNT=$FILE_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Upload files to Volcengine TOS
+        id: upload
+        run: |
+          # 删除.git目录
           rm -rf .git
-          tosutil cp -r ./ tos://${{ secrets.TOS_BUCKET }}/ -flat \
-            -cacheControl="public,max-age=31536000,immutable" \
-            --exclude "*.map" \
-            --exclude ".git" \
-            --exclude ".git/**"
+          
+          # 读取修改的文件列表
+          if [[ -f changed_files.txt ]]; then
+            FILE_COUNT=$(wc -l < changed_files.txt)
+            
+            if [[ $FILE_COUNT -eq 0 ]]; then
+              echo "没有文件需要上传"
+              exit 0
+            fi
+            
+            echo "开始上传 $FILE_COUNT 个文件..."
+            
+            # 检查是否应该使用完整上传（文件太多或手动触发）
+            UPLOAD_ALL=false
+            if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+              echo "手动触发，使用完整上传..."
+              UPLOAD_ALL=true
+            elif [[ $FILE_COUNT -gt 100 ]]; then
+              echo "修改的文件超过100个，使用完整上传更高效..."
+              UPLOAD_ALL=true
+            fi
+            
+            if [[ $UPLOAD_ALL == true ]]; then
+              # 完整上传
+              tosutil cp -r ./ "tos://${{ secrets.TOS_BUCKET }}/" -flat \
+                -cacheControl="public,max-age=31536000,immutable" \
+                --exclude "*.map" \
+                --exclude ".git" \
+                --exclude ".git/**"
+            else
+              # 增量上传：逐个上传修改的文件
+              UPLOADED=0
+              SKIPPED=0
+              
+              while IFS= read -r file; do
+                if [[ -f "$file" ]]; then
+                  echo "上传 ($((UPLOADED+1))/$FILE_COUNT): $file"
+                  tosutil cp "$file" "tos://${{ secrets.TOS_BUCKET }}/$file" \
+                    -cacheControl="public,max-age=31536000,immutable"
+                  ((UPLOADED++))
+                else
+                  echo "跳过不存在的文件: $file"
+                  ((SKIPPED++))
+                fi
+              done < changed_files.txt
+              
+              echo "文件上传完成: $UPLOADED 个文件已上传, $SKIPPED 个文件被跳过"
+            fi
+          else
+            echo "错误: changed_files.txt 不存在"
+            exit 1
+          fi
         env:
           TOS_ACCESS_KEY_ID: ${{ secrets.TOS_ACCESS_KEY_ID }}
           TOS_SECRET_ACCESS_KEY: ${{ secrets.TOS_SECRET_ACCESS_KEY }}

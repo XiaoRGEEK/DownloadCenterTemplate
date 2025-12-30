@@ -658,18 +658,18 @@
         "tools": []
     },
     {
-        "logoSrc": "./software/image/xrblock.jpg",
+        "logoSrc": "./software/image/xrblock.png",
         "name": {
-            "en": "XRBlock Scratch3.0Software",
-            "zh": "XRBlock 图像化编程PC端软件"
+            "en": "XRBlock Scratch3.0 Software",
+            "zh": "XRBlock 图形化编程PC端软件"
         },
-        "version": "v2.1.9",
+        "version": "v2.2.5",
         "desc": {
             "en": "Support Scratch3.0 porducts",
             "zh": "支持图形化编程系列产品"
         },
         "link": [
-            "http://software.xiao-r.com/software/pc/XR Block v2.1.9.exe"
+            "//software.xiao-r.com/software/pc/XR Block v2.2.5.exe"
         ],
         "btnNames": {
             "en": [
@@ -682,7 +682,7 @@
         "oldVersion": [],
         "platform": "windows",
         "platformVersions": {
-            "windows": "v2.1.9"
+            "windows": "v2.2.5"
         },
         "hasTools": false,
         "tools": []
