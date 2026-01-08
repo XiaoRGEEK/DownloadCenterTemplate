@@ -8,6 +8,7 @@
 import os
 import re
 import json
+import yaml
 from typing import List, Dict, Any, Tuple
 
 # 外部链接, 如果有其他的产品，没有在本地的，可以通过外部链接的方式添加进来，一个典型的示例如下
@@ -167,6 +168,8 @@ def extract_software_info(filename: str) -> Dict[str, Any]:
         platform = "mac"
     elif file_ext in ['.png', '.jpg', '.jpeg']:
         platform = "ios"
+    elif file_ext in ['.bin', '.hex']:
+        platform = "firmware"
     
     # 如果无法确定平台，跳过该文件
     if platform is None:
@@ -212,40 +215,44 @@ def extract_software_info(filename: str) -> Dict[str, Any]:
     }
 
 
-def scan_software_files(software_dir: str = "software") -> Dict[str, Dict]:
-    """扫描software目录，返回按软件和平台分组的文件信息"""
+def scan_software_files(scan_dirs: List[str] = ["software", "firmware"]) -> Dict[str, Dict]:
+    """扫描目录，返回按软件和平台分组的文件信息"""
     software_data = {}
     
-    print("扫描software目录...")
+    print(f"扫描目录: {scan_dirs}...")
     
-    # 递归扫描所有子目录，但跳过image文件夹
-    for root, dirs, files in os.walk(software_dir):
-        # 跳过image目录
-        if 'image' in root.split(os.sep):
+    for software_dir in scan_dirs:
+        if not os.path.exists(software_dir):
             continue
             
-        for filename in files:
-            file_path = os.path.join(root, filename).replace("\\", "/")
-            
-            # 处理所有文件，只根据后缀判断平台
-            file_info = extract_software_info(filename)
-            if file_info is None:
+        # 递归扫描所有子目录，但跳过image文件夹
+        for root, dirs, files in os.walk(software_dir):
+            # 跳过image目录
+            if 'image' in root.split(os.sep):
                 continue
                 
-            file_info['file_path'] = file_path
-            
-            software_name = file_info['software_name']
-            if software_name not in software_data:
-                software_data[software_name] = {'android': [], 'windows': [], 'mac': [], 'ios': []}
-            
-            platform = file_info['platform']
-            
-            # 确保平台是有效的
-            if platform in ['android', 'windows', 'mac', 'ios']:
-                software_data[software_name][platform].append(file_info)
-                print(f"找到软件: {software_name} 版本: {file_info['version']} 平台: {platform} 文件: {filename}")
-            else:
-                print(f"跳过文件: {filename} - 未知平台: {platform}")
+            for filename in files:
+                file_path = os.path.join(root, filename).replace("\\", "/")
+                
+                # 处理所有文件，只根据后缀判断平台
+                file_info = extract_software_info(filename)
+                if file_info is None:
+                    continue
+                    
+                file_info['file_path'] = file_path
+                
+                software_name = file_info['software_name']
+                if software_name not in software_data:
+                    software_data[software_name] = {'android': [], 'windows': [], 'mac': [], 'ios': [], 'firmware': []}
+                
+                platform = file_info['platform']
+                
+                # 确保平台是有效的
+                if platform in ['android', 'windows', 'mac', 'ios', 'firmware']:
+                    software_data[software_name][platform].append(file_info)
+                    print(f"找到软件: {software_name} 版本: {file_info['version']} 平台: {platform} 文件: {filename}")
+                else:
+                    print(f"跳过文件: {filename} - 未知平台: {platform}")
     
     print(f"扫描完成，共找到 {len(software_data)} 个软件")
     return software_data
@@ -506,6 +513,223 @@ def generate_external_links_data() -> List[Dict]:
     return data
 
 
+def update_software_yaml(latest_versions: Dict):
+    """根据最新版本信息更新 update/software.yaml"""
+    yaml_path = os.path.join("update", "software.yaml")
+    if not os.path.exists(yaml_path):
+        print(f"警告: 找不到 {yaml_path}，跳过更新")
+        return
+
+    print(f"正在更新 {yaml_path}...")
+    
+    with open(yaml_path, 'r', encoding='utf-8') as f:
+        try:
+            config = yaml.safe_load(f)
+        except Exception as e:
+            print(f"错误: 无法解析 {yaml_path}: {e}")
+            return
+
+    if not config:
+        print(f"警告: {yaml_path} 为空，将自动生成默认结构...")
+        config = {}
+
+    # 记录哪些软件已经存在于 yaml 中
+    existing_softwares = set()
+    
+    def find_existing(data):
+        if not isinstance(data, dict):
+            return
+        if 'version' in data and 'url' in data:
+            sw_name = data.get('name', '').lower()
+            if sw_name:
+                existing_softwares.add(sw_name)
+        for v in data.values():
+            if isinstance(v, (dict, list)):
+                find_existing(v)
+
+    find_existing(config)
+
+    def update_recursive(data, key_name=None):
+        updated_count = 0
+        if not isinstance(data, dict):
+            return updated_count
+
+        # 如果当前字典包含 'version' 和 'url'，它可能是一个软件条目
+        if 'version' in data and 'url' in data:
+            name_to_match = data.get('name', '').lower()
+            current_url = data['url'].lower()
+            current_filename = os.path.basename(current_url)
+            
+            # 寻找匹配的最新版本
+            found_latest = None
+            found_sw_name = None
+            
+            for sw_name, platforms in latest_versions.items():
+                match = False
+                # 1. 尝试匹配软件名称字段
+                if name_to_match and (sw_name.lower() == name_to_match or sw_name.lower() in name_to_match or name_to_match in sw_name.lower()):
+                    match = True
+                # 2. 尝试匹配字典键名
+                elif key_name and (sw_name.lower() == key_name.lower() or sw_name.lower() in key_name.lower() or key_name.lower() in sw_name.lower()):
+                    match = True
+                # 3. 尝试匹配原 URL 中的文件名
+                elif sw_name.lower() in current_filename:
+                    match = True
+                
+                if match:
+                    # 确定合适的平台
+                    target_platform = None
+                    if '.apk' in current_url or 'android' in current_url:
+                        target_platform = 'android'
+                    elif '.exe' in current_url or '.zip' in current_url or 'pc' in current_url:
+                        target_platform = 'windows'
+                    elif '.bin' in current_url or '.hex' in current_url or 'firmware' in current_url:
+                        target_platform = 'firmware'
+                    
+                    # 如果找到了平台且该平台有最新版本
+                    if target_platform and target_platform in platforms and platforms[target_platform]:
+                        found_latest = platforms[target_platform]['latest']
+                        found_sw_name = sw_name
+                        break
+                    # 如果平台没对上，但这是唯一的匹配
+                    elif not target_platform or target_platform not in platforms:
+                        for p in ['android', 'windows', 'firmware', 'mac', 'ios']:
+                            if p in platforms and platforms[p]:
+                                found_latest = platforms[p]['latest']
+                                found_sw_name = sw_name
+                                break
+                        if found_latest:
+                            break
+            
+            if found_latest:
+                new_version = found_latest['version']
+                new_url = found_latest['file_path']
+                
+                if isinstance(data['version'], int):
+                    parts = str(new_version).split('.')
+                    if len(parts) >= 3:
+                        try:
+                            new_version = int(parts[2])
+                        except ValueError:
+                            pass
+                    elif len(parts) == 1:
+                        try:
+                            new_version = int(parts[0])
+                        except ValueError:
+                            pass
+                
+                if str(data['version']) != str(new_version) or data['url'] != new_url:
+                    print(f"  更新 {key_name or found_sw_name}: {data['version']} -> {new_version}, {data['url']} -> {new_url}")
+                    data['version'] = new_version
+                    data['url'] = new_url
+                    updated_count += 1
+                return updated_count
+
+        for key, value in data.items():
+            if isinstance(value, dict):
+                updated_count += update_recursive(value, key)
+            elif isinstance(value, list):
+                for item in value:
+                    if isinstance(item, dict):
+                        updated_count += update_recursive(item, key)
+        
+        return updated_count
+
+    # 1. 先更新现有条目
+    total_updated = update_recursive(config)
+    
+    # 2. 检查是否有新软件没在 yaml 里，并添加进去
+    new_entries_added = 0
+    
+    # 按照用户要求，创建大类结构
+    for platform_key in ['android', 'windows', 'humanoid', 'xr-servo']:
+        if platform_key not in config:
+            config[platform_key] = {}
+        
+    for sw_name, platforms in latest_versions.items():
+        if sw_name.lower() not in existing_softwares:
+            # 为该软件的每个平台都创建一个条目
+            for platform, info in platforms.items():
+                if not info:
+                    continue
+                
+                # 排除 ios 和 mac
+                if platform in ['ios', 'mac']:
+                    continue
+                    
+                # 映射到对应的分类
+                platform_key = platform
+                if platform == 'firmware':
+                    platform_key = 'humanoid' # 固件分类改为 humanoid
+                elif platform == 'android':
+                    platform_key = 'android'
+                elif platform == 'windows':
+                    platform_key = 'windows'
+                else:
+                    continue # 跳过其他未指定平台
+                
+                latest = info['latest']
+                
+                # 特殊处理 xr-servo，单独拎出来作为顶级分类
+                if sw_name.lower() == 'xr-servo':
+                    config['xr-servo'] = {
+                        'name': 'xr-servo',
+                        'version': latest['version'],
+                        'url': latest['file_path']
+                    }
+                    print(f"  新增软件条目: [顶级分类] xr-servo (版本: {latest['version']})")
+                    new_entries_added += 1
+                    continue
+
+                # 特殊处理固件的名称映射
+                if platform_key == 'humanoid':
+                    if 'samuroid' in sw_name.lower():
+                        entry_key = 'SamuRoid'
+                        display_name = 'SamuRoid'
+                    elif 'vortabot' in sw_name.lower():
+                        entry_key = 'VortaBot'
+                        display_name = 'VortaBot'
+                    else:
+                        entry_key = sw_name
+                        display_name = sw_name
+                        
+                    config[platform_key][entry_key] = {
+                        'name': display_name,
+                        'version': latest['version'],
+                        'url': latest['file_path']
+                    }
+                else:
+                    # 普通软件条目
+                    entry_key = sw_name
+                    config[platform_key][entry_key] = {
+                        'name': sw_name,
+                        'version': latest['version'],
+                        'url': latest['file_path'],
+                        'forceUpdate': False,
+                        'updateMsg': {
+                            'chinese': f"更新 {sw_name} 到最新版本",
+                            'english': f"Update {sw_name} to latest version"
+                        }
+                    }
+                
+                print(f"  新增软件条目: [{platform_key}] {entry_key} (版本: {latest['version']})")
+                new_entries_added += 1
+
+    # 清理掉空的分类
+    for key in list(config.keys()):
+        if isinstance(config[key], dict) and not config[key] and key in ['android', 'windows', 'humanoid', 'auto_generated']:
+            del config[key]
+        elif key == 'auto_generated':
+            del config[key]
+
+    if total_updated > 0 or new_entries_added > 0:
+        with open(yaml_path, 'w', encoding='utf-8') as f:
+            yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
+        print(f"成功更新 {total_updated} 个条目，新增 {new_entries_added} 个条目到 {yaml_path}")
+    else:
+        print(f"{yaml_path} 已是最新，无需更新")
+
+
 def main():
     """主函数"""
     print("=== 从零开始生成data.json (仅根据文件后缀区分平台) ===")
@@ -521,6 +745,9 @@ def main():
     
     # 生成data.json数据
     data = generate_data_json(latest_versions, tools_data)
+    
+    # 更新 software.yaml
+    update_software_yaml(latest_versions)
     
     # 添加外部链接数据
     external_data = generate_external_links_data()

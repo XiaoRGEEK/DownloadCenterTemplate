@@ -1,43 +1,143 @@
+android:
+  DonkeyCar:
+    name: DonkeyCar
+    version: 1.3.0
+    url: software/android/DonkeyCar_V1.3.0.apk
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 DonkeyCar 到最新版本
+      english: Update DonkeyCar to latest version
+  RoboManager:
+    name: RoboManager
+    version: 1.0.56
+    url: software/android/RoboManager-1.0.56.251202.ca5668d-release.apk
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 RoboManager 到最新版本
+      english: Update RoboManager to latest version
+  ROS2Mobile:
+    name: ROS2Mobile
+    version: 1.0.21
+    url: software/android/ROS2Mobile_V1.0.21.240604.ee1d8af_arm64-v8a-release.apk
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 ROS2Mobile 到最新版本
+      english: Update ROS2Mobile to latest version
+  ROSCollie:
+    name: ROSCollie
+    version: unknown
+    url: software/android/roscollie.apk
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 ROSCollie 到最新版本
+      english: Update ROSCollie to latest version
+  ROSXRMobile:
+    name: ROSXRMobile
+    version: 1.6.87
+    url: software/android/ROSXRMobile V1.6.87.250115.cf4f37a.apk
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 ROSXRMobile 到最新版本
+      english: Update ROSXRMobile to latest version
+  VortaDroid:
+    name: VortaDroid
+    version: 1.0.36
+    url: software/android/VortaDroid-1.0.36.250922.1dc364f-release.apk
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 VortaDroid 到最新版本
+      english: Update VortaDroid to latest version
+  WifiRobot:
+    name: WifiRobot
+    version: '2.37'
+    url: software/android/WiFiRobot_V2.37.apk
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 WifiRobot 到最新版本
+      english: Update WifiRobot to latest version
+  WuliBot:
+    name: WuliBot
+    version: unknown
+    url: software/android/wulibot.apk
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 WuliBot 到最新版本
+      english: Update WuliBot to latest version
+  XR-Controller:
+    name: XR-Controller
+    version: 1.4.144
+    url: software/android/XR-Controller_V1.4.144.251030.ac19f2c_arm64-v8a-release.apk
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 XR-Controller 到最新版本
+      english: Update XR-Controller to latest version
+  XRBitCar:
+    name: XRBitCar
+    version: unknown
+    url: software/android/xrbitcar.apk
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 XRBitCar 到最新版本
+      english: Update XRBitCar to latest version
+  XRCollieTool:
+    name: XRCollieTool
+    version: 1.0.28
+    url: software/android/XRCollieTool_V1.0.28.apk
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 XRCollieTool 到最新版本
+      english: Update XRCollieTool to latest version
+windows:
+  RoboManager:
+    name: RoboManager
+    version: 1.0.1
+    url: software/pc/RoboManager机器人动作组编辑工具V1.0.1.1.zip
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 RoboManager 到最新版本
+      english: Update RoboManager to latest version
+  WifiRobot:
+    name: WifiRobot
+    version: 2.7.1
+    url: software/pc/WIFIRobot_V2.7.1_Setup.exe
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 WifiRobot 到最新版本
+      english: Update WifiRobot to latest version
+  Hexapod:
+    name: Hexapod
+    version: 1.0.2
+    url: software/pc/hexapod-1.0.2.zip
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 Hexapod 到最新版本
+      english: Update Hexapod to latest version
+  RobotKit:
+    name: RobotKit
+    version: unknown
+    url: software/pc/Robotkit.zip
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 RobotKit 到最新版本
+      english: Update RobotKit to latest version
+  smart-arm:
+    name: smart-arm
+    version: 1.0.9
+    url: software/pc/smart-arm Setup 1.0.9.exe
+    forceUpdate: false
+    updateMsg:
+      chinese: 更新 smart-arm 到最新版本
+      english: Update smart-arm to latest version
 humanoid:
   SamuRoid:
     name: SamuRoid
     version: 1.2.5
-    url: firmware/SamuRoid_action-1.2.5.bin
-
+    url: firmware/Samuroid_action-1.2.5.bin
   VortaBot:
     name: VortaBot
     version: 1.2.5
-    url: firmware/VortaBot_action-1.2.5.bin
-  
+    url: firmware/Vortabot_action-1.2.5.bin
 xr-servo:
   name: xr-servo
   version: 1.2.6
   url: software/pc/xr-servo-1.2.6.exe
-
-ros2mobile:
-  name: ros2mobile
-  version: 1.0.0
-  url: software/pc/ros2mobile.exe
-
-xr-controller:
-  name: xr-controller
-  version: 1.0.0
-  url: software/pc/xr-controller.apk
-
-test_app:
-  name: "xr-test"
-  version: 1
-  url: software/android/wulibot.apk
-  forceUpdate: false
-  updateMsg:
-    chinese: "update text"
-    english: "Updated test app"
-
-VortaDroid:
-  name: "VortaDroid"
-  version: 36
-  url: software/android/VortaDroid-1.0.36.250922.1dc364f-release.apk
-  forceUpdate: true
-  updateMsg:
-    chinese: "支持舵机偏差调整"
-    english: "support servo deviation adjustment"
