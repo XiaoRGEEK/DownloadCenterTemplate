@@ -11,8 +11,8 @@ humanoid:
   
 xr-servo:
   name: xr-servo
-  version: 1.2.5
-  url: software/pc/xr-servo-1.2.5.exe
+  version: 1.2.6
+  url: software/pc/xr-servo-1.2.6.exe
 
 ros2mobile:
   name: ros2mobile
