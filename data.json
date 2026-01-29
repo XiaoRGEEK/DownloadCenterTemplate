@@ -369,13 +369,13 @@
             "en": "XR-Controller",
             "zh": "XR-Controller机器人控制器"
         },
-        "version": "v1.4.144",
+        "version": "v1.4.161",
         "desc": {
             "en": "Support X-series, Jetbot V2.0, DonkeyCar and Bionic robots",
             "zh": "支持 X 系列、Jetbot V2.0、DonkeyCar 和仿生机器人"
         },
         "link": [
-            "software/android/XR-Controller_V1.4.144.251030.ac19f2c_arm64-v8a-release.apk"
+            "software/android/XR-Controller_V1.4.161.260129.379dc84_arm64-v8a-release.apk"
         ],
         "btnNames": {
             "en": [
@@ -386,6 +386,7 @@
             ]
         },
         "oldVersion": [
+            "software/android/XR-Controller_V1.4.144.251030.ac19f2c_arm64-v8a-release.apk",
             "software/android/XR-Controller_V1.4.144.251030.ac19f2c_armeabi-v7a-release.apk",
             "software/android/XR-Controller_V1.4.143.250603.91316e0_arm64-v8a-release.apk",
             "software/android/XR-Controller_V1.4.143.250603.91316e0_armeabi-v7a-release.apk",
@@ -399,7 +400,7 @@
         ],
         "platform": "android",
         "platformVersions": {
-            "android": "v1.4.144",
+            "android": "v1.4.161",
             "ios": "v1.0"
         },
         "hasTools": false,
@@ -430,7 +431,7 @@
         "oldVersion": [],
         "platform": "ios",
         "platformVersions": {
-            "android": "v1.4.144",
+            "android": "v1.4.161",
             "ios": "v1.0"
         },
         "hasTools": false,
