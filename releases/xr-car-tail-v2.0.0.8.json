@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "xr-car-tail-v2.0.0.8",
+  "title": "XR-CAR-TAIL Firmware 2.0.0.8",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-car-tail-ver-2.0.0.8.bin",
+      "tos_key": "firmware/xr-car-tail/xr-car-tail-ver-2.0.0.8.bin",
+      "size": 33516,
+      "sha256": "7859d406ca265fbd619eba534d7ddcce790b59ffa920c45282ad1ed85d731979"
+    }
+  ]
+}

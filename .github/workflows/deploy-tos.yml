@@ -206,13 +206,13 @@ jobs:
 
           while IFS=$'\t' read -r status file rest; do
             case "${file}" in
-              data.json|index.html|style.css|update/software.yaml|firmware/mxbit/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml|software/image/*|software/ios/*|docs/*.html|docs/assets/*)
+              data.json|index.html|style.css|update/software.yaml|firmware/mxbit/version.yaml|firmware/xr-car-tail/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml|software/image/*|software/ios/*|docs/*.html|docs/assets/*)
                 if [[ "${status}" == D* || "${status}" == R* ]]; then
                   echo "TOS deletion/rename is forbidden in deployment: ${status} ${file}" >&2
                   exit 1
                 fi
                 case "${file}" in
-                  data.json|index.html|update/software.yaml|firmware/mxbit/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml)
+                  data.json|index.html|update/software.yaml|firmware/mxbit/version.yaml|firmware/xr-car-tail/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml)
                     printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-entrypoints.txt" ;;
                   *) printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-assets.txt" ;;
                 esac

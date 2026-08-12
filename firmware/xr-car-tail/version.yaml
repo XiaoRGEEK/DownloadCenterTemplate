@@ -1,0 +1,19 @@
+product:
+  id: xr-car-tail
+  device_type: XR-CAR-TAIL
+  product_codes:
+    - 24833
+
+firmware:
+  app:
+    name:
+      zh: XR-CAR-TAIL 主固件
+      en: XR-CAR-TAIL Firmware
+    version: 2.0.0.8
+    url: xr-car-tail-ver-2.0.0.8.bin
+    image_version: 2.0.0.8
+    product_code: 24833
+    image_size: 33516
+    image_crc32: 693107542
+    sha256: 7859d406ca265fbd619eba534d7ddcce790b59ffa920c45282ad1ed85d731979
+    min_bootloader_version: 2.0.0.0
