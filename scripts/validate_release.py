@@ -9,6 +9,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from pathlib import PurePosixPath
 from urllib.parse import urlparse
 
 
@@ -28,6 +29,15 @@ RELEASE_SUFFIXES = BINARY_SUFFIXES | {".jpeg", ".jpg", ".png"}
 TOS_DOWNLOAD_HOSTS = {
     "software.xiao-r.com",
     "software2.tos-cn-beijing.volces.com",
+}
+MAX_RELEASE_ASSET_SIZE = 2 * 1024 * 1024 * 1024
+RELEASE_TAG_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{2,127}$")
+SENSITIVE_SUFFIXES = {".env", ".key", ".p8", ".p12", ".pem"}
+SENSITIVE_NAMES = {
+    ".env",
+    ".tosutilconfig",
+    "credentials",
+    "hosts.yml",
 }
 
 
@@ -114,14 +124,110 @@ def referenced_objects() -> tuple[set[str], list[dict]]:
     return objects, data
 
 
+def validate_release_manifests() -> tuple[int, set[str]]:
+    manifest_dir = ROOT / "releases"
+    seen_tags: set[str] = set()
+    seen_tos_keys: set[str] = set()
+    count = 0
+    manifest_keys: set[str] = set()
+    for path in sorted(manifest_dir.glob("*.json")):
+        try:
+            manifest = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            fail(f"invalid release manifest {path.relative_to(ROOT)}: {exc}")
+        if not isinstance(manifest, dict):
+            fail(f"release manifest must be an object: {path.relative_to(ROOT)}")
+        if set(manifest) != {
+            "schema_version",
+            "tag",
+            "title",
+            "target_commitish",
+            "assets",
+        }:
+            fail(f"unexpected fields in release manifest: {path.relative_to(ROOT)}")
+        tag = manifest.get("tag")
+        if (
+            manifest.get("schema_version") != 1
+            or not isinstance(tag, str)
+            or not RELEASE_TAG_RE.fullmatch(tag)
+            or path.stem != tag
+            or tag in seen_tags
+        ):
+            fail(f"invalid or duplicate release tag: {path.relative_to(ROOT)}")
+        if manifest.get("target_commitish") != "master":
+            fail(f"release target must be master: {path.relative_to(ROOT)}")
+        if not isinstance(manifest.get("title"), str) or not manifest["title"].strip():
+            fail(f"release title must not be empty: {path.relative_to(ROOT)}")
+        assets = manifest.get("assets")
+        if not isinstance(assets, list) or not assets:
+            fail(f"release manifest must contain assets: {path.relative_to(ROOT)}")
+
+        seen_names: set[str] = set()
+        for asset in assets:
+            if not isinstance(asset, dict) or set(asset) != {
+                "name",
+                "tos_key",
+                "size",
+                "sha256",
+            }:
+                fail(f"invalid asset fields in {path.relative_to(ROOT)}")
+            name = asset.get("name")
+            tos_key = asset.get("tos_key")
+            size = asset.get("size")
+            digest = asset.get("sha256")
+            if (
+                not isinstance(name, str)
+                or Path(name).name != name
+                or Path(name).suffix.lower() not in BINARY_SUFFIXES
+                or re.search(r"[\x00-\x1f*?\[\]]", name)
+                or name in seen_names
+            ):
+                fail(f"invalid or duplicate asset name in {path.relative_to(ROOT)}")
+            key = PurePosixPath(tos_key) if isinstance(tos_key, str) else None
+            if (
+                key is None
+                or key.is_absolute()
+                or ".." in key.parts
+                or re.search(r"[\x00-\x1f]", key.as_posix())
+                or not key.as_posix().startswith(("software/", "firmware/"))
+                or key.name != name
+                or key.as_posix() in seen_tos_keys
+            ):
+                fail(f"invalid or duplicate TOS key in {path.relative_to(ROOT)}")
+            if not isinstance(size, int) or size <= 0 or size >= MAX_RELEASE_ASSET_SIZE:
+                fail(f"asset must be non-empty and smaller than 2 GiB: {name}")
+            if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
+                fail(f"invalid SHA256 for release asset: {name}")
+            seen_names.add(name)
+            seen_tos_keys.add(key.as_posix())
+            manifest_keys.add(key.as_posix())
+            count += 1
+        seen_tags.add(tag)
+    return count, manifest_keys
+
+
 def validate() -> set[str]:
-    binaries = [
-        path for path in tracked_files() if Path(path).suffix.lower() in BINARY_SUFFIXES
-    ]
+    tracked = tracked_files()
+    binaries = [path for path in tracked if Path(path).suffix.lower() in BINARY_SUFFIXES]
     if binaries:
         fail("release binaries are tracked by Git:\n  " + "\n  ".join(binaries))
 
+    sensitive = [
+        path
+        for path in tracked
+        if Path(path).suffix.lower() in SENSITIVE_SUFFIXES
+        or Path(path).name.lower() in SENSITIVE_NAMES
+        or Path(path).name.lower().startswith(".env.")
+        or ".ssh" in Path(path).parts
+    ]
+    if sensitive:
+        fail("sensitive files are tracked by Git:\n  " + "\n  ".join(sensitive))
+
     objects, data = referenced_objects()
+    _, manifest_keys = validate_release_manifests()
+    orphaned = sorted(manifest_keys - objects)
+    if orphaned:
+        fail("release assets are not referenced by public metadata:\n  " + "\n  ".join(orphaned))
     invalid = [key for key in sorted(objects) if Path(key).suffix.lower() not in RELEASE_SUFFIXES]
     if invalid:
         fail("unsupported release object references:\n  " + "\n  ".join(invalid))

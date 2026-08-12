@@ -1,8 +1,9 @@
 name: Deploy static download center to Pages
 
 on:
-  push:
-    branches: ["master"]
+  workflow_run:
+    workflows: ["Publish release assets and deploy metadata to TOS"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -16,6 +17,10 @@ concurrency:
 
 jobs:
   deploy:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'master')
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -23,6 +28,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - name: Validate release manifests
         run: python3 scripts/validate_release.py
       - name: Assemble site without repository controls
