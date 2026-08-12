@@ -25,6 +25,10 @@ release metadata, documentation, and validation/deployment automation.
 - TOS object deletion is a separate, explicitly reviewed maintenance operation.
 - Historical TOS object versions expire through the bucket lifecycle policy.
 
+The `tos-maintenance` environment requires XiaoRGEEK approval. Its manual
+workflow preserves unrelated lifecycle rules, expires noncurrent versions after
+30 days, and aborts incomplete multipart uploads after 7 days.
+
 ## Website
 
 [GitHub Pages](https://xiaorgeek.github.io/DownloadCenterTemplate/) reads
