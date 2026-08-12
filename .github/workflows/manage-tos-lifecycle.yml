@@ -38,4 +38,3 @@ jobs:
           TOS_SECURITY_TOKEN: ${{ secrets.TOS_SECURITY_TOKEN }}
           TOS_BUCKET: ${{ secrets.TOS_BUCKET }}
         run: python3 scripts/manage_tos_lifecycle.py
-
