@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -55,7 +56,17 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def parse_asset(value: str) -> tuple[Path, str]:
+def release_asset_name(filename: str) -> str:
+    """Return a deterministic GitHub-safe name while TOS keeps its original key."""
+    safe = re.sub(r"[^A-Za-z0-9._-]+", ".", filename).strip(".")
+    suffix = Path(filename).suffix.lower()
+    if not safe or Path(safe).suffix.lower() != suffix:
+        stem = hashlib.sha256(filename.encode("utf-8")).hexdigest()[:16]
+        safe = f"asset-{stem}{suffix}"
+    return safe
+
+
+def parse_asset(value: str) -> tuple[Path, str, str]:
     if "=" not in value:
         raise ReleaseError("--asset must use LOCAL_FILE=TOS_KEY")
     source_text, tos_key = value.split("=", 1)
@@ -77,7 +88,7 @@ def parse_asset(value: str) -> tuple[Path, str]:
         raise ReleaseError(
             f"local filename and TOS key basename must match: {source.name} != {key.name}"
         )
-    return source, normalized_key
+    return source, normalized_key, release_asset_name(source.name)
 
 
 def release_info(repository: str, tag: str) -> dict | None:
@@ -119,24 +130,16 @@ def ensure_draft_release(repository: str, tag: str, title: str) -> dict:
     return info
 
 
-def verify_existing_asset(repository: str, tag: str, name: str, expected: str) -> None:
-    with tempfile.TemporaryDirectory(prefix="xiaor-release-check-") as directory:
-        run_gh(
-            "release",
-            "download",
-            tag,
-            "--repo",
-            repository,
-            "--pattern",
-            name,
-            "--dir",
-            directory,
+def verify_existing_asset(asset: dict, expected_size: int, expected_sha: str) -> None:
+    if (
+        asset.get("state") != "uploaded"
+        or asset.get("size") != expected_size
+        or asset.get("digest") != f"sha256:{expected_sha}"
+    ):
+        raise ReleaseError(
+            f"draft asset {asset.get('name')} already exists with different or incomplete "
+            "content; refusing overwrite"
         )
-        downloaded = Path(directory) / name
-        if not downloaded.is_file() or sha256(downloaded) != expected:
-            raise ReleaseError(
-                f"draft asset {name} already exists with different content; refusing overwrite"
-            )
 
 
 def load_manifest(path: Path, tag: str, title: str) -> dict:
@@ -177,32 +180,53 @@ def main() -> int:
         repository_result = run_gh("repo", "view", "--json", "nameWithOwner")
         repository = json.loads(repository_result.stdout)["nameWithOwner"]
         assets = [parse_asset(value) for value in args.asset]
-        if len({source.name for source, _ in assets}) != len(assets):
-            raise ReleaseError("duplicate asset filename")
-        if len({key for _, key in assets}) != len(assets):
+        if len({name for _, _, name in assets}) != len(assets):
+            raise ReleaseError("duplicate normalized GitHub Release asset name")
+        if len({key for _, key, _ in assets}) != len(assets):
             raise ReleaseError("duplicate TOS key")
 
         info = ensure_draft_release(repository, args.tag, args.title)
-        existing_names = {asset["name"] for asset in info.get("assets", [])}
+        existing_assets = {asset["name"]: asset for asset in info.get("assets", [])}
         prepared: list[dict] = []
-        for source, tos_key in assets:
+        for source, tos_key, asset_name in assets:
             digest = sha256(source)
-            if source.name in existing_names:
-                verify_existing_asset(repository, args.tag, source.name, digest)
-                print(f"verified existing draft asset: {source.name}")
-            else:
-                run_gh(
-                    "release",
-                    "upload",
-                    args.tag,
-                    str(source),
-                    "--repo",
-                    repository,
+            if asset_name in existing_assets:
+                verify_existing_asset(
+                    existing_assets[asset_name], source.stat().st_size, digest
                 )
-                print(f"uploaded draft asset: {source.name}")
+                print(f"verified existing draft asset: {asset_name}")
+            else:
+                if asset_name == source.name:
+                    upload_path = source
+                    run_gh(
+                        "release",
+                        "upload",
+                        args.tag,
+                        str(upload_path),
+                        "--repo",
+                        repository,
+                    )
+                else:
+                    with tempfile.TemporaryDirectory(
+                        prefix="xiaor-release-name-", dir=source.parent
+                    ) as directory:
+                        upload_path = Path(directory) / asset_name
+                        try:
+                            os.link(source, upload_path)
+                        except OSError:
+                            shutil.copyfile(source, upload_path)
+                        run_gh(
+                            "release",
+                            "upload",
+                            args.tag,
+                            str(upload_path),
+                            "--repo",
+                            repository,
+                        )
+                print(f"uploaded draft asset: {asset_name}")
             prepared.append(
                 {
-                    "name": source.name,
+                    "name": asset_name,
                     "tos_key": tos_key,
                     "size": source.stat().st_size,
                     "sha256": digest,

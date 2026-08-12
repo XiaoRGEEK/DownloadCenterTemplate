@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "tag": "existing-firmware-2026-08-12",
+  "title": "XiaoR Existing Firmware Archive (2026-08-12)",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "Samuroid_action-1.2.5.bin",
+      "tos_key": "firmware/Samuroid_action-1.2.5.bin",
+      "size": 131072,
+      "sha256": "a23d3d06cae2256764fe0d3721e8796f9008d19f0cee6ffae7bf13e4ead57c37"
+    },
+    {
+      "name": "Vortabot_action-1.2.5.bin",
+      "tos_key": "firmware/Vortabot_action-1.2.5.bin",
+      "size": 131072,
+      "sha256": "bd164b28e84551e81e35672ea15e864bf892ff2b3aa0d85ded6363a388cdabfd"
+    },
+    {
+      "name": "micropython_2.0.5.bin",
+      "tos_key": "firmware/mxbit/micropython_2.0.5.bin",
+      "size": 2357840,
+      "sha256": "62b60ad949ae87e67f77436db4199b3ac810c8b33a7ac536c87a6441e507ec50"
+    },
+    {
+      "name": "xiaozhi_2.0.4.bin",
+      "tos_key": "firmware/mxbit/xiaozhi_2.0.4.bin",
+      "size": 9575120,
+      "sha256": "5ace7a968440ad8252459b5806b078ea559e8f5bddc926a4a111ec38ab55351d"
+    }
+  ]
+}

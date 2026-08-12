@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "tag": "existing-android-2026-08-12",
+  "title": "XiaoR Existing Android Releases (2026-08-12)",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "DonkeyCar_V1.3.0.apk",
+      "tos_key": "software/android/DonkeyCar_V1.3.0.apk",
+      "size": 11874509,
+      "sha256": "4c0c8f3a0762f1f0211d74f34a7e690547a91d70aa7c62b11adff24b6447a955"
+    },
+    {
+      "name": "ROS2Mobile_V1.0.20.240312.ee1d8af.apk",
+      "tos_key": "software/android/ROS2Mobile_V1.0.20.240312.ee1d8af.apk",
+      "size": 74435054,
+      "sha256": "b9508d016d9445b4da00edf4e36a63ef63818f485825b8a4f8bf6efac10f0b5d"
+    },
+    {
+      "name": "ROS2Mobile_V1.0.21.240604.ee1d8af_arm64-v8a-release.apk",
+      "tos_key": "software/android/ROS2Mobile_V1.0.21.240604.ee1d8af_arm64-v8a-release.apk",
+      "size": 74488478,
+      "sha256": "e76183d95c050e9768af3acfae6ac472d9f916e4e0df4ce31bb0d9bf7fc1db5b"
+    },
+    {
+      "name": "ROSXRMobile.V1.6.86.250107.8e48d4d.apk",
+      "tos_key": "software/android/ROSXRMobile V1.6.86.250107.8e48d4d.apk",
+      "size": 11419280,
+      "sha256": "92bc5a6db1aba96c7dea61ee0f79068487a6dab066e17e7d5a48895364a27036"
+    },
+    {
+      "name": "ROSXRMobile.V1.6.87.250115.cf4f37a.apk",
+      "tos_key": "software/android/ROSXRMobile V1.6.87.250115.cf4f37a.apk",
+      "size": 11419877,
+      "sha256": "9350171ddd74f03e5285b65eca0ae8cddbfcf8aa3c4bd38f3507e26cc64ae4f6"
+    },
+    {
+      "name": "RoboManager-1.0.52.251106.d6f40e8-release.apk",
+      "tos_key": "software/android/RoboManager-1.0.52.251106.d6f40e8-release.apk",
+      "size": 9822599,
+      "sha256": "b6a3d99b5d4575c1bacb6c976ee736ae60b9e6130c77b12331e4e84f729c1a81"
+    },
+    {
+      "name": "RoboManager-1.0.56.251202.ca5668d-release.apk",
+      "tos_key": "software/android/RoboManager-1.0.56.251202.ca5668d-release.apk",
+      "size": 9822599,
+      "sha256": "9e5743436b5fbfce9a37e593e78801677654f6c38ab689751faa0b106bac0edc"
+    },
+    {
+      "name": "VortaDroid-1.0.36.250922.1dc364f-release.apk",
+      "tos_key": "software/android/VortaDroid-1.0.36.250922.1dc364f-release.apk",
+      "size": 8584996,
+      "sha256": "492aa382f9de31c9436573faf7cc17e81e3061a7c6c374d4fbbcdf998f56c344"
+    },
+    {
+      "name": "WiFiRobot_V2.37.apk",
+      "tos_key": "software/android/WiFiRobot_V2.37.apk",
+      "size": 15469791,
+      "sha256": "a41995a9ab516cbf3250ec541b01a9b88fd507215329e48d90d8b9a72adfefe4"
+    },
+    {
+      "name": "XR-Controller_V1.4.143.250603.91316e0_armeabi-v7a-release.apk",
+      "tos_key": "software/android/XR-Controller_V1.4.143.250603.91316e0_armeabi-v7a-release.apk",
+      "size": 33297177,
+      "sha256": "20239ed0616bb10dcf6eab350c742107a5d14efe795bd1cdbc359f28cb45fd70"
+    },
+    {
+      "name": "XR-Controller_V1.4.144.251030.ac19f2c_armeabi-v7a-release.apk",
+      "tos_key": "software/android/XR-Controller_V1.4.144.251030.ac19f2c_armeabi-v7a-release.apk",
+      "size": 33297171,
+      "sha256": "241d55fcc0748d69f1218b4686441d23f4f0d97466cce57bbe447c3fb642a750"
+    },
+    {
+      "name": "XR-Controller_V1.4.162.260212.379dc84_arm64-v8a-release.apk",
+      "tos_key": "software/android/XR-Controller_V1.4.162.260212.379dc84_arm64-v8a-release.apk",
+      "size": 41214092,
+      "sha256": "e691e6978a3464589b0f9361e8293325883d2e4e782b61d4fd7d60d2aca62939"
+    },
+    {
+      "name": "XR-Controller_V1.4.165.260630.6cfcfdb_arm64-v8a-release.apk",
+      "tos_key": "software/android/XR-Controller_V1.4.165.260630.6cfcfdb_arm64-v8a-release.apk",
+      "size": 41755214,
+      "sha256": "fe4b111976d63771bdbb98ea11abb160cbf6e911d18e13933fbcaba3e4da0c8a"
+    },
+    {
+      "name": "XRCollieTool_V1.0.28.apk",
+      "tos_key": "software/android/XRCollieTool_V1.0.28.apk",
+      "size": 5086990,
+      "sha256": "67cc550f4f0641307d87e03039b82defcc4a5b2ff01d9f9ae465a3d1a8747794"
+    },
+    {
+      "name": "roscollie.apk",
+      "tos_key": "software/android/roscollie.apk",
+      "size": 9741571,
+      "sha256": "a86cd59324d9d3f2fee85205ce51a6b154ca85305b9215097b73cf44ec328c0c"
+    },
+    {
+      "name": "wulibot.apk",
+      "tos_key": "software/android/wulibot.apk",
+      "size": 16242217,
+      "sha256": "7c0f9090acb910863511008e46135a33b66022d8501878b7b6c4fd9d0bd603d1"
+    },
+    {
+      "name": "xrbitcar.apk",
+      "tos_key": "software/android/xrbitcar.apk",
+      "size": 9625740,
+      "sha256": "3c942526cca43202b3224dd4db5b2cac1f98b60656af84cb63205283fdd319b9"
+    }
+  ]
+}
