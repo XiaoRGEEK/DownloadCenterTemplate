@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "tag": "existing-pc-2026-08-12",
+  "title": "XiaoR Existing PC Releases (2026-08-12)",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "RoboManager.V1.0.0.18.zip",
+      "tos_key": "software/pc/RoboManager机器人动作组编辑工具V1.0.0.18.zip",
+      "size": 8337479,
+      "sha256": "bb3a1c8eccc6119b96505a76f9cd492461e7e0e4572237b9917ec09786e8b597"
+    },
+    {
+      "name": "RoboManager.V1.0.1.1.zip",
+      "tos_key": "software/pc/RoboManager机器人动作组编辑工具V1.0.1.1.zip",
+      "size": 8442008,
+      "sha256": "7267989090ccb889bcaa71dbd1b011a40e78034d297b6175f62393884f1836a7"
+    },
+    {
+      "name": "Robotkit.zip",
+      "tos_key": "software/pc/Robotkit.zip",
+      "size": 13446289,
+      "sha256": "275ea11ed57054c44e0600f893c675d4ed849c15297aa8c1dd6a05b1c5d51947"
+    },
+    {
+      "name": "WIFIRobot_V2.7.1_Setup.exe",
+      "tos_key": "software/pc/WIFIRobot_V2.7.1_Setup.exe",
+      "size": 49697995,
+      "sha256": "cff5274c51b2be3d67eab5b63ab7fb1093509d7dc4dfa8d9c0c0b9f93d271c6a"
+    },
+    {
+      "name": "XR.Block.v2.2.6.exe",
+      "tos_key": "software/pc/XR Block v2.2.6.exe",
+      "size": 523250548,
+      "sha256": "3b71a0f116c4bf2f7b59777e064b83c72fcb13f432981e2261aaf3ccaf34c518"
+    },
+    {
+      "name": "hexapod-1.0.2.zip",
+      "tos_key": "software/pc/hexapod-1.0.2.zip",
+      "size": 89561296,
+      "sha256": "70dd1f09cda2ad4a44d440f9f084ebd7cc27e1baf6a36f77afaa59b22cd6d149"
+    },
+    {
+      "name": "smart-arm-1.0.5.dmg",
+      "tos_key": "software/pc/smart-arm-1.0.5.dmg",
+      "size": 82846901,
+      "sha256": "d8c5f563b8ed0adb2ae9269f925f4bbe0b4a626e3082da45bdb0bb2a9d4d2874"
+    },
+    {
+      "name": "smart-arm.Setup.1.0.9.exe",
+      "tos_key": "software/pc/smart-arm Setup 1.0.9.exe",
+      "size": 61964361,
+      "sha256": "688427053d694c8a554740c531aee2ff5c03f3728acaea3c6451cc443cd47033"
+    },
+    {
+      "name": "xr-servo-1.2.5.exe",
+      "tos_key": "software/pc/xr-servo-1.2.5.exe",
+      "size": 41095680,
+      "sha256": "fa90a245b99d7b953c034dd7afd8afa89391ab7299dfa2cdabfadb0a96369449"
+    },
+    {
+      "name": "xr-servo-1.2.6.exe",
+      "tos_key": "software/pc/xr-servo-1.2.6.exe",
+      "size": 36741120,
+      "sha256": "7c1613893ed7e74c0a5d8f1a77d9ec46574f8ece705df11dcbfd420ad66b3e7d"
+    }
+  ]
+}

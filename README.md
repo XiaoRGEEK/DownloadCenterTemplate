@@ -53,8 +53,9 @@ python3 scripts/prepare_release.py \
 3. 创建或复用 GitHub Draft Release，并上传资产。
 4. 生成 `releases/<tag>.json` 公开清单。
 
-多个架构或平台文件可以重复传入 `--asset`。文件名必须与 TOS Key 的最后
-一段一致，已经存在但内容不同的 Release 资产不会被覆盖。
+多个架构或平台文件可以重复传入 `--asset`。本地文件名必须与 TOS Key 的最后
+一段一致；GitHub 不支持的空格或非 ASCII 字符会在 Release 资产名中确定性地
+转换，TOS Key 仍保留原名。已经存在但内容不同的 Release 资产不会被覆盖。
 
 ### 3. 更新下载中心元数据
 

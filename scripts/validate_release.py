@@ -190,7 +190,7 @@ def validate_release_manifests() -> tuple[int, set[str]]:
                 or ".." in key.parts
                 or re.search(r"[\x00-\x1f]", key.as_posix())
                 or not key.as_posix().startswith(("software/", "firmware/"))
-                or key.name != name
+                or Path(key.name).suffix.lower() != Path(name).suffix.lower()
                 or key.as_posix() in seen_tos_keys
             ):
                 fail(f"invalid or duplicate TOS key in {path.relative_to(ROOT)}")
