@@ -1,168 +1,122 @@
-# Workflow for deploying static content to Volcengine TOS
-name: Deploy to Volcengine TOS
+name: Deploy release metadata to Volcengine TOS
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["master"]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow reading repository contents
 permissions:
   contents: read
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "tos"
+  group: tos-production
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
+    environment: tos-production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2  # 获取最近2次提交，用于比较差异
+          fetch-depth: 2
 
-      - name: Setup tosutil
-        uses: banyudu/actions-setup-tosutil@v0
-        with:
-          endpoint: ${{ secrets.TOS_ENDPOINT }}
-          region: ${{ secrets.TOS_REGION }}
-          access-key-id: ${{ secrets.TOS_ACCESS_KEY_ID }}
-          access-key-secret: ${{ secrets.TOS_SECRET_ACCESS_KEY }}
-          # token is optional, omit if not needed
+      - name: Validate control plane
+        run: python3 scripts/validate_release.py
 
-      - name: Get changed files
-        id: changed-files
-        run: |
-          # 对于push事件，获取本次提交中修改的文件
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            echo "获取修改的文件列表..."
-            
-            # 检查是否有上一个提交
-            if git rev-parse HEAD~1 >/dev/null 2>&1; then
-              # 获取当前提交和上一个提交之间的差异，过滤掉.git目录下的文件
-              git diff --name-only HEAD~1 HEAD | grep -v '^\.git/' > changed_files.txt
-            else
-              # 首次提交，没有上一个提交，上传所有文件（排除.git目录）
-              echo "首次提交，上传所有文件..."
-              find . -type f -not -path "./.git/*" -not -name "*.map" > changed_files.txt
-            fi
-          else
-            # 对于手动触发，上传所有文件（排除.git目录）
-            echo "手动触发，上传所有文件..."
-            find . -type f -not -path "./.git/*" -not -name "*.map" > changed_files.txt
-          fi
-          
-          # 统计文件数量
-          FILE_COUNT=$(wc -l < changed_files.txt 2>/dev/null || echo 0)
-          echo "找到 $FILE_COUNT 个文件需要处理"
-          
-          # 输出文件列表（前10个）
-          if [[ $FILE_COUNT -gt 0 ]]; then
-            echo "文件列表（前10个）:"
-            head -10 changed_files.txt
-          else
-            echo "没有找到需要处理的文件"
-            # 创建一个空文件，避免后续步骤出错
-            touch changed_files.txt
-          fi
-          
-          # 设置输出变量
-          echo "FILE_COUNT=$FILE_COUNT" >> $GITHUB_OUTPUT
-
-      - name: Upload files to Volcengine TOS
-        id: upload
-        run: |
-          # 删除.git目录
-          rm -rf .git
-          
-          # 读取修改的文件列表
-          if [[ -f changed_files.txt ]]; then
-            FILE_COUNT=$(wc -l < changed_files.txt)
-            
-            if [[ $FILE_COUNT -eq 0 ]]; then
-              echo "没有文件需要上传"
-              exit 0
-            fi
-            
-            echo "开始上传 $FILE_COUNT 个文件..."
-            
-            # 检查是否应该使用完整上传（文件太多或手动触发）
-            UPLOAD_ALL=false
-            if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-              echo "手动触发，使用完整上传..."
-              UPLOAD_ALL=true
-            elif [[ $FILE_COUNT -gt 100 ]]; then
-              echo "修改的文件超过100个，使用完整上传更高效..."
-              UPLOAD_ALL=true
-            fi
-            
-            if [[ $UPLOAD_ALL == true ]]; then
-              # 完整上传
-              tosutil cp -r ./ "tos://${{ secrets.TOS_BUCKET }}/" -flat \
-                -cacheControl="public,max-age=31536000,immutable" \
-                --exclude "*.map" \
-                --exclude ".git" \
-                --exclude ".git/**"
-            else
-              # 增量上传：逐个上传修改的文件
-              UPLOADED=0
-              SKIPPED=0
-              FAILED=0
-              
-              while IFS= read -r file; do
-                if [[ -f "$file" ]]; then
-                  echo "上传 ($((UPLOADED+FAILED+1))/$FILE_COUNT): $file"
-                  # 尝试上传，最多重试2次
-                  for attempt in {1..3}; do
-                    if [[ $attempt -gt 1 ]]; then
-                      echo "  第 $attempt 次重试..."
-                      sleep 2
-                    fi
-                    
-                    if tosutil cp "$file" "tos://${{ secrets.TOS_BUCKET }}/$file" \
-                      -cacheControl="public,max-age=31536000,immutable" 2>&1; then
-                      ((UPLOADED++))
-                      echo "  成功"
-                      break
-                    else
-                      if [[ $attempt -eq 3 ]]; then
-                        ((FAILED++))
-                        echo "  失败（已重试3次）"
-                        # 记录失败的文件
-                        echo "$file" >> failed_files.txt
-                      fi
-                    fi
-                  done
-                else
-                  echo "跳过不存在的文件: $file"
-                  ((SKIPPED++))
-                fi
-              done < changed_files.txt
-              
-              echo "文件上传完成:"
-              echo "  $UPLOADED 个文件已上传"
-              echo "  $SKIPPED 个文件被跳过"
-              echo "  $FAILED 个文件失败"
-              
-              # 如果有文件上传失败，显示失败列表并退出
-              if [[ $FAILED -gt 0 ]]; then
-                echo "以下文件上传失败:"
-                cat failed_files.txt
-                exit 1
-              fi
-            fi
-          else
-            echo "错误: changed_files.txt 不存在"
-            exit 1
-          fi
+      - name: Install and configure tosutil
         env:
+          TOS_ENDPOINT: ${{ secrets.TOS_ENDPOINT }}
+          TOS_REGION: ${{ secrets.TOS_REGION }}
           TOS_ACCESS_KEY_ID: ${{ secrets.TOS_ACCESS_KEY_ID }}
           TOS_SECRET_ACCESS_KEY: ${{ secrets.TOS_SECRET_ACCESS_KEY }}
+          TOS_SECURITY_TOKEN: ${{ secrets.TOS_SECURITY_TOKEN }}
+        run: |
+          set -euo pipefail
+          install_dir="${RUNNER_TEMP}/tosutil-bin"
+          mkdir -p "${install_dir}"
+          curl --fail --silent --show-error --location --retry 3 \
+            --output "${install_dir}/tosutil" \
+            https://tos-tools.tos-cn-beijing.volces.com/linux/amd64/tosutil
+          chmod 0755 "${install_dir}/tosutil"
+          echo "${install_dir}" >> "${GITHUB_PATH}"
+          "${install_dir}/tosutil" version
+          args=(config "-e=${TOS_ENDPOINT}" "-re=${TOS_REGION}" \
+            "-i=${TOS_ACCESS_KEY_ID}" "-k=${TOS_SECRET_ACCESS_KEY}")
+          if [[ -n "${TOS_SECURITY_TOKEN:-}" ]]; then
+            args+=("-t=${TOS_SECURITY_TOKEN}")
+          fi
+          "${install_dir}/tosutil" "${args[@]}"
+
+      - name: Build strict incremental plan
+        id: plan
+        run: |
+          set -euo pipefail
+          before="${{ github.event.before }}"
+          if [[ "${before}" == "0000000000000000000000000000000000000000" ]]; then
+            echo "Refusing an implicit full deployment without a base commit" >&2
+            exit 1
+          fi
+
+          git diff --name-status "${before}" "${GITHUB_SHA}" > "${RUNNER_TEMP}/changes.tsv"
+          : > "${RUNNER_TEMP}/deploy-assets.txt"
+          : > "${RUNNER_TEMP}/deploy-entrypoints.txt"
+
+          while IFS=$'\t' read -r status file rest; do
+            case "${file}" in
+              data.json|index.html|style.css|update/software.yaml|firmware/mxbit/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml|software/image/*|software/ios/*|docs/*.html|docs/assets/*)
+                if [[ "${status}" == D* || "${status}" == R* ]]; then
+                  echo "TOS deletion/rename is forbidden in deployment: ${status} ${file}" >&2
+                  exit 1
+                fi
+                case "${file}" in
+                  data.json|index.html|update/software.yaml|firmware/mxbit/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml)
+                    printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-entrypoints.txt"
+                    ;;
+                  *) printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-assets.txt" ;;
+                esac
+                ;;
+            esac
+          done < "${RUNNER_TEMP}/changes.tsv"
+
+          count=$(($(wc -l < "${RUNNER_TEMP}/deploy-assets.txt") + $(wc -l < "${RUNNER_TEMP}/deploy-entrypoints.txt")))
+          echo "count=${count}" >> "${GITHUB_OUTPUT}"
+          echo "Strict incremental plan contains ${count} allowlisted file(s)"
+
+      - name: Verify referenced release objects already exist
+        if: steps.plan.outputs.count != '0'
+        env:
+          TOS_BUCKET: ${{ secrets.TOS_BUCKET }}
+        run: |
+          set -euo pipefail
+          python3 scripts/validate_release.py --print-objects > "${RUNNER_TEMP}/release-objects.txt"
+          while IFS= read -r key; do
+            tosutil stat "tos://${TOS_BUCKET}/${key}" >/dev/null
+          done < "${RUNNER_TEMP}/release-objects.txt"
+
+      - name: Upload changed allowlisted files
+        if: steps.plan.outputs.count != '0'
+        env:
+          TOS_BUCKET: ${{ secrets.TOS_BUCKET }}
+        run: |
+          set -euo pipefail
+          upload() {
+            local file="$1"
+            local cache_control="public,max-age=3600"
+            case "${file}" in
+              *.json|*.yml|*.yaml|*.html|*.css)
+                cache_control="no-cache,max-age=0"
+                ;;
+            esac
+            tosutil cp "${file}" "tos://${TOS_BUCKET}/${file}" \
+              "-cacheControl=${cache_control}"
+          }
+
+          while IFS= read -r file; do
+            [[ -z "${file}" ]] || upload "${file}"
+          done < "${RUNNER_TEMP}/deploy-assets.txt"
+
+          # Mutable entrypoints are deliberately uploaded last.
+          while IFS= read -r file; do
+            [[ -z "${file}" ]] || upload "${file}"
+          done < "${RUNNER_TEMP}/deploy-entrypoints.txt"

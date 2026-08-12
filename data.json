@@ -52,12 +52,7 @@
             ]
         },
         "oldVersion": [
-            "software/android/RoboManager-1.0.52.251106.d6f40e8-release.apk",
-            "software/android/RoboManager-1.0.51.251106.26819f5-release.apk",
-            "software/android/RoboManager-1.0.48.251031.b983c84-release.apk",
-            "software/android/RoboManager-1.0.47.251015.cfd5c39-release.apk",
-            "software/android/RoboManager-1.0.40.250930.ec3dcff-release.apk",
-            "software/android/RoboManager-1.0.37.250923.1dc364f-release.apk"
+            "software/android/RoboManager-1.0.52.251106.d6f40e8-release.apk"
         ],
         "platform": "android",
         "platformVersions": {
@@ -195,8 +190,7 @@
             ]
         },
         "oldVersion": [
-            "software/android/ROSXRMobile V1.6.86.250107.8e48d4d.apk",
-            "software/android/ROSXRMobile V1.6.71.230508.97a7d55.apk"
+            "software/android/ROSXRMobile V1.6.86.250107.8e48d4d.apk"
         ],
         "platform": "android",
         "platformVersions": {
@@ -387,18 +381,8 @@
         },
         "oldVersion": [
             "software/android/XR-Controller_V1.4.162.260212.379dc84_arm64-v8a-release.apk",
-            "software/android/XR-Controller_V1.4.161.260129.379dc84_arm64-v8a-release.apk",
-            "software/android/XR-Controller_V1.4.144.251030.ac19f2c_arm64-v8a-release.apk",
             "software/android/XR-Controller_V1.4.144.251030.ac19f2c_armeabi-v7a-release.apk",
-            "software/android/XR-Controller_V1.4.143.250603.91316e0_arm64-v8a-release.apk",
-            "software/android/XR-Controller_V1.4.143.250603.91316e0_armeabi-v7a-release.apk",
-            "software/android/XR-Controller_V1.4.141.250107.dd4f546_arm64-v8a-release.apk",
-            "software/android/XR-Controller_V1.4.141.250107.dd4f546_armeabi-v7a-release.apk",
-            "software/android/XR-Controller_V1.4.139.240604.1d1b340_arm64-v8a-release.apk",
-            "software/android/XR-Controller_V1.4.139.240604.1d1b340_armeabi-v7a-release.apk",
-            "software/android/XR-Controller V1.4.136.240510.48048d8.apk",
-            "software/android/XR-Controller V1.4.134.240509.aa5a471.apk",
-            "software/android/XR-Controller V1.4.133.240328.5e14feb.apk"
+            "software/android/XR-Controller_V1.4.143.250603.91316e0_armeabi-v7a-release.apk"
         ],
         "platform": "android",
         "platformVersions": {
@@ -646,12 +630,7 @@
             ]
         },
         "oldVersion": [
-            "software/pc/xr-servo-1.2.5.exe",
-            "software/pc/xr-servo-1.2.3.exe",
-            "software/pc/xr-servo-1.2.2.exe",
-            "software/pc/xr-servo-1.2.1.exe",
-            "software/pc/xr-servo-1.1.9.exe",
-            "software/pc/xr-servo.exe"
+            "software/pc/xr-servo-1.2.5.exe"
         ],
         "platform": "windows",
         "platformVersions": {
@@ -666,13 +645,13 @@
             "en": "XRBlock Scratch3.0 Software",
             "zh": "XRBlock 图形化编程PC端软件"
         },
-        "version": "v2.2.5",
+        "version": "v2.2.6",
         "desc": {
             "en": "Support Scratch3.0 porducts",
             "zh": "支持图形化编程系列产品"
         },
         "link": [
-            "//software.xiao-r.com/software/pc/XR Block v2.2.5.exe"
+            "//software.xiao-r.com/software/pc/XR Block v2.2.6.exe"
         ],
         "btnNames": {
             "en": [
@@ -685,7 +664,7 @@
         "oldVersion": [],
         "platform": "windows",
         "platformVersions": {
-            "windows": "v2.2.5"
+            "windows": "v2.2.6"
         },
         "hasTools": false,
         "tools": []

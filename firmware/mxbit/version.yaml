@@ -1,0 +1,13 @@
+firmware:
+  xiaozhi:
+    name:
+      zh: 小智AI固件
+      en: Xiaozhi
+    version: 2.0.4
+    url: xiaozhi_2.0.4.bin
+  micropython:
+    name:
+      zh: Micropython固件
+      en: Micropython
+    version: 2.0.5
+    url: micropython_2.0.5.bin
