@@ -26,10 +26,8 @@ BINARY_SUFFIXES = {
     ".zip",
 }
 RELEASE_SUFFIXES = BINARY_SUFFIXES | {".jpeg", ".jpg", ".png"}
-TOS_DOWNLOAD_HOSTS = {
-    "software.xiao-r.com",
-    "software2.tos-cn-beijing.volces.com",
-}
+PUBLIC_DOWNLOAD_BASE_URL = "https://software.xiao-r.com/"
+TOS_DOWNLOAD_HOSTS = {"software.xiao-r.com"}
 MAX_RELEASE_ASSET_SIZE = 2 * 1024 * 1024 * 1024
 RELEASE_TAG_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{2,127}$")
 SENSITIVE_SUFFIXES = {".env", ".key", ".p8", ".p12", ".pem"}
@@ -232,6 +230,13 @@ def validate() -> set[str]:
     if invalid:
         fail("unsupported release object references:\n  " + "\n  ".join(invalid))
 
+    index = (ROOT / "index.html").read_text(encoding="utf-8")
+    expected_base = f"const RELEASE_BASE_URL = '{PUBLIC_DOWNLOAD_BASE_URL}';"
+    if expected_base not in index:
+        fail("index.html must use the HTTPS custom domain as RELEASE_BASE_URL")
+    if "software2.tos-cn-beijing.volces.com" in index:
+        fail("index.html must not expose the raw TOS bucket domain")
+
     xrblock = [
         entry
         for entry in data
@@ -241,7 +246,7 @@ def validate() -> set[str]:
         fail("data.json must contain exactly one XRBlock entry")
     entry = xrblock[0]
     if entry.get("version") != "v2.2.6" or entry.get("link") != [
-        "https://software2.tos-cn-beijing.volces.com/software/pc/XR Block v2.2.6.exe"
+        "software/pc/XR Block v2.2.6.exe"
     ]:
         fail("XRBlock website release must point to v2.2.6")
 
