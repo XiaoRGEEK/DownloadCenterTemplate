@@ -1,4 +1,4 @@
-name: Deploy release metadata to Volcengine TOS
+name: Publish release assets and deploy metadata to TOS
 
 on:
   push:
@@ -12,7 +12,156 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      has_releases: ${{ steps.changes.outputs.has_releases }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+
+      - name: Validate public control plane
+        run: python3 scripts/validate_release.py
+
+      - name: Detect new immutable release manifests
+        id: changes
+        run: |
+          set -euo pipefail
+          before="${{ github.event.before }}"
+          if [[ "${before}" == "0000000000000000000000000000000000000000" ]]; then
+            echo "Refusing an implicit full publication without a base commit" >&2
+            exit 1
+          fi
+          git diff --name-status "${before}" "${GITHUB_SHA}" > "${RUNNER_TEMP}/changes.tsv"
+          count=0
+          while IFS=$'\t' read -r status file rest; do
+            case "${file}" in
+              releases/*.json)
+                if [[ "${status}" != A* ]]; then
+                  echo "Release manifests are immutable: ${status} ${file}" >&2
+                  exit 1
+                fi
+                count=$((count + 1))
+                ;;
+            esac
+          done < "${RUNNER_TEMP}/changes.tsv"
+          if (( count > 0 )); then
+            echo "has_releases=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "has_releases=false" >> "${GITHUB_OUTPUT}"
+          fi
+          echo "New release manifests: ${count}"
+
+  publish-assets:
+    needs: plan
+    if: needs.plan.outputs.has_releases == 'true'
+    environment: release-publishing
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout reviewed master
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+
+      - name: Install and configure tosutil
+        env:
+          TOS_ENDPOINT: ${{ secrets.TOS_ENDPOINT }}
+          TOS_REGION: ${{ secrets.TOS_REGION }}
+          TOS_ACCESS_KEY_ID: ${{ secrets.TOS_ACCESS_KEY_ID }}
+          TOS_SECRET_ACCESS_KEY: ${{ secrets.TOS_SECRET_ACCESS_KEY }}
+          TOS_SECURITY_TOKEN: ${{ secrets.TOS_SECURITY_TOKEN }}
+        run: |
+          set -euo pipefail
+          install_dir="${RUNNER_TEMP}/tosutil-bin"
+          mkdir -p "${install_dir}"
+          curl --fail --silent --show-error --location --retry 3 \
+            --output "${install_dir}/tosutil" \
+            https://tos-tools.tos-cn-beijing.volces.com/linux/amd64/tosutil
+          chmod 0755 "${install_dir}/tosutil"
+          echo "${install_dir}" >> "${GITHUB_PATH}"
+          args=(config "-e=${TOS_ENDPOINT}" "-re=${TOS_REGION}" \
+            "-i=${TOS_ACCESS_KEY_ID}" "-k=${TOS_SECRET_ACCESS_KEY}")
+          if [[ -n "${TOS_SECURITY_TOKEN:-}" ]]; then
+            args+=("-t=${TOS_SECURITY_TOKEN}")
+          fi
+          "${install_dir}/tosutil" "${args[@]}"
+
+      - name: Mirror reviewed Draft Releases to TOS
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TOS_BUCKET: ${{ secrets.TOS_BUCKET }}
+        run: |
+          set -euo pipefail
+          git diff --name-status "${{ github.event.before }}" "${GITHUB_SHA}" \
+            | awk -F '\t' '$1 ~ /^A/ && $2 ~ /^releases\/.*\.json$/ {print $2}' \
+            > "${RUNNER_TEMP}/release-manifests.txt"
+
+          while IFS= read -r manifest; do
+            [[ -n "${manifest}" ]] || continue
+            tag=$(jq -r '.tag' "${manifest}")
+            release_json=$(gh release view "${tag}" --repo "${GITHUB_REPOSITORY}" \
+              --json isDraft,tagName)
+            is_draft=$(jq -r '.isDraft' <<<"${release_json}")
+            release_dir="${RUNNER_TEMP}/release-${tag}"
+            mkdir -p "${release_dir}"
+
+            while IFS=$'\t' read -r name tos_key expected_size expected_sha; do
+              gh release download "${tag}" --repo "${GITHUB_REPOSITORY}" \
+                --pattern "${name}" --dir "${release_dir}"
+              local_file="${release_dir}/${name}"
+              actual_size=$(stat -c '%s' "${local_file}")
+              actual_sha=$(sha256sum "${local_file}" | awk '{print $1}')
+              [[ "${actual_size}" == "${expected_size}" ]] || {
+                echo "Release asset size mismatch: ${name}" >&2; exit 1;
+              }
+              [[ "${actual_sha}" == "${expected_sha}" ]] || {
+                echo "Release asset SHA256 mismatch: ${name}" >&2; exit 1;
+              }
+
+              stat_log="${RUNNER_TEMP}/tos-stat.log"
+              if tosutil stat "tos://${TOS_BUCKET}/${tos_key}" >"${stat_log}" 2>&1; then
+                remote_file="${RUNNER_TEMP}/existing-${expected_sha}"
+                tosutil cp "tos://${TOS_BUCKET}/${tos_key}" "${remote_file}" -vchecksum
+                remote_size=$(stat -c '%s' "${remote_file}")
+                remote_sha=$(sha256sum "${remote_file}" | awk '{print $1}')
+                [[ "${remote_size}" == "${expected_size}" && \
+                   "${remote_sha}" == "${expected_sha}" ]] || {
+                  echo "TOS key exists with different content; refusing overwrite: ${tos_key}" >&2
+                  exit 1
+                }
+                echo "TOS object already matches; skipped: ${tos_key}"
+              elif grep -q 'Status \[404\]' "${stat_log}"; then
+                tosutil cp "${local_file}" "tos://${TOS_BUCKET}/${tos_key}" \
+                  -vchecksum "-meta=sha256:${expected_sha}" \
+                  -cacheControl=public,max-age=31536000,immutable
+                tosutil stat "tos://${TOS_BUCKET}/${tos_key}" >/dev/null
+                echo "Uploaded new TOS object: ${tos_key}"
+              else
+                cat "${stat_log}" >&2
+                echo "Unable to determine TOS object state: ${tos_key}" >&2
+                exit 1
+              fi
+            done < <(jq -r '.assets[] | [.name,.tos_key,(.size|tostring),.sha256] | @tsv' "${manifest}")
+
+            if [[ "${is_draft}" == "true" ]]; then
+              gh release edit "${tag}" --repo "${GITHUB_REPOSITORY}" \
+                --draft=false --latest=false --target "${GITHUB_SHA}"
+              echo "Published GitHub Release: ${tag}"
+            else
+              echo "GitHub Release already published: ${tag}"
+            fi
+          done < "${RUNNER_TEMP}/release-manifests.txt"
+
+  deploy-metadata:
+    needs: [plan, publish-assets]
+    if: >-
+      always() &&
+      needs.plan.result == 'success' &&
+      (needs.publish-assets.result == 'success' || needs.publish-assets.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,7 +188,6 @@ jobs:
             https://tos-tools.tos-cn-beijing.volces.com/linux/amd64/tosutil
           chmod 0755 "${install_dir}/tosutil"
           echo "${install_dir}" >> "${GITHUB_PATH}"
-          "${install_dir}/tosutil" version
           args=(config "-e=${TOS_ENDPOINT}" "-re=${TOS_REGION}" \
             "-i=${TOS_ACCESS_KEY_ID}" "-k=${TOS_SECRET_ACCESS_KEY}")
           if [[ -n "${TOS_SECURITY_TOKEN:-}" ]]; then
@@ -47,17 +195,12 @@ jobs:
           fi
           "${install_dir}/tosutil" "${args[@]}"
 
-      - name: Build strict incremental plan
+      - name: Build strict incremental metadata plan
         id: plan
         run: |
           set -euo pipefail
-          before="${{ github.event.before }}"
-          if [[ "${before}" == "0000000000000000000000000000000000000000" ]]; then
-            echo "Refusing an implicit full deployment without a base commit" >&2
-            exit 1
-          fi
-
-          git diff --name-status "${before}" "${GITHUB_SHA}" > "${RUNNER_TEMP}/changes.tsv"
+          git diff --name-status "${{ github.event.before }}" "${GITHUB_SHA}" \
+            > "${RUNNER_TEMP}/changes.tsv"
           : > "${RUNNER_TEMP}/deploy-assets.txt"
           : > "${RUNNER_TEMP}/deploy-entrypoints.txt"
 
@@ -70,8 +213,7 @@ jobs:
                 fi
                 case "${file}" in
                   data.json|index.html|update/software.yaml|firmware/mxbit/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml)
-                    printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-entrypoints.txt"
-                    ;;
+                    printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-entrypoints.txt" ;;
                   *) printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-assets.txt" ;;
                 esac
                 ;;
@@ -80,9 +222,9 @@ jobs:
 
           count=$(($(wc -l < "${RUNNER_TEMP}/deploy-assets.txt") + $(wc -l < "${RUNNER_TEMP}/deploy-entrypoints.txt")))
           echo "count=${count}" >> "${GITHUB_OUTPUT}"
-          echo "Strict incremental plan contains ${count} allowlisted file(s)"
+          echo "Strict incremental metadata plan contains ${count} file(s)"
 
-      - name: Verify referenced release objects already exist
+      - name: Verify every referenced TOS release object
         if: steps.plan.outputs.count != '0'
         env:
           TOS_BUCKET: ${{ secrets.TOS_BUCKET }}
@@ -93,7 +235,7 @@ jobs:
             tosutil stat "tos://${TOS_BUCKET}/${key}" >/dev/null
           done < "${RUNNER_TEMP}/release-objects.txt"
 
-      - name: Upload changed allowlisted files
+      - name: Upload changed allowlisted metadata
         if: steps.plan.outputs.count != '0'
         env:
           TOS_BUCKET: ${{ secrets.TOS_BUCKET }}
@@ -104,18 +246,14 @@ jobs:
             local cache_control="public,max-age=3600"
             case "${file}" in
               *.json|*.yml|*.yaml|*.html|*.css)
-                cache_control="no-cache,max-age=0"
-                ;;
+                cache_control="no-cache,max-age=0" ;;
             esac
             tosutil cp "${file}" "tos://${TOS_BUCKET}/${file}" \
               "-cacheControl=${cache_control}"
           }
-
           while IFS= read -r file; do
             [[ -z "${file}" ]] || upload "${file}"
           done < "${RUNNER_TEMP}/deploy-assets.txt"
-
-          # Mutable entrypoints are deliberately uploaded last.
           while IFS= read -r file; do
             [[ -z "${file}" ]] || upload "${file}"
           done < "${RUNNER_TEMP}/deploy-entrypoints.txt"
