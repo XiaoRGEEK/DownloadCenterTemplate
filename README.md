@@ -1,9 +1,9 @@
 # XiaoR Download Center
 
 This repository is the control plane for XiaoR software and firmware releases.
-The public release binaries live in Volcengine TOS at
-`https://software.xiao-r.com/`; regular Git contains only the website, release
-metadata, documentation, and validation/deployment automation.
+The public release binaries live in Volcengine TOS and are downloaded through
+its certificate-valid HTTPS endpoint; regular Git contains only the website,
+release metadata, documentation, and validation/deployment automation.
 
 ## Release workflow
 
