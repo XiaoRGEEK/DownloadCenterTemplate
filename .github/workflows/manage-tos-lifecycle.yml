@@ -1,0 +1,41 @@
+name: Manage TOS lifecycle policy
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type APPLY-XIAOR-TOS-LIFECYCLE
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tos-maintenance
+  cancel-in-progress: false
+
+jobs:
+  lifecycle:
+    environment: tos-maintenance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout protected master
+        uses: actions/checkout@v7
+      - name: Verify exact confirmation
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: test "${CONFIRMATION}" = "APPLY-XIAOR-TOS-LIFECYCLE"
+      - name: Install official TOS SDK
+        run: python3 -m pip install --disable-pip-version-check 'tos==2.9.0'
+      - name: Preserve existing rules and apply XiaoR retention
+        env:
+          TOS_LIFECYCLE_CONFIRM: ${{ inputs.confirmation }}
+          TOS_ENDPOINT: ${{ secrets.TOS_ENDPOINT }}
+          TOS_REGION: ${{ secrets.TOS_REGION }}
+          TOS_ACCESS_KEY_ID: ${{ secrets.TOS_ACCESS_KEY_ID }}
+          TOS_SECRET_ACCESS_KEY: ${{ secrets.TOS_SECRET_ACCESS_KEY }}
+          TOS_SECURITY_TOKEN: ${{ secrets.TOS_SECURITY_TOKEN }}
+          TOS_BUCKET: ${{ secrets.TOS_BUCKET }}
+        run: python3 scripts/manage_tos_lifecycle.py
+
