@@ -25,6 +25,10 @@ BINARY_SUFFIXES = {
     ".zip",
 }
 RELEASE_SUFFIXES = BINARY_SUFFIXES | {".jpeg", ".jpg", ".png"}
+TOS_DOWNLOAD_HOSTS = {
+    "software.xiao-r.com",
+    "software2.tos-cn-beijing.volces.com",
+}
 
 
 def fail(message: str) -> None:
@@ -45,12 +49,12 @@ def normalize_object(value: str, base: str = "") -> str | None:
     value = value.strip().strip("'\"")
     if value.startswith("//"):
         parsed = urlparse(f"https:{value}")
-        if parsed.hostname != "software.xiao-r.com":
+        if parsed.hostname not in TOS_DOWNLOAD_HOSTS:
             return None
         return parsed.path.lstrip("/")
     if value.startswith(("http://", "https://")):
         parsed = urlparse(value)
-        if parsed.hostname != "software.xiao-r.com":
+        if parsed.hostname not in TOS_DOWNLOAD_HOSTS:
             return None
         return parsed.path.lstrip("/")
     if value.startswith("./"):
@@ -131,7 +135,7 @@ def validate() -> set[str]:
         fail("data.json must contain exactly one XRBlock entry")
     entry = xrblock[0]
     if entry.get("version") != "v2.2.6" or entry.get("link") != [
-        "//software.xiao-r.com/software/pc/XR Block v2.2.6.exe"
+        "https://software2.tos-cn-beijing.volces.com/software/pc/XR Block v2.2.6.exe"
     ]:
         fail("XRBlock website release must point to v2.2.6")
 
