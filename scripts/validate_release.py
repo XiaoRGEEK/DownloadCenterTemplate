@@ -102,13 +102,24 @@ def data_objects() -> tuple[set[str], list[dict]]:
 def yaml_urls(path: Path, base: str = "") -> set[str]:
     objects: set[str] = set()
     for line in path.read_text(encoding="utf-8-sig").splitlines():
-        match = re.match(r"^\s*(?:url|path):\s*(.+?)\s*$", line)
+        match = re.match(r"^\s*(?:-\s*)?(?:url|path):\s*(.+?)\s*$", line)
         if not match:
             continue
         key = normalize_object(match.group(1), base)
         if key:
             objects.add(key)
     return objects
+
+
+def electron_updater_objects(path: Path, base: str) -> set[str]:
+    """Return updater packages plus their implicit differential blockmaps."""
+    objects = yaml_urls(path, base)
+    blockmaps = {
+        f"{key}.blockmap"
+        for key in objects
+        if Path(key).suffix.lower() in {".dmg", ".exe", ".zip"}
+    }
+    return objects | blockmaps
 
 
 def referenced_objects() -> tuple[set[str], list[dict]]:
@@ -121,6 +132,12 @@ def referenced_objects() -> tuple[set[str], list[dict]]:
     objects |= yaml_urls(ROOT / "software/pc/latest.yml", "software/pc/")
     objects |= yaml_urls(
         ROOT / "software/pc/moxin/latest.yml", "software/pc/moxin/"
+    )
+    objects |= electron_updater_objects(
+        ROOT / "ota/xr-studio/latest.yml", "ota/xr-studio/"
+    )
+    objects |= electron_updater_objects(
+        ROOT / "ota/xr-studio/latest-mac.yml", "ota/xr-studio/"
     )
     return objects, data
 
@@ -190,7 +207,7 @@ def validate_release_manifests() -> tuple[int, set[str]]:
                 or key.is_absolute()
                 or ".." in key.parts
                 or re.search(r"[\x00-\x1f]", key.as_posix())
-                or not key.as_posix().startswith(("software/", "firmware/"))
+                or not key.as_posix().startswith(("software/", "firmware/", "ota/"))
                 or Path(key.name).suffix.lower() != Path(name).suffix.lower()
                 or key.as_posix() in seen_tos_keys
             ):
@@ -256,6 +273,50 @@ def validate() -> set[str]:
     omnimind = [key for key in objects if "omnimind" in key.lower()]
     if omnimind:
         fail("retired OmniMind objects must not be referenced")
+
+    xr_studio = [
+        entry for entry in data if entry.get("name", {}).get("en") == "XR Studio"
+    ]
+    expected_xr_studio = {
+        "windows": {
+            "version": "v1.0.0",
+            "link": [
+                "https://software.xiao-r.com/software/pc/"
+                "xr-studio-1.0.0-win-x64.exe"
+            ],
+            "button": ["Windows x64"],
+        },
+        "mac": {
+            "version": "v1.0.0",
+            "link": [
+                "https://software.xiao-r.com/software/pc/"
+                "xr-studio-1.0.0-mac-arm64.dmg"
+            ],
+            "button": ["macOS Apple Silicon"],
+        },
+    }
+    if len(xr_studio) != 2:
+        fail("data.json must contain exactly two XR Studio platform entries")
+    for entry in xr_studio:
+        platform = entry.get("platform")
+        expected = expected_xr_studio.get(platform)
+        if (
+            expected is None
+            or entry.get("logoSrc") != "./software/image/xr-studio.png"
+            or entry.get("version") != expected["version"]
+            or entry.get("link") != expected["link"]
+            or entry.get("btnNames", {}).get("en") != expected["button"]
+            or entry.get("btnNames", {}).get("zh") != expected["button"]
+            or entry.get("platformVersions")
+            != {"windows": "v1.0.0", "mac": "v1.0.0"}
+        ):
+            fail(f"invalid XR Studio data.json entry for platform: {platform}")
+
+    for updater_name in ("latest.yml", "latest-mac.yml"):
+        updater_path = ROOT / "ota/xr-studio" / updater_name
+        updater_text = updater_path.read_text(encoding="utf-8-sig")
+        if not re.search(r"^version:\s*1\.0\.0\s*$", updater_text, re.MULTILINE):
+            fail(f"XR Studio {updater_name} version must be 1.0.0")
 
     xr_car_tail = (ROOT / "firmware/xr-car-tail/version.yaml").read_text(
         encoding="utf-8"

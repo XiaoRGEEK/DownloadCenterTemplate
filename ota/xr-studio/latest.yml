@@ -1,0 +1,8 @@
+version: 1.0.0
+files:
+  - url: xr-studio-1.0.0-win-x64.exe
+    sha512: LpHM4Z0+QoZ/LV/Enxq2d3SZ8y4WDN9WoZ4R4eZG0ihHStFz9Edxj0HfxwLU61fgOr1TOCuoDO8++Hq1yE6Pwg==
+    size: 84089477
+path: xr-studio-1.0.0-win-x64.exe
+sha512: LpHM4Z0+QoZ/LV/Enxq2d3SZ8y4WDN9WoZ4R4eZG0ihHStFz9Edxj0HfxwLU61fgOr1TOCuoDO8++Hq1yE6Pwg==
+releaseDate: '2026-08-12T14:29:26.312Z'
