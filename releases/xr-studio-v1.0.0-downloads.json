@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "tag": "xr-studio-v1.0.0-downloads",
+  "title": "XR Studio 1.0.0 Downloads",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-studio-1.0.0-mac-arm64.dmg",
+      "tos_key": "software/pc/xr-studio-1.0.0-mac-arm64.dmg",
+      "size": 104650593,
+      "sha256": "4f56f8d621c2e8fc72d0366cbf1448cdc3a79a3663fb361f5acca14497763c9d"
+    },
+    {
+      "name": "xr-studio-1.0.0-win-x64.exe",
+      "tos_key": "software/pc/xr-studio-1.0.0-win-x64.exe",
+      "size": 84089477,
+      "sha256": "740fb92410d804c7db44b8133adf541d8961e6fb33190d6164f1b834b912a891"
+    }
+  ]
+}

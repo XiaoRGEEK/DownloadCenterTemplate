@@ -668,5 +668,67 @@
         },
         "hasTools": false,
         "tools": []
+    },
+    {
+        "logoSrc": "./software/image/xr-studio.png",
+        "name": {
+            "en": "XR Studio",
+            "zh": "XR Studio"
+        },
+        "version": "v1.0.0",
+        "desc": {
+            "en": "Device workbench for communication, debugging, and OTA updates",
+            "zh": "面向设备通信、联调和 OTA 升级的设备工作台"
+        },
+        "link": [
+            "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-win-x64.exe"
+        ],
+        "btnNames": {
+            "en": [
+                "Windows x64"
+            ],
+            "zh": [
+                "Windows x64"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "windows",
+        "platformVersions": {
+            "windows": "v1.0.0",
+            "mac": "v1.0.0"
+        },
+        "hasTools": false,
+        "tools": []
+    },
+    {
+        "logoSrc": "./software/image/xr-studio.png",
+        "name": {
+            "en": "XR Studio",
+            "zh": "XR Studio"
+        },
+        "version": "v1.0.0",
+        "desc": {
+            "en": "Device workbench for communication, debugging, and OTA updates",
+            "zh": "面向设备通信、联调和 OTA 升级的设备工作台"
+        },
+        "link": [
+            "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-mac-arm64.dmg"
+        ],
+        "btnNames": {
+            "en": [
+                "macOS Apple Silicon"
+            ],
+            "zh": [
+                "macOS Apple Silicon"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "mac",
+        "platformVersions": {
+            "windows": "v1.0.0",
+            "mac": "v1.0.0"
+        },
+        "hasTools": false,
+        "tools": []
     }
 ]

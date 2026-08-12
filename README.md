@@ -66,6 +66,15 @@ python3 scripts/prepare_release.py \
 python3 scripts/validate_release.py
 ```
 
+XR Studio 同时包含下载中心安装包和 electron-updater 自动更新文件：
+
+- 下载中心安装包发布到 `software/pc/`。
+- 自动更新安装包和 `.blockmap` 发布到 `ota/xr-studio/`。
+- 带版本号的安装包和 `.blockmap` 只放 GitHub Draft Release，不提交到 Git。
+- `ota/xr-studio/latest.yml`、`latest-mac.yml`、图标和 `data.json` 作为小型元数据提交到 Git。
+- Action 必须先镜像所有安装包，再镜像 `.blockmap`，验证公开 HTTPS、文件长度和 Range 请求后，才上传 `latest*.yml`；`data.json` 始终最后上传。
+- Windows 和 macOS 下载中心文件与 OTA 文件即使内容相同，也使用各自固定的 TOS Key；不得用同步或删除命令代替逐对象增量发布。
+
 ### 4. 提交 PR
 
 ```bash

@@ -30,7 +30,7 @@ ALLOWED_SUFFIXES = {
     ".msi",
     ".zip",
 }
-ALLOWED_TOS_PREFIXES = ("software/", "firmware/")
+ALLOWED_TOS_PREFIXES = ("software/", "firmware/", "ota/")
 GH_CLI = os.environ.get("XIAOR_GH", "gh")
 
 
@@ -83,7 +83,9 @@ def parse_asset(value: str) -> tuple[Path, str, str]:
         raise ReleaseError(f"unsafe TOS key: {tos_key}")
     normalized_key = key.as_posix()
     if not normalized_key.startswith(ALLOWED_TOS_PREFIXES):
-        raise ReleaseError(f"TOS key must start with software/ or firmware/: {tos_key}")
+        raise ReleaseError(
+            f"TOS key must start with software/, firmware/ or ota/: {tos_key}"
+        )
     if key.name != source.name:
         raise ReleaseError(
             f"local filename and TOS key basename must match: {source.name} != {key.name}"
@@ -245,7 +247,10 @@ def main() -> int:
                 )
             merged[asset["name"]] = asset
         manifest["title"] = args.title
-        manifest["assets"] = sorted(merged.values(), key=lambda item: item["name"])
+        manifest["assets"] = sorted(
+            merged.values(),
+            key=lambda item: (item["name"].endswith(".blockmap"), item["name"]),
+        )
         manifest_path.write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",

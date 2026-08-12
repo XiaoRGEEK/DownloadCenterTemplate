@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "tag": "xr-studio-v1.0.0-ota",
+  "title": "XR Studio 1.0.0 Automatic Updates",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-studio-1.0.0-mac-arm64.dmg",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.0-mac-arm64.dmg",
+      "size": 104650593,
+      "sha256": "4f56f8d621c2e8fc72d0366cbf1448cdc3a79a3663fb361f5acca14497763c9d"
+    },
+    {
+      "name": "xr-studio-1.0.0-mac-arm64.zip",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.0-mac-arm64.zip",
+      "size": 99660292,
+      "sha256": "76d036884d42543da0d2b2880d8499563f74c8941d934797263f9456ab1d00c6"
+    },
+    {
+      "name": "xr-studio-1.0.0-win-x64.exe",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64.exe",
+      "size": 84089477,
+      "sha256": "740fb92410d804c7db44b8133adf541d8961e6fb33190d6164f1b834b912a891"
+    },
+    {
+      "name": "xr-studio-1.0.0-mac-arm64.dmg.blockmap",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.0-mac-arm64.dmg.blockmap",
+      "size": 110085,
+      "sha256": "18ae74a3140661523b2ad1f1e0d8bc0bea4ef57e17e586fce8e668470dbb3bfc"
+    },
+    {
+      "name": "xr-studio-1.0.0-mac-arm64.zip.blockmap",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.0-mac-arm64.zip.blockmap",
+      "size": 104965,
+      "sha256": "93f7d62b9fbb9399998e1654d5e8b3c77cff767e75b83a8e0290851ad3b3570b"
+    },
+    {
+      "name": "xr-studio-1.0.0-win-x64.exe.blockmap",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64.exe.blockmap",
+      "size": 87842,
+      "sha256": "8a5e62ed64f429d42597361bfea8583d070c39dc2e84de4ba871e7eb5b6f8b4d"
+    }
+  ]
+}

@@ -94,8 +94,81 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TOS_BUCKET: ${{ secrets.TOS_BUCKET }}
+          PUBLIC_RELEASE_BASE_URL: https://software.xiao-r.com/
         run: |
           set -euo pipefail
+          verify_public() {
+            local tos_key="$1"
+            local expected_size="$2"
+            local encoded_key
+            local url
+            local head_file="${RUNNER_TEMP}/public-head.txt"
+            local range_file="${RUNNER_TEMP}/public-range.txt"
+            local actual_length
+            local range_status
+            local content_range
+
+            encoded_key=$(jq -rn --arg key "${tos_key}" '$key | @uri' | sed 's/%2F/\//g')
+            url="${PUBLIC_RELEASE_BASE_URL}${encoded_key}"
+            curl --fail --silent --show-error --location \
+              --retry 5 --retry-all-errors --head --output "${head_file}" "${url}"
+            actual_length=$(tr -d '\r' < "${head_file}" \
+              | awk 'tolower($1) == "content-length:" {value=$2} END {print value}')
+            [[ "${actual_length}" == "${expected_size}" ]] || {
+              echo "Public Content-Length mismatch: ${tos_key}" >&2; exit 1;
+            }
+
+            range_status=$(curl --silent --show-error --location \
+              --retry 5 --retry-all-errors --range 0-0 \
+              --dump-header "${range_file}" --output /dev/null \
+              --write-out '%{http_code}' "${url}")
+            content_range=$(tr -d '\r' < "${range_file}" \
+              | awk 'tolower($1) == "content-range:" {value=$2 " " $3} END {print value}')
+            [[ "${range_status}" == "206" && \
+               "${content_range}" == "bytes 0-0/${expected_size}" ]] || {
+              echo "Public Range verification failed: ${tos_key}" >&2; exit 1;
+            }
+            echo "Verified public HTTPS, length and Range: ${tos_key}"
+          }
+
+          verify_updater_manifest() {
+            local tos_key="$1"
+            local local_file="$2"
+            local expected_size="$3"
+            local asset_name
+            local updater_manifest
+            local expected_sha512=""
+            local manifest_size=""
+            local actual_sha512
+
+            case "${tos_key}" in
+              ota/xr-studio/*.exe|ota/xr-studio/*.dmg|ota/xr-studio/*.zip) ;;
+              *) return ;;
+            esac
+            asset_name=$(basename "${tos_key}")
+            for updater_manifest in \
+              ota/xr-studio/latest.yml \
+              ota/xr-studio/latest-mac.yml; do
+              expected_sha512=$(awk -v name="${asset_name}" '
+                $1 == "-" && $2 == "url:" {current=$3; next}
+                current == name && $1 == "sha512:" {print $2; exit}
+              ' "${updater_manifest}")
+              manifest_size=$(awk -v name="${asset_name}" '
+                $1 == "-" && $2 == "url:" {current=$3; next}
+                current == name && $1 == "size:" {print $2; exit}
+              ' "${updater_manifest}")
+              [[ -z "${expected_sha512}" ]] || break
+            done
+            [[ -n "${expected_sha512}" && "${manifest_size}" == "${expected_size}" ]] || {
+              echo "Updater manifest entry missing or size mismatch: ${tos_key}" >&2; exit 1;
+            }
+            actual_sha512=$(openssl dgst -sha512 -binary "${local_file}" | openssl base64 -A)
+            [[ "${actual_sha512}" == "${expected_sha512}" ]] || {
+              echo "Updater manifest SHA512 mismatch: ${tos_key}" >&2; exit 1;
+            }
+            echo "Verified updater size and SHA512: ${tos_key}"
+          }
+
           git diff --name-status "${{ github.event.before }}" "${GITHUB_SHA}" \
             | awk -F '\t' '$1 ~ /^A/ && $2 ~ /^releases\/.*\.json$/ {print $2}' \
             > "${RUNNER_TEMP}/release-manifests.txt"
@@ -121,10 +194,12 @@ jobs:
               [[ "${actual_sha}" == "${expected_sha}" ]] || {
                 echo "Release asset SHA256 mismatch: ${name}" >&2; exit 1;
               }
+              verify_updater_manifest "${tos_key}" "${local_file}" "${expected_size}"
 
               stat_log="${RUNNER_TEMP}/tos-stat.log"
               if tosutil stat "tos://${TOS_BUCKET}/${tos_key}" >"${stat_log}" 2>&1; then
-                remote_file="${RUNNER_TEMP}/existing-${expected_sha}"
+                key_id=$(printf '%s' "${tos_key}" | sha256sum | awk '{print $1}')
+                remote_file="${RUNNER_TEMP}/existing-${key_id}"
                 tosutil cp "tos://${TOS_BUCKET}/${tos_key}" "${remote_file}" -vchecksum
                 remote_size=$(stat -c '%s' "${remote_file}")
                 remote_sha=$(sha256sum "${remote_file}" | awk '{print $1}')
@@ -145,6 +220,7 @@ jobs:
                 echo "Unable to determine TOS object state: ${tos_key}" >&2
                 exit 1
               fi
+              verify_public "${tos_key}" "${expected_size}"
             done < <(jq -r '.assets[] | [.name,.tos_key,(.size|tostring),.sha256] | @tsv' "${manifest}")
 
             if [[ "${is_draft}" == "true" ]]; then
@@ -203,16 +279,19 @@ jobs:
             > "${RUNNER_TEMP}/changes.tsv"
           : > "${RUNNER_TEMP}/deploy-assets.txt"
           : > "${RUNNER_TEMP}/deploy-entrypoints.txt"
+          : > "${RUNNER_TEMP}/deploy-final.txt"
 
           while IFS=$'\t' read -r status file rest; do
             case "${file}" in
-              data.json|index.html|style.css|update/software.yaml|firmware/mxbit/version.yaml|firmware/xr-car-tail/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml|software/image/*|software/ios/*|docs/*.html|docs/assets/*)
+              data.json|index.html|style.css|update/software.yaml|firmware/mxbit/version.yaml|firmware/xr-car-tail/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml|ota/xr-studio/latest.yml|ota/xr-studio/latest-mac.yml|software/image/*|software/ios/*|docs/*.html|docs/assets/*)
                 if [[ "${status}" == D* || "${status}" == R* ]]; then
                   echo "TOS deletion/rename is forbidden in deployment: ${status} ${file}" >&2
                   exit 1
                 fi
                 case "${file}" in
-                  data.json|index.html|update/software.yaml|firmware/mxbit/version.yaml|firmware/xr-car-tail/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml)
+                  data.json)
+                    printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-final.txt" ;;
+                  index.html|update/software.yaml|firmware/mxbit/version.yaml|firmware/xr-car-tail/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml|ota/xr-studio/latest.yml|ota/xr-studio/latest-mac.yml)
                     printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-entrypoints.txt" ;;
                   *) printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-assets.txt" ;;
                 esac
@@ -220,7 +299,7 @@ jobs:
             esac
           done < "${RUNNER_TEMP}/changes.tsv"
 
-          count=$(($(wc -l < "${RUNNER_TEMP}/deploy-assets.txt") + $(wc -l < "${RUNNER_TEMP}/deploy-entrypoints.txt")))
+          count=$(($(wc -l < "${RUNNER_TEMP}/deploy-assets.txt") + $(wc -l < "${RUNNER_TEMP}/deploy-entrypoints.txt") + $(wc -l < "${RUNNER_TEMP}/deploy-final.txt")))
           echo "count=${count}" >> "${GITHUB_OUTPUT}"
           echo "Strict incremental metadata plan contains ${count} file(s)"
 
@@ -249,7 +328,7 @@ jobs:
                 cache_control="no-cache,max-age=0" ;;
             esac
             tosutil cp "${file}" "tos://${TOS_BUCKET}/${file}" \
-              "-cacheControl=${cache_control}"
+              -vchecksum "-cacheControl=${cache_control}"
           }
           while IFS= read -r file; do
             [[ -z "${file}" ]] || upload "${file}"
@@ -257,3 +336,48 @@ jobs:
           while IFS= read -r file; do
             [[ -z "${file}" ]] || upload "${file}"
           done < "${RUNNER_TEMP}/deploy-entrypoints.txt"
+          while IFS= read -r file; do
+            [[ -z "${file}" ]] || upload "${file}"
+          done < "${RUNNER_TEMP}/deploy-final.txt"
+
+      - name: Verify public metadata and XR Studio download entries
+        if: steps.plan.outputs.count != '0'
+        env:
+          PUBLIC_RELEASE_BASE_URL: https://software.xiao-r.com/
+        run: |
+          set -euo pipefail
+          verify_file() {
+            local file="$1"
+            local encoded_file
+            local downloaded="${RUNNER_TEMP}/public-$(basename "${file}")"
+            encoded_file=$(jq -rn --arg file "${file}" '$file | @uri' | sed 's/%2F/\//g')
+            curl --fail --silent --show-error --location \
+              --retry 5 --retry-all-errors \
+              --output "${downloaded}" \
+              "${PUBLIC_RELEASE_BASE_URL}${encoded_file}?release=${GITHUB_SHA}"
+            cmp --silent "${file}" "${downloaded}" || {
+              echo "Public metadata mismatch: ${file}" >&2; exit 1;
+            }
+            echo "Verified public metadata: ${file}"
+          }
+          for plan_file in \
+            "${RUNNER_TEMP}/deploy-assets.txt" \
+            "${RUNNER_TEMP}/deploy-entrypoints.txt" \
+            "${RUNNER_TEMP}/deploy-final.txt"; do
+            while IFS= read -r file; do
+              [[ -z "${file}" ]] || verify_file "${file}"
+            done < "${plan_file}"
+          done
+
+          if grep -qx 'data.json' "${RUNNER_TEMP}/deploy-final.txt"; then
+            data_url="${PUBLIC_RELEASE_BASE_URL}data.json?release=${GITHUB_SHA}"
+            public_data="${RUNNER_TEMP}/public-data.json"
+            curl --fail --silent --show-error --location \
+              --retry 5 --retry-all-errors --output "${public_data}" "${data_url}"
+            [[ "$(jq '[.[] | select(.name.en == "XR Studio")] | length' "${public_data}")" == "2" ]]
+            jq -e '[.[] | select(.name.en == "XR Studio") | .link[]] == [
+              "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-win-x64.exe",
+              "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-mac-arm64.dmg"
+            ]' "${public_data}" >/dev/null
+            echo "Verified XR Studio website entries"
+          fi
