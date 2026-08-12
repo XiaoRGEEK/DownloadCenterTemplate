@@ -76,7 +76,9 @@ gh pr create --fill
 ```
 
 - 发布人员使用 `ray-yi-cn` 或其他获授权的协作者账号提交。
-- `XiaoRGEEK` 必须审核 PR。
+- `XiaoRGEEK` 是唯一 PR 审核人，必须批准 PR。
+- PR 获得批准后，由 `ray-yi-cn` 或另一名非 `XiaoRGEEK` 的获授权协作者
+  执行合并；`XiaoRGEEK` 不执行自己随后需要审批发布的合并。
 - 未审核的 Draft Release 不公开，也不会同步到 TOS。
 
 ### 5. 合并后的自动发布
@@ -91,6 +93,10 @@ gh pr create --fill
 6. 最后同步 `data.json`、更新清单和网站，避免提前出现失效链接。
 
 Action 不执行递归全量上传，不覆盖版本化二进制，不自动删除 TOS 对象。
+包含新发布清单的运行必须经过 `release-publishing` Environment，唯一审批人是
+`XiaoRGEEK`，并启用“禁止触发者自批”。因此标准职责顺序固定为：发布人员
+提交、`XiaoRGEEK` 审核、发布人员合并、`XiaoRGEEK` 审批正式发布。不要使用
+`XiaoRGEEK` 执行合并，否则该账号会成为部署触发者并被 GitHub 禁止自批。
 
 ## 下载源
 
