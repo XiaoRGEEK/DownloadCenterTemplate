@@ -75,6 +75,14 @@
   // 当前语言，默认根据浏览器语言设置
   let currentLang = getBrowserLanguage();
 
+  const RELEASE_BASE_URL = 'https://software.xiao-r.com/';
+
+  function resolveDownloadUrl(path) {
+    if (/^https?:\/\//i.test(path)) return path;
+    if (path.startsWith('//')) return `https:${path}`;
+    return new URL(path.replace(/^\.\//, ''), RELEASE_BASE_URL).href;
+  }
+
   console.log(`Current language: ${currentLang}`);
 
   // 获取多语言字段的函数
@@ -187,7 +195,7 @@
         const fileName = version.split('/').pop();
         
         const versionLink = document.createElement('a');
-        versionLink.href = version;
+        versionLink.href = resolveDownloadUrl(version);
         versionLink.download = fileName;
         versionLink.target = '_blank';
         versionLink.textContent = fileName;
@@ -312,7 +320,7 @@
                   <i class="${icon}"></i>
                   ${btnNames[i] || langData[currentLang].download}
                 </button>` :
-                `<a class="btn ${cls}" href="${url}" download target="_blank">
+                `<a class="btn ${cls}" href="${resolveDownloadUrl(url)}" download target="_blank" rel="noopener">
                   <i class="${icon}"></i>
                   ${btnNames[i] || langData[currentLang].download}
                 </a>`;
@@ -525,7 +533,7 @@
         
         // 下载按钮
         const downloadButton = document.createElement('a');
-        downloadButton.href = tool.file_path;
+        downloadButton.href = resolveDownloadUrl(tool.file_path);
         downloadButton.download = tool.file_path.split('/').pop();
         downloadButton.target = '_blank';
         downloadButton.className = 'tool-download-btn';

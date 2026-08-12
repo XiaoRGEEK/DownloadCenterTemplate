@@ -1,0 +1,25 @@
+# Release binaries belong in Volcengine TOS, never in regular Git.
+*.apk
+*.aab
+*.bin
+*.hex
+*.dmg
+*.exe
+*.msi
+*.zip
+*.blockmap
+
+# Credentials and local TOS state.
+.env
+*.p8
+*.p12
+*.pem
+*.key
+.tosutil*
+credentials*
+
+# Local/editor files.
+.DS_Store
+.vscode/
+__pycache__/
+*.pyc
