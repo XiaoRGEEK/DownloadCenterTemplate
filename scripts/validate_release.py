@@ -115,6 +115,9 @@ def referenced_objects() -> tuple[set[str], list[dict]]:
     objects, data = data_objects()
     objects |= yaml_urls(ROOT / "update/software.yaml")
     objects |= yaml_urls(ROOT / "firmware/mxbit/version.yaml", "firmware/mxbit/")
+    objects |= yaml_urls(
+        ROOT / "firmware/xr-car-tail/version.yaml", "firmware/xr-car-tail/"
+    )
     objects |= yaml_urls(ROOT / "software/pc/latest.yml", "software/pc/")
     objects |= yaml_urls(
         ROOT / "software/pc/moxin/latest.yml", "software/pc/moxin/"
@@ -253,6 +256,31 @@ def validate() -> set[str]:
     omnimind = [key for key in objects if "omnimind" in key.lower()]
     if omnimind:
         fail("retired OmniMind objects must not be referenced")
+
+    xr_car_tail = (ROOT / "firmware/xr-car-tail/version.yaml").read_text(
+        encoding="utf-8"
+    )
+    required_xr_car_tail_fields = {
+        "id": "xr-car-tail",
+        "device_type": "XR-CAR-TAIL",
+        "version": "2.0.0.8",
+        "url": "xr-car-tail-ver-2.0.0.8.bin",
+        "image_version": "2.0.0.8",
+        "product_code": "24833",
+        "image_size": "33516",
+        "image_crc32": "693107542",
+        "sha256": "7859d406ca265fbd619eba534d7ddcce790b59ffa920c45282ad1ed85d731979",
+        "min_bootloader_version": "2.0.0.0",
+    }
+    for field, expected in required_xr_car_tail_fields.items():
+        if not re.search(
+            rf"^\s*{re.escape(field)}:\s*['\"]?{re.escape(expected)}['\"]?\s*$",
+            xr_car_tail,
+            re.MULTILINE,
+        ):
+            fail(f"XR-CAR-TAIL {field} must be {expected}")
+    if not re.search(r"^\s*-\s*24833\s*$", xr_car_tail, re.MULTILINE):
+        fail("XR-CAR-TAIL product_codes must contain 24833")
 
     return objects
 
