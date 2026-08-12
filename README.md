@@ -101,12 +101,12 @@ Action 不执行递归全量上传，不覆盖版本化二进制，不自动删�
 ## 下载源
 
 - GitHub Releases：海外下载源，也是发布流程的上游资产存储。
-- TOS 自定义域名：国内下载源。HTTPS 证书就绪后使用
+- TOS 自定义域名：已启用的国内 HTTPS 下载源：
   `https://software.xiao-r.com/`。
 - [GitHub Pages](https://xiaorgeek.github.io/DownloadCenterTemplate/)：下载中心网站。
 
-网站可以同时展示“国内下载”和“海外下载”。在 TOS 自定义域名 HTTPS
-完成前，GitHub Releases 是安全的公开下载入口。
+网站下载按钮默认使用国内 HTTPS 源；GitHub Releases 保留为海外下载源和
+发布上游。公开页面和元数据不得重新使用 TOS 桶原始域名。
 
 ## 开源仓库安全规则
 
