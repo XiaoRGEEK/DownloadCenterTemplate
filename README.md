@@ -109,6 +109,18 @@ Action 不执行递归全量上传，不覆盖版本化二进制，不自动删�
 提交、`XiaoRGEEK` 审核、发布人员合并、`XiaoRGEEK` 审批正式发布。不要使用
 `XiaoRGEEK` 执行合并，否则该账号会成为部署触发者并被 GitHub 禁止自批。
 
+如果资产发布在元数据更新前失败，不得手工上传或复制清单。修复工作流并通过
+PR 审核后，使用受控重放入口明确列出原始清单：
+
+```bash
+gh workflow run deploy-tos.yml --ref master \
+  -f release_manifests_json='["releases/<tag>.json"]'
+```
+
+重放只接受仓库根层的 `releases/<tag>.json`，仍需 `release-publishing`
+Environment 审批，并重新执行 Release 资产大小、SHA256、TOS 不覆盖和公开
+HTTPS 校验。重放成功后才更新元数据；不得为绕过失败而复制或修改不可变清单。
+
 ## 下载源
 
 - GitHub Releases：海外下载源，也是发布流程的上游资产存储。
