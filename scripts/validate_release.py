@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -293,6 +294,13 @@ def validate() -> set[str]:
         fail("unsupported release object references:\n  " + "\n  ".join(invalid))
 
     index = (ROOT / "index.html").read_text(encoding="utf-8")
+    style_digest = hashlib.sha256((ROOT / "style.css").read_bytes()).hexdigest()[:12]
+    expected_style_href = f'href="style.css?v={style_digest}"'
+    if expected_style_href not in index:
+        fail(
+            "index.html stylesheet cache version must match the first 12 "
+            "characters of the style.css SHA256"
+        )
     expected_base = f"const RELEASE_BASE_URL = '{PUBLIC_DOWNLOAD_BASE_URL}';"
     if expected_base not in index:
         fail("index.html must use the HTTPS custom domain as RELEASE_BASE_URL")
