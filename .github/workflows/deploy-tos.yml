@@ -3,6 +3,12 @@ name: Publish release assets and deploy metadata to TOS
 on:
   push:
     branches: ["master"]
+  workflow_dispatch:
+    inputs:
+      release_manifests_json:
+        description: JSON array of existing releases/<tag>.json manifests to replay
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -27,28 +33,45 @@ jobs:
 
       - name: Detect new immutable release manifests
         id: changes
+        env:
+          REPLAY_MANIFESTS_JSON: ${{ inputs.release_manifests_json }}
         run: |
           set -euo pipefail
-          before="${{ github.event.before }}"
-          if [[ "${before}" == "0000000000000000000000000000000000000000" ]]; then
-            echo "Refusing an implicit full publication without a base commit" >&2
-            exit 1
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            jq -e '
+              type == "array" and length > 0 and
+              all(.[]; type == "string" and test("^releases/[^/]+[.]json$"))
+            ' <<<"${REPLAY_MANIFESTS_JSON}" >/dev/null
+            jq -r '.[]' <<<"${REPLAY_MANIFESTS_JSON}" \
+              > "${RUNNER_TEMP}/release-manifests.txt"
+            while IFS= read -r manifest; do
+              [[ -f "${manifest}" ]] || {
+                echo "Replay manifest not found: ${manifest}" >&2; exit 1;
+              }
+            done < "${RUNNER_TEMP}/release-manifests.txt"
+            count=$(wc -l < "${RUNNER_TEMP}/release-manifests.txt")
+          else
+            before="${{ github.event.before }}"
+            if [[ "${before}" == "0000000000000000000000000000000000000000" ]]; then
+              echo "Refusing an implicit full publication without a base commit" >&2
+              exit 1
+            fi
+            git diff --name-status "${before}" "${GITHUB_SHA}" > "${RUNNER_TEMP}/changes.tsv"
+            count=0
+            while IFS=$'\t' read -r status file rest; do
+              case "${file}" in
+                releases/audit/*)
+                  ;;
+                releases/*.json)
+                  if [[ "${status}" != A* ]]; then
+                    echo "Release manifests are immutable: ${status} ${file}" >&2
+                    exit 1
+                  fi
+                  count=$((count + 1))
+                  ;;
+              esac
+            done < "${RUNNER_TEMP}/changes.tsv"
           fi
-          git diff --name-status "${before}" "${GITHUB_SHA}" > "${RUNNER_TEMP}/changes.tsv"
-          count=0
-          while IFS=$'\t' read -r status file rest; do
-            case "${file}" in
-              releases/audit/*)
-                ;;
-              releases/*.json)
-                if [[ "${status}" != A* ]]; then
-                  echo "Release manifests are immutable: ${status} ${file}" >&2
-                  exit 1
-                fi
-                count=$((count + 1))
-                ;;
-            esac
-          done < "${RUNNER_TEMP}/changes.tsv"
           if (( count > 0 )); then
             echo "has_releases=true" >> "${GITHUB_OUTPUT}"
           else
@@ -97,6 +120,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TOS_BUCKET: ${{ secrets.TOS_BUCKET }}
           PUBLIC_RELEASE_BASE_URL: https://software.xiao-r.com/
+          REPLAY_MANIFESTS_JSON: ${{ inputs.release_manifests_json }}
         run: |
           set -euo pipefail
           verify_public() {
@@ -171,10 +195,15 @@ jobs:
             echo "Verified updater size and SHA512: ${tos_key}"
           }
 
-          git diff --name-status "${{ github.event.before }}" "${GITHUB_SHA}" \
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            jq -r '.[]' <<<"${REPLAY_MANIFESTS_JSON}" \
+              > "${RUNNER_TEMP}/release-manifests.txt"
+          else
+            git diff --name-status "${{ github.event.before }}" "${GITHUB_SHA}" \
             | awk -F '\t' '$1 ~ /^A/ && $2 ~ /^releases\/.*\.json$/ {print $2}' \
             | awk '$0 !~ /^releases\/audit\//' \
             > "${RUNNER_TEMP}/release-manifests.txt"
+          fi
 
           while IFS= read -r manifest; do
             [[ -n "${manifest}" ]] || continue
