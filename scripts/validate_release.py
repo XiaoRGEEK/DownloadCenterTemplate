@@ -224,6 +224,47 @@ def validate_release_manifests() -> tuple[int, set[str]]:
     return count, manifest_keys
 
 
+def validate_superseded_assets(
+    manifest_keys: set[str], referenced_keys: set[str]
+) -> set[str]:
+    path = ROOT / "releases/audit/superseded-assets.json"
+    if not path.exists():
+        return set()
+    try:
+        records = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(f"invalid superseded asset registry: {exc}")
+    if not isinstance(records, list):
+        fail("superseded asset registry must contain a top-level list")
+
+    superseded: set[str] = set()
+    for record in records:
+        if not isinstance(record, dict) or set(record) != {
+            "tos_key",
+            "replacement_tos_key",
+            "reason",
+        }:
+            fail("invalid superseded asset registry entry")
+        old_key = record.get("tos_key")
+        replacement = record.get("replacement_tos_key")
+        reason = record.get("reason")
+        if (
+            not isinstance(old_key, str)
+            or not isinstance(replacement, str)
+            or not isinstance(reason, str)
+            or not reason.strip()
+            or old_key == replacement
+            or old_key in superseded
+            or old_key not in manifest_keys
+            or replacement not in manifest_keys
+            or old_key in referenced_keys
+            or replacement not in referenced_keys
+        ):
+            fail(f"invalid superseded asset mapping: {old_key} -> {replacement}")
+        superseded.add(old_key)
+    return superseded
+
+
 def validate() -> set[str]:
     tracked = tracked_files()
     binaries = [path for path in tracked if Path(path).suffix.lower() in BINARY_SUFFIXES]
@@ -243,7 +284,8 @@ def validate() -> set[str]:
 
     objects, data = referenced_objects()
     _, manifest_keys = validate_release_manifests()
-    orphaned = sorted(manifest_keys - objects)
+    superseded = validate_superseded_assets(manifest_keys, objects)
+    orphaned = sorted(manifest_keys - objects - superseded)
     if orphaned:
         fail("release assets are not referenced by public metadata:\n  " + "\n  ".join(orphaned))
     invalid = [key for key in sorted(objects) if Path(key).suffix.lower() not in RELEASE_SUFFIXES]
@@ -282,9 +324,12 @@ def validate() -> set[str]:
             "version": "v1.0.0",
             "link": [
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.0.0-win-x64.exe"
+                "xr-studio-1.0.0-win-x64-native.exe",
+                "https://software.xiao-r.com/software/pc/"
+                "xr-studio-1.0.0-win-x64-native.zip",
             ],
-            "button": ["Windows x64"],
+            "button_en": ["Windows x64 Installer", "Windows x64 Portable ZIP"],
+            "button_zh": ["Windows x64 安装版", "Windows x64 便携 ZIP"],
         },
         "mac": {
             "version": "v1.0.0",
@@ -292,7 +337,8 @@ def validate() -> set[str]:
                 "https://software.xiao-r.com/software/pc/"
                 "xr-studio-1.0.0-mac-arm64.dmg"
             ],
-            "button": ["macOS Apple Silicon"],
+            "button_en": ["macOS Apple Silicon"],
+            "button_zh": ["macOS Apple Silicon"],
         },
     }
     if len(xr_studio) != 2:
@@ -305,8 +351,8 @@ def validate() -> set[str]:
             or entry.get("logoSrc") != "./software/image/xr-studio.png"
             or entry.get("version") != expected["version"]
             or entry.get("link") != expected["link"]
-            or entry.get("btnNames", {}).get("en") != expected["button"]
-            or entry.get("btnNames", {}).get("zh") != expected["button"]
+            or entry.get("btnNames", {}).get("en") != expected["button_en"]
+            or entry.get("btnNames", {}).get("zh") != expected["button_zh"]
             or entry.get("platformVersions")
             != {"windows": "v1.0.0", "mac": "v1.0.0"}
         ):

@@ -376,7 +376,8 @@ jobs:
               --retry 5 --retry-all-errors --output "${public_data}" "${data_url}"
             [[ "$(jq '[.[] | select(.name.en == "XR Studio")] | length' "${public_data}")" == "2" ]]
             jq -e '[.[] | select(.name.en == "XR Studio") | .link[]] == [
-              "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-win-x64.exe",
+              "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-win-x64-native.exe",
+              "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-win-x64-native.zip",
               "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-mac-arm64.dmg"
             ]' "${public_data}" >/dev/null
             echo "Verified XR Studio website entries"

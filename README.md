@@ -74,6 +74,8 @@ XR Studio 同时包含下载中心安装包和 electron-updater 自动更新文�
 - `ota/xr-studio/latest.yml`、`latest-mac.yml`、图标和 `data.json` 作为小型元数据提交到 Git。
 - Action 必须先镜像所有安装包，再镜像 `.blockmap`，验证公开 HTTPS、文件长度和 Range 请求后，才上传 `latest*.yml`；`data.json` 始终最后上传。
 - Windows 和 macOS 下载中心文件与 OTA 文件即使内容相同，也使用各自固定的 TOS Key；不得用同步或删除命令代替逐对象增量发布。
+- 已发布的版本化对象发现构建错误时不得覆盖原 Key；应使用带纠正标识的新 Key 和新的 Draft Release 清单，再通过审核 PR 更新公开入口。旧对象保留用于审计，但不能继续被入口引用。
+- 被替代但保留的对象必须登记在 `releases/audit/superseded-assets.json`，同时声明当前受控发布清单中的替代 Key 和公开原因；校验器会拒绝仍被入口引用、替代对象未被引用或来源不在发布清单中的登记。
 
 ### 4. 提交 PR
 
