@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "tag": "xr-studio-v1.0.0-win-native-downloads",
+  "title": "XR Studio 1.0.0 Windows Native Downloads",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-studio-1.0.0-win-x64-native.exe",
+      "tos_key": "software/pc/xr-studio-1.0.0-win-x64-native.exe",
+      "size": 84086290,
+      "sha256": "3633b0d27dc2663ead47b9bc9a19eec8a1b9ca4d05ea7a358653b89f40444a05"
+    },
+    {
+      "name": "xr-studio-1.0.0-win-x64-native.zip",
+      "tos_key": "software/pc/xr-studio-1.0.0-win-x64-native.zip",
+      "size": 114725661,
+      "sha256": "cca1bf6908e2ddab95962e6ce5ed1ea54b156d5a7f708d95ff2f640e7b8433c0"
+    }
+  ]
+}

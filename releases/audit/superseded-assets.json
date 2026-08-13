@@ -1,0 +1,17 @@
+[
+  {
+    "tos_key": "software/pc/xr-studio-1.0.0-win-x64.exe",
+    "replacement_tos_key": "software/pc/xr-studio-1.0.0-win-x64-native.exe",
+    "reason": "The original Windows installer was cross-built on macOS and could not run on Windows."
+  },
+  {
+    "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64.exe",
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64-native.exe",
+    "reason": "The original Windows updater package was cross-built on macOS and could not run on Windows."
+  },
+  {
+    "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64.exe.blockmap",
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64-native.exe.blockmap",
+    "reason": "The blockmap belongs to the superseded cross-built Windows updater package."
+  }
+]

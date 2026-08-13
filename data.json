@@ -681,14 +681,17 @@
             "zh": "面向设备通信、联调和 OTA 升级的设备工作台"
         },
         "link": [
-            "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-win-x64.exe"
+            "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-win-x64-native.exe",
+            "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-win-x64-native.zip"
         ],
         "btnNames": {
             "en": [
-                "Windows x64"
+                "Windows x64 Installer",
+                "Windows x64 Portable ZIP"
             ],
             "zh": [
-                "Windows x64"
+                "Windows x64 安装版",
+                "Windows x64 便携 ZIP"
             ]
         },
         "oldVersion": [],
