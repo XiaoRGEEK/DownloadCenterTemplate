@@ -129,22 +129,28 @@
         };
       }
       
-      // 根据链接判断平台
-      let platform = 'other';
+      // 优先使用 data.json 中的显式平台；仅为旧数据保留链接推断。
+      const supportedPlatforms = ['android', 'windows', 'ios', 'mac'];
+      let platform = supportedPlatforms.includes(item.platform) ? item.platform : 'other';
       const links = item.link || [];
       
-      for (const link of links) {
-        if (link.includes('android')) {
-          platform = 'android';
-          break;
-        } else if (link.includes('pc') ||
-                  (item.btnNames && item.btnNames.en &&
-                   item.btnNames.en.some(name => name.toLowerCase().includes('windows')))) {
-          platform = 'pc';
-          break;
-        } else if (link.includes('.png') || link.includes('.jpg') || link.includes('.jpeg')) {
-          platform = 'ios';
-          break;
+      if (platform === 'other') {
+        for (const link of links) {
+          if (link.includes('android')) {
+            platform = 'android';
+            break;
+          } else if (link.toLowerCase().includes('.dmg')) {
+            platform = 'mac';
+            break;
+          } else if (link.includes('.png') || link.includes('.jpg') || link.includes('.jpeg')) {
+            platform = 'ios';
+            break;
+          } else if (link.includes('pc') ||
+                    (item.btnNames && item.btnNames.en &&
+                     item.btnNames.en.some(name => name.toLowerCase().includes('windows')))) {
+            platform = 'windows';
+            break;
+          }
         }
       }
       
@@ -277,22 +283,31 @@
             return links.map((url, i) => {
               const isImage = url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg');
               const platformName = btnNames[i]?.toLowerCase() || 'download';
+              const itemPlatform = item.platform || platform;
               let cls = '', icon = '';
               
-              if (platformName.includes('android')) {
+              if (isImage && itemPlatform === 'ios') {
+                cls = 'ios';
+                icon = 'fas fa-qrcode';
+              }
+              else if (itemPlatform === 'android' || platformName.includes('android')) {
                 cls = 'android';
                 icon = 'fab fa-android';
               }
-              else if (platformName.includes('win') || platformName.includes('pc')) {
+              else if (itemPlatform === 'windows' || platformName.includes('win') || platformName.includes('pc')) {
                 cls = 'windows';
                 icon = 'fab fa-windows';
               }
-              else if (platformName.includes('mac')) {
+              else if (itemPlatform === 'mac' || platformName.includes('mac')) {
                 cls = 'mac';
                 icon = 'fab fa-apple';
               }
+              else if (itemPlatform === 'ios' || platformName.includes('ios')) {
+                cls = 'ios';
+                icon = 'fab fa-apple';
+              }
               else if (isImage) {
-                cls = 'qr';
+                cls = 'ios';
                 icon = 'fas fa-qrcode';
               }
               else {
@@ -659,8 +674,8 @@
     
     .history-btn {
       padding: 8px 12px;
-      background-color: #6c757d;
-      color: white;
+      background-color: var(--history);
+      color: var(--history-text);
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -668,11 +683,13 @@
       display: flex;
       align-items: center;
       gap: 5px;
-      transition: background-color 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
     }
     
     .history-btn:hover {
-      background-color: #5a6268;
+      filter: brightness(1.04) saturate(1.08);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(31, 41, 55, .16);
     }
     
     /* 历史版本弹窗样式 */
@@ -767,28 +784,35 @@
     }
     
     .version-tag.android {
-      background-color: #d4edda;
-      border-color: #c3e6cb;
-      color: #155724;
+      background-color: #dcfce7;
+      border-color: #86efac;
+      color: var(--android-text);
     }
     
-    .version-tag.pc {
-      background-color: #cce7ff;
-      border-color: #b3d9ff;
-      color: #004085;
+    .version-tag.pc,
+    .version-tag.windows {
+      background-color: #e0f2fe;
+      border-color: #7dd3fc;
+      color: var(--windows-text);
     }
     
     .version-tag.ios {
-      background-color: #fff3cd;
-      border-color: #ffeaa7;
-      color: #856404;
+      background-color: #fef9c3;
+      border-color: #fde047;
+      color: var(--ios-text);
+    }
+
+    .version-tag.mac {
+      background-color: #f3e8ff;
+      border-color: #d8b4fe;
+      color: var(--mac-text);
     }
 
     /* 工具按钮样式 */
     .tools-btn {
       padding: 8px 12px;
-      background-color: #28a745;
-      color: white;
+      background-color: var(--tools);
+      color: var(--tools-text);
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -796,11 +820,13 @@
       display: flex;
       align-items: center;
       gap: 5px;
-      transition: background-color 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
     }
 
     .tools-btn:hover {
-      background-color: #218838;
+      filter: brightness(1.04) saturate(1.08);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(31, 41, 55, .16);
     }
 
     /* 工具弹窗样式 */

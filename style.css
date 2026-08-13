@@ -4,9 +4,18 @@
     --accent: #0078ff;
     --text: #222;
     --muted: #666;
-    --android: #3DDB85;
-    --windows: #00A4EF;
-    --mac: #A2AAAD;
+    --android: #4ade80;
+    --android-text: #12351f;
+    --windows: #38bdf8;
+    --windows-text: #082f49;
+    --ios: #facc15;
+    --ios-text: #422006;
+    --mac: #c084fc;
+    --mac-text: #3b0764;
+    --history: #fb923c;
+    --history-text: #431407;
+    --tools: #2dd4bf;
+    --tools-text: #042f2e;
 }
 
 * {
@@ -122,27 +131,34 @@ header h1 {
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
-    transition: opacity .2s;
+    transition: transform .2s, box-shadow .2s, filter .2s;
 }
 
 .btn:hover {
-    opacity: .85
+    filter: brightness(1.04) saturate(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(31, 41, 55, .16)
 }
 
 .btn.android {
-    background: var(--android)
+    background: var(--android);
+    color: var(--android-text)
 }
 
 .btn.windows {
-    background: var(--windows)
+    background: var(--windows);
+    color: var(--windows-text)
 }
 
 .btn.mac {
-    background: var(--mac)
+    background: var(--mac);
+    color: var(--mac-text)
 }
 
+.btn.ios,
 .btn.qr {
-    background: #28a745
+    background: var(--ios);
+    color: var(--ios-text)
 }
 
 .btn i {
