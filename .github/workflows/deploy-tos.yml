@@ -38,6 +38,8 @@ jobs:
           count=0
           while IFS=$'\t' read -r status file rest; do
             case "${file}" in
+              releases/audit/*)
+                ;;
               releases/*.json)
                 if [[ "${status}" != A* ]]; then
                   echo "Release manifests are immutable: ${status} ${file}" >&2
@@ -171,6 +173,7 @@ jobs:
 
           git diff --name-status "${{ github.event.before }}" "${GITHUB_SHA}" \
             | awk -F '\t' '$1 ~ /^A/ && $2 ~ /^releases\/.*\.json$/ {print $2}' \
+            | awk '$0 !~ /^releases\/audit\//' \
             > "${RUNNER_TEMP}/release-manifests.txt"
 
           while IFS= read -r manifest; do
