@@ -114,12 +114,15 @@ PR 审核后，使用受控重放入口明确列出原始清单：
 
 ```bash
 gh workflow run deploy-tos.yml --ref master \
-  -f release_manifests_json='["releases/<tag>.json"]'
+  -f release_manifests_json='["releases/<tag>.json"]' \
+  -f metadata_base_sha='<failed-push-before-sha>'
 ```
 
 重放只接受仓库根层的 `releases/<tag>.json`，仍需 `release-publishing`
 Environment 审批，并重新执行 Release 资产大小、SHA256、TOS 不覆盖和公开
 HTTPS 校验。重放成功后才更新元数据；不得为绕过失败而复制或修改不可变清单。
+如果资产 job 已成功、仅元数据 job 失败，使用 `release_manifests_json='[]'`
+只重放严格增量元数据计划，避免重复传输大文件。
 
 ## 下载源
 

@@ -7,6 +7,11 @@ on:
     inputs:
       release_manifests_json:
         description: JSON array of existing releases/<tag>.json manifests to replay
+        required: false
+        default: "[]"
+        type: string
+      metadata_base_sha:
+        description: Reviewed base commit used to rebuild the incremental metadata plan
         required: true
         type: string
 
@@ -39,7 +44,7 @@ jobs:
           set -euo pipefail
           if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
             jq -e '
-              type == "array" and length > 0 and
+              type == "array" and
               all(.[]; type == "string" and test("^releases/[^/]+[.]json$"))
             ' <<<"${REPLAY_MANIFESTS_JSON}" >/dev/null
             jq -r '.[]' <<<"${REPLAY_MANIFESTS_JSON}" \
@@ -275,7 +280,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Validate control plane
         run: python3 scripts/validate_release.py
@@ -305,9 +310,23 @@ jobs:
 
       - name: Build strict incremental metadata plan
         id: plan
+        env:
+          REPLAY_METADATA_BASE_SHA: ${{ inputs.metadata_base_sha }}
         run: |
           set -euo pipefail
-          git diff --name-status "${{ github.event.before }}" "${GITHUB_SHA}" \
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            metadata_base_sha="${REPLAY_METADATA_BASE_SHA}"
+            [[ "${metadata_base_sha}" =~ ^[0-9a-f]{40}$ ]] || {
+              echo "Invalid metadata base SHA" >&2; exit 1;
+            }
+            git cat-file -e "${metadata_base_sha}^{commit}"
+            git merge-base --is-ancestor "${metadata_base_sha}" "${GITHUB_SHA}" || {
+              echo "Metadata base SHA is not an ancestor of reviewed master" >&2; exit 1;
+            }
+          else
+            metadata_base_sha="${{ github.event.before }}"
+          fi
+          git diff --name-status "${metadata_base_sha}" "${GITHUB_SHA}" \
             > "${RUNNER_TEMP}/changes.tsv"
           : > "${RUNNER_TEMP}/deploy-assets.txt"
           : > "${RUNNER_TEMP}/deploy-entrypoints.txt"
