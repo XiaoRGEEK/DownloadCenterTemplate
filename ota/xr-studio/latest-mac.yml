@@ -1,11 +1,11 @@
-version: 1.0.0
+version: 1.0.1
 files:
-  - url: xr-studio-1.0.0-mac-arm64.zip
-    sha512: 5bjOYwb15wIovXpXTqOJjGBhluEQqFO6fy3gBOCtnYmm9ChnuPZ1eb8BDd3yHV/ER7pAh/jvFstgPV9r8J5uHw==
-    size: 99660292
-  - url: xr-studio-1.0.0-mac-arm64.dmg
-    sha512: pGyOY0L2vCG97h3bWH0DIGqHF0eEdQ2n6aeL9KFmTYL0uSRpoArBA1uIu1ycLJ2Da9HyYJQigsyFDKT0sQdZDw==
-    size: 104650593
-path: xr-studio-1.0.0-mac-arm64.zip
-sha512: 5bjOYwb15wIovXpXTqOJjGBhluEQqFO6fy3gBOCtnYmm9ChnuPZ1eb8BDd3yHV/ER7pAh/jvFstgPV9r8J5uHw==
-releaseDate: '2026-08-12T14:13:57.343Z'
+  - url: xr-studio-1.0.1-mac-arm64.zip
+    sha512: 8S2I+/BzMyamLx8Fe5JSUeuhRjkfhwAJZB4tjLEAEm30BZpbcl0HtaO10bEZZ3Ztz+kmQa6+J9v4MlkWJY1XHw==
+    size: 99698960
+  - url: xr-studio-1.0.1-mac-arm64.dmg
+    sha512: 0b+YpPN9/3P7ybnLdBnM0I5DQ9d1RBFCyKFzSdB1gx2EwkT8X9bGNt/3dIwYJUgftty9ZratbW6/BH00P/9aPQ==
+    size: 104732832
+path: xr-studio-1.0.1-mac-arm64.zip
+sha512: 8S2I+/BzMyamLx8Fe5JSUeuhRjkfhwAJZB4tjLEAEm30BZpbcl0HtaO10bEZZ3Ztz+kmQa6+J9v4MlkWJY1XHw==
+releaseDate: '2026-09-02T07:34:40.144Z'

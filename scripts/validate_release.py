@@ -340,10 +340,10 @@ def validate() -> set[str]:
             "button_zh": ["Windows x64 安装版", "Windows x64 便携 ZIP"],
         },
         "mac": {
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "link": [
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.0.0-mac-arm64.dmg"
+                "xr-studio-1.0.1-mac-arm64.dmg"
             ],
             "button_en": ["macOS Apple Silicon"],
             "button_zh": ["macOS Apple Silicon"],
@@ -362,15 +362,19 @@ def validate() -> set[str]:
             or entry.get("btnNames", {}).get("en") != expected["button_en"]
             or entry.get("btnNames", {}).get("zh") != expected["button_zh"]
             or entry.get("platformVersions")
-            != {"windows": "v1.0.0", "mac": "v1.0.0"}
+            != {"windows": "v1.0.0", "mac": "v1.0.1"}
         ):
             fail(f"invalid XR Studio data.json entry for platform: {platform}")
 
-    for updater_name in ("latest.yml", "latest-mac.yml"):
+    updater_versions = {"latest.yml": "1.0.0", "latest-mac.yml": "1.0.1"}
+    for updater_name, updater_version in updater_versions.items():
         updater_path = ROOT / "ota/xr-studio" / updater_name
         updater_text = updater_path.read_text(encoding="utf-8-sig")
-        if not re.search(r"^version:\s*1\.0\.0\s*$", updater_text, re.MULTILINE):
-            fail(f"XR Studio {updater_name} version must be 1.0.0")
+        version_pattern = rf"^version:\s*{re.escape(updater_version)}\s*$"
+        if not re.search(version_pattern, updater_text, re.MULTILINE):
+            fail(
+                f"XR Studio {updater_name} version must be {updater_version}"
+            )
 
     xr_car_tail = (ROOT / "firmware/xr-car-tail/version.yaml").read_text(
         encoding="utf-8"
