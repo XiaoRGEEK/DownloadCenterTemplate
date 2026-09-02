@@ -329,12 +329,12 @@ def validate() -> set[str]:
     ]
     expected_xr_studio = {
         "windows": {
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "link": [
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.0.0-win-x64-native.exe",
+                "xr-studio-1.0.1-win-x64.exe",
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.0.0-win-x64-native.zip",
+                "xr-studio-1.0.1-win-x64.zip",
             ],
             "button_en": ["Windows x64 Installer", "Windows x64 Portable ZIP"],
             "button_zh": ["Windows x64 安装版", "Windows x64 便携 ZIP"],
@@ -362,11 +362,11 @@ def validate() -> set[str]:
             or entry.get("btnNames", {}).get("en") != expected["button_en"]
             or entry.get("btnNames", {}).get("zh") != expected["button_zh"]
             or entry.get("platformVersions")
-            != {"windows": "v1.0.0", "mac": "v1.0.1"}
+            != {"windows": "v1.0.1", "mac": "v1.0.1"}
         ):
             fail(f"invalid XR Studio data.json entry for platform: {platform}")
 
-    updater_versions = {"latest.yml": "1.0.0", "latest-mac.yml": "1.0.1"}
+    updater_versions = {"latest.yml": "1.0.1", "latest-mac.yml": "1.0.1"}
     for updater_name, updater_version in updater_versions.items():
         updater_path = ROOT / "ota/xr-studio" / updater_name
         updater_text = updater_path.read_text(encoding="utf-8-sig")

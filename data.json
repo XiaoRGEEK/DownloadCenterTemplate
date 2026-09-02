@@ -675,14 +675,14 @@
             "en": "XR Studio",
             "zh": "XR Studio"
         },
-        "version": "v1.0.0",
+        "version": "v1.0.1",
         "desc": {
             "en": "Device workbench for communication, debugging, and OTA updates",
             "zh": "面向设备通信、联调和 OTA 升级的设备工作台"
         },
         "link": [
-            "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-win-x64-native.exe",
-            "https://software.xiao-r.com/software/pc/xr-studio-1.0.0-win-x64-native.zip"
+            "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.exe",
+            "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.zip"
         ],
         "btnNames": {
             "en": [
@@ -697,7 +697,7 @@
         "oldVersion": [],
         "platform": "windows",
         "platformVersions": {
-            "windows": "v1.0.0",
+            "windows": "v1.0.1",
             "mac": "v1.0.1"
         },
         "hasTools": false,
@@ -728,7 +728,7 @@
         "oldVersion": [],
         "platform": "mac",
         "platformVersions": {
-            "windows": "v1.0.0",
+            "windows": "v1.0.1",
             "mac": "v1.0.1"
         },
         "hasTools": false,
