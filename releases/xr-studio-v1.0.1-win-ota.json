@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "tag": "xr-studio-v1.0.1-win-ota",
+  "title": "XR Studio 1.0.1 Windows Automatic Update",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-studio-1.0.1-win-x64.exe",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe",
+      "size": 84085843,
+      "sha256": "a194d9314a8d564558a9457999393e00183109e89e725cefe26468a73be1a212"
+    },
+    {
+      "name": "xr-studio-1.0.1-win-x64.exe.blockmap",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe.blockmap",
+      "size": 88412,
+      "sha256": "d31d726cd6b2306ed3f4b513bcc2be9a3ed93cacbf6015662ff6d72e38b65b78"
+    }
+  ]
+}

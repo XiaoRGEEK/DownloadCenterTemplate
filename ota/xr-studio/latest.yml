@@ -1,8 +1,8 @@
-version: 1.0.0
+version: 1.0.1
 files:
-  - url: xr-studio-1.0.0-win-x64-native.exe
-    sha512: wFFfExZ/evlwdKAj9zwp9WhnsXUgEh5b2wSqp6+UXuYkx0KZcyTlPgWnkucpxoEPQhYcOdoyzc5lGq5mmvQh4g==
-    size: 84086290
-path: xr-studio-1.0.0-win-x64-native.exe
-sha512: wFFfExZ/evlwdKAj9zwp9WhnsXUgEh5b2wSqp6+UXuYkx0KZcyTlPgWnkucpxoEPQhYcOdoyzc5lGq5mmvQh4g==
-releaseDate: '2026-08-13T03:41:03.000Z'
+  - url: xr-studio-1.0.1-win-x64.exe
+    sha512: Cr+PBXRBRTZ2KqaLgryaLIk4v4AcM2h7pwMfqeMKZ+ZOy9NG9OORNXSXp3JRWGvkQci8dBToSiwtI3RkpCWaMg==
+    size: 84085843
+path: xr-studio-1.0.1-win-x64.exe
+sha512: Cr+PBXRBRTZ2KqaLgryaLIk4v4AcM2h7pwMfqeMKZ+ZOy9NG9OORNXSXp3JRWGvkQci8dBToSiwtI3RkpCWaMg==
+releaseDate: '2026-09-02T11:09:13.803Z'

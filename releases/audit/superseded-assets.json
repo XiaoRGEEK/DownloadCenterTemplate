@@ -1,17 +1,17 @@
 [
   {
     "tos_key": "software/pc/xr-studio-1.0.0-win-x64.exe",
-    "replacement_tos_key": "software/pc/xr-studio-1.0.0-win-x64-native.exe",
+    "replacement_tos_key": "software/pc/xr-studio-1.0.1-win-x64.exe",
     "reason": "The original Windows installer was cross-built on macOS and could not run on Windows."
   },
   {
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64.exe",
-    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64-native.exe",
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe",
     "reason": "The original Windows updater package was cross-built on macOS and could not run on Windows."
   },
   {
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64.exe.blockmap",
-    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64-native.exe.blockmap",
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe.blockmap",
     "reason": "The blockmap belongs to the superseded cross-built Windows updater package."
   },
   {
@@ -38,5 +38,25 @@
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-mac-arm64.zip.blockmap",
     "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.zip.blockmap",
     "reason": "The 1.0.0 ZIP blockmap remains historical after the Mac 1.0.1 updater release."
+  },
+  {
+    "tos_key": "software/pc/xr-studio-1.0.0-win-x64-native.exe",
+    "replacement_tos_key": "software/pc/xr-studio-1.0.1-win-x64.exe",
+    "reason": "XR Studio Windows 1.0.1 supersedes the corrected native 1.0.0 installer while preserving the historical release asset."
+  },
+  {
+    "tos_key": "software/pc/xr-studio-1.0.0-win-x64-native.zip",
+    "replacement_tos_key": "software/pc/xr-studio-1.0.1-win-x64.zip",
+    "reason": "XR Studio Windows 1.0.1 supersedes the native 1.0.0 portable ZIP while preserving the historical release asset."
+  },
+  {
+    "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64-native.exe",
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe",
+    "reason": "XR Studio Windows 1.0.1 supersedes the corrected native 1.0.0 updater package while preserving the historical release asset."
+  },
+  {
+    "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64-native.exe.blockmap",
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe.blockmap",
+    "reason": "The native 1.0.0 updater blockmap remains historical after the Windows 1.0.1 release."
   }
 ]
