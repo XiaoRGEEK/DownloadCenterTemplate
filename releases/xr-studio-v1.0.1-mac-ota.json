@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "tag": "xr-studio-v1.0.1-mac-ota",
+  "title": "XR Studio 1.0.1 Mac Automatic Update",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-studio-1.0.1-mac-arm64.dmg",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.dmg",
+      "size": 104732832,
+      "sha256": "2e01a17e38ab9ca88c16ae2563a27c9f9c307ac94a824952d528bf26e5d4ae2c"
+    },
+    {
+      "name": "xr-studio-1.0.1-mac-arm64.zip",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.zip",
+      "size": 99698960,
+      "sha256": "50a4a147a4c75237063b1ccd9ba79e4579c6e96a0225795f7e9072801b1010d6"
+    },
+    {
+      "name": "xr-studio-1.0.1-mac-arm64.dmg.blockmap",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.dmg.blockmap",
+      "size": 111605,
+      "sha256": "3442320f873db967f3c9b7b2311111616be1fbe05436fe91002a714b9e22c695"
+    },
+    {
+      "name": "xr-studio-1.0.1-mac-arm64.zip.blockmap",
+      "tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.zip.blockmap",
+      "size": 104982,
+      "sha256": "aab0dc433e15f5c5b8294280fe468768583916acaf3c560f133a69ba17fd1622"
+    }
+  ]
+}
