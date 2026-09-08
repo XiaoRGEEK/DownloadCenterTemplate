@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "xr-servo-v1.3.2",
+  "title": "XR Servo Control Terminal 1.3.2",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-servo-1.3.2.exe",
+      "tos_key": "software/pc/xr-servo-1.3.2.exe",
+      "size": 36757504,
+      "sha256": "2d4bb20efd1c97d3939d1d9f347e97efad067050717a8afb364d1741ce7818c4"
+    }
+  ]
+}
