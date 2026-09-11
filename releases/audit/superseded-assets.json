@@ -58,5 +58,10 @@
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64-native.exe.blockmap",
     "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe.blockmap",
     "reason": "The native 1.0.0 updater blockmap remains historical after the Windows 1.0.1 release."
+  },
+  {
+    "tos_key": "software/android/XR-Controller_V1.4.168.260908.7f05a88_release.apk",
+    "replacement_tos_key": "software/android/XR-Controller_V1.4.165.260630.6cfcfdb_arm64-v8a-release.apk",
+    "reason": "XR Controller 1.4.168 was withdrawn after a reported functional issue; 1.4.165 is restored as the current stable download."
   }
 ]
