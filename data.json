@@ -646,13 +646,13 @@
             "en": "XRBlock Scratch3.0 Software",
             "zh": "XRBlock 图形化编程PC端软件"
         },
-        "version": "v2.2.6",
+        "version": "v2.3.3",
         "desc": {
             "en": "Support Scratch3.0 porducts",
             "zh": "支持图形化编程系列产品"
         },
         "link": [
-            "software/pc/XR Block v2.2.6.exe"
+            "software/pc/XR Block v2.3.3.exe"
         ],
         "btnNames": {
             "en": [
@@ -662,10 +662,12 @@
                 "Windows"
             ]
         },
-        "oldVersion": [],
+        "oldVersion": [
+            "software/pc/XR Block v2.2.6.exe"
+        ],
         "platform": "windows",
         "platformVersions": {
-            "windows": "v2.2.6"
+            "windows": "v2.3.3"
         },
         "hasTools": false,
         "tools": []

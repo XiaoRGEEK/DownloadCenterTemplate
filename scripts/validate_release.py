@@ -315,10 +315,10 @@ def validate() -> set[str]:
     if len(xrblock) != 1:
         fail("data.json must contain exactly one XRBlock entry")
     entry = xrblock[0]
-    if entry.get("version") != "v2.2.6" or entry.get("link") != [
-        "software/pc/XR Block v2.2.6.exe"
+    if entry.get("version") != "v2.3.3" or entry.get("link") != [
+        "software/pc/XR Block v2.3.3.exe"
     ]:
-        fail("XRBlock website release must point to v2.2.6")
+        fail("XRBlock website release must point to v2.3.3")
 
     omnimind = [key for key in objects if "omnimind" in key.lower()]
     if omnimind:
