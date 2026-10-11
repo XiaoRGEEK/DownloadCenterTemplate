@@ -85,6 +85,12 @@ XRUP 包格式 schema 2 不改变发布清单的 `schema_version: 1`；设备兼
 修改发布控制脚本或元数据允许名单时，同时运行
 `python3 -m unittest discover -s tests -v`。
 
+XR Studio Mac 1.1.2 Public 当前仅为网站客户试用（Preview）下载，
+`software/pc/` 的 DMG 为本轮唯一资产，1.0.1 DMG 保留为回退入口。
+Windows 网站仍为 1.0.1；两平台 stable `ota/xr-studio/latest*.yml` 仍为
+1.0.1，不随网站 Preview 推广。新的 OTA ZIP、blockmap 和 feed 须另行验收、
+审核发布，不得为满足引用校验而提前启用稳定自更新。
+
 ### 4. 提交 PR
 
 ```bash

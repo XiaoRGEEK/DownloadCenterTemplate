@@ -429,7 +429,7 @@ jobs:
             jq -e '[.[] | select(.name.en == "XR Studio") | .link[]] == [
               "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.exe",
               "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.zip",
-              "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-mac-arm64.dmg"
+              "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-mac-arm64.dmg"
             ]' "${public_data}" >/dev/null
             echo "Verified XR Studio website entries"
           fi

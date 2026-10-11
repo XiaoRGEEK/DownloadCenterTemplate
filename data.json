@@ -701,7 +701,7 @@
         "platform": "windows",
         "platformVersions": {
             "windows": "v1.0.1",
-            "mac": "v1.0.1"
+            "mac": "v1.1.2"
         },
         "hasTools": false,
         "tools": []
@@ -712,13 +712,13 @@
             "en": "XR Studio",
             "zh": "XR Studio"
         },
-        "version": "v1.0.1",
+        "version": "v1.1.2",
         "desc": {
-            "en": "Device workbench for communication, debugging, and OTA updates",
-            "zh": "面向设备通信、联调和 OTA 升级的设备工作台"
+            "en": "Public Preview for customer evaluation: device communication, debugging, and OTA updates. macOS 12.0+ on Apple Silicon; stable auto-update remains at 1.0.1.",
+            "zh": "Public 客户试用版：设备通信、联调和 OTA 升级工作台。适用于 macOS 12.0+ Apple Silicon；稳定自更新仍保持 1.0.1。"
         },
         "link": [
-            "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-mac-arm64.dmg"
+            "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-mac-arm64.dmg"
         ],
         "btnNames": {
             "en": [
@@ -728,11 +728,13 @@
                 "macOS Apple Silicon"
             ]
         },
-        "oldVersion": [],
+        "oldVersion": [
+            "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-mac-arm64.dmg"
+        ],
         "platform": "mac",
         "platformVersions": {
             "windows": "v1.0.1",
-            "mac": "v1.0.1"
+            "mac": "v1.1.2"
         },
         "hasTools": false,
         "tools": []
