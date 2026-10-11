@@ -77,6 +77,14 @@ XR Studio 同时包含下载中心安装包和 electron-updater 自动更新文�
 - 已发布的版本化对象发现构建错误时不得覆盖原 Key；应使用带纠正标识的新 Key 和新的 Draft Release 清单，再通过审核 PR 更新公开入口。旧对象保留用于审计，但不能继续被入口引用。
 - 被替代但保留的对象必须登记在 `releases/audit/superseded-assets.json`，同时声明当前受控发布清单中的替代 Key 和公开原因；校验器会拒绝仍被入口引用、替代对象未被引用或来源不在发布清单中的登记。
 
+XR-AUD-01 在线 OTA 只公开加密 `.XRUP` 原包及
+`firmware/xr-aud-01/version.yaml`，包校验、镜像完成后才部署 catalog。
+XRUP 包格式 schema 2 不改变发布清单的 `schema_version: 1`；设备兼容性、
+安全 profile、镜像信息放在 catalog，不扩展 Release manifest 字段。
+工厂 BIN、密钥、设备身份和内部授权配置不属于该公开渠道。
+修改发布控制脚本或元数据允许名单时，同时运行
+`python3 -m unittest discover -s tests -v`。
+
 ### 4. 提交 PR
 
 ```bash
