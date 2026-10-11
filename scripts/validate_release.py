@@ -24,6 +24,7 @@ BINARY_SUFFIXES = {
     ".exe",
     ".hex",
     ".msi",
+    ".xrup",
     ".zip",
 }
 RELEASE_SUFFIXES = BINARY_SUFFIXES | {".jpeg", ".jpg", ".png"}
@@ -129,6 +130,9 @@ def referenced_objects() -> tuple[set[str], list[dict]]:
     objects |= yaml_urls(ROOT / "firmware/mxbit/version.yaml", "firmware/mxbit/")
     objects |= yaml_urls(
         ROOT / "firmware/xr-car-tail/version.yaml", "firmware/xr-car-tail/"
+    )
+    objects |= yaml_urls(
+        ROOT / "firmware/xr-aud-01/version.yaml", "firmware/xr-aud-01/"
     )
     objects |= yaml_urls(ROOT / "software/pc/latest.yml", "software/pc/")
     objects |= yaml_urls(

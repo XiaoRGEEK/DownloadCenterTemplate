@@ -28,6 +28,7 @@ ALLOWED_SUFFIXES = {
     ".exe",
     ".hex",
     ".msi",
+    ".xrup",
     ".zip",
 }
 ALLOWED_TOS_PREFIXES = ("software/", "firmware/", "ota/")

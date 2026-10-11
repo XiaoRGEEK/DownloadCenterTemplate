@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "xr-aud-01-app-v1.0.1.2",
+  "title": "XR-AUD-01 APP 1.0.1.2 encrypted OTA",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "XR-AUD01-APP1.0.1.2-REC9-schema2.XRUP",
+      "tos_key": "firmware/xr-aud-01/XR-AUD01-APP1.0.1.2-REC9-schema2.XRUP",
+      "size": 3279488,
+      "sha256": "8f00b6c77be11d9049a4c34fc98d48dd6dfbb3991eb43f5298a12259e9c995ae"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+product:
+  id: xr-aud-01
+  device_type: XR-AUD-01
+  company_code: 22610
+  product_codes:
+    - 28931
+
+firmware:
+  app:
+    name:
+      zh: XR-AUD-01 加密音频固件
+      en: XR-AUD-01 Encrypted Audio Firmware
+    version: 1.0.1.2
+    url: XR-AUD01-APP1.0.1.2-REC9-schema2.XRUP
+    size: 3279488
+    sha256: 8f00b6c77be11d9049a4c34fc98d48dd6dfbb3991eb43f5298a12259e9c995ae
+    package_format: xrup
+    package_schema: 2
+    security_profile: aud01-shared-xts-maintenance
+    platform_id: xr-aud-01-esp32s3
+    layout: aud01-a-ab16m-v1
+    hardware_min: 1.0.0.1
+    hardware_max: 1.0.0.1
+    min_recovery_version: 1.0.0.7
+    image_size: 1639616
+    image_sha256: 44f47e0bf762e1ab335a524b2104c0b6de4cef7383072a944f3fb59c51320cf2
+    release_notes: >-
+      保留已认可的 AEC NLP AGGR 与原降噪模型；修正 USB 真实 dB、独立左右音量与静音。
+      仅适用于 DR.XRAUD01.A/A、Hardware1.0.0.1 和已配置共享 XTS 加密维护环境的设备。
+      本次实测 Recovery1.0.0.9；只更新 APP，不更新模型、BL、分区、Recovery 或 eFuse。

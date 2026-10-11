@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "test-xrup-v1",
+  "title": "Synthetic XRUP control-plane fixture (not firmware)",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "fixture.XRUP",
+      "tos_key": "firmware/xr-aud-01/fixture.XRUP",
+      "size": 1,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ]
+}
