@@ -344,10 +344,10 @@ def validate() -> set[str]:
             "button_zh": ["Windows x64 安装版", "Windows x64 便携 ZIP"],
         },
         "mac": {
-            "version": "v1.0.1",
+            "version": "v1.1.2",
             "link": [
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.0.1-mac-arm64.dmg"
+                "xr-studio-1.1.2-mac-arm64.dmg"
             ],
             "button_en": ["macOS Apple Silicon"],
             "button_zh": ["macOS Apple Silicon"],
@@ -366,10 +366,19 @@ def validate() -> set[str]:
             or entry.get("btnNames", {}).get("en") != expected["button_en"]
             or entry.get("btnNames", {}).get("zh") != expected["button_zh"]
             or entry.get("platformVersions")
-            != {"windows": "v1.0.1", "mac": "v1.0.1"}
+            != {"windows": "v1.0.1", "mac": "v1.1.2"}
         ):
             fail(f"invalid XR Studio data.json entry for platform: {platform}")
+        if platform == "mac" and (
+            entry.get("oldVersion") != [
+                "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-mac-arm64.dmg"
+            ]
+            or "preview" not in entry.get("desc", {}).get("en", "").lower()
+            or "客户试用" not in entry.get("desc", {}).get("zh", "")
+        ):
+            fail("XR Studio Mac preview requires bilingual labels and the 1.0.1 rollback")
 
+    # Website preview is independent of stable application self-update.
     updater_versions = {"latest.yml": "1.0.1", "latest-mac.yml": "1.0.1"}
     for updater_name, updater_version in updater_versions.items():
         updater_path = ROOT / "ota/xr-studio" / updater_name

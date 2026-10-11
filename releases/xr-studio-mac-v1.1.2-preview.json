@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "xr-studio-mac-v1.1.2-preview",
+  "title": "XR Studio 1.1.2 Public macOS ARM64 Preview",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-studio-1.1.2-mac-arm64.dmg",
+      "tos_key": "software/pc/xr-studio-1.1.2-mac-arm64.dmg",
+      "size": 127910769,
+      "sha256": "a8b9b556c8e61d1aa26c665746428461466d21d22be65167412d5e8ae1ce3a51"
+    }
+  ]
+}
