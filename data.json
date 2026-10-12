@@ -678,14 +678,14 @@
             "en": "XR Studio",
             "zh": "XR Studio"
         },
-        "version": "v1.0.1",
+        "version": "v1.1.2",
         "desc": {
-            "en": "Device workbench for communication, debugging, and OTA updates",
-            "zh": "面向设备通信、联调和 OTA 升级的设备工作台"
+            "en": "Public Preview for customer evaluation. Windows x64 files are not Authenticode signed. Choose All users: standard-path installation passed on Windows 11 build 26200. The first /S /currentuser attempt failed in NSIS System.dll (0xc0000005); root cause is unresolved and per-user installation is not validated. Portable ZIP is a fallback. Window/taskbar appearance and device testing of this build await user confirmation. Stable auto-update remains at 1.0.1.",
+            "zh": "Public 客户试用版。Windows x64 文件未做 Authenticode 签名。建议选择“所有用户”：标准路径安装已在 Windows 11 build 26200 通过。首次 /S /currentuser 在 NSIS System.dll 报 0xc0000005，根因未定位，按用户安装尚未通过验收；ZIP 为免安装备用。实际窗口/任务栏视觉及新包设备实测仍待用户确认。稳定自更新保持 1.0.1。"
         },
         "link": [
-            "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.exe",
-            "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.zip"
+            "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.exe",
+            "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.zip"
         ],
         "btnNames": {
             "en": [
@@ -697,10 +697,13 @@
                 "Windows x64 便携 ZIP"
             ]
         },
-        "oldVersion": [],
+        "oldVersion": [
+            "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.exe",
+            "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.zip"
+        ],
         "platform": "windows",
         "platformVersions": {
-            "windows": "v1.0.1",
+            "windows": "v1.1.2",
             "mac": "v1.1.2"
         },
         "hasTools": false,
@@ -733,7 +736,7 @@
         ],
         "platform": "mac",
         "platformVersions": {
-            "windows": "v1.0.1",
+            "windows": "v1.1.2",
             "mac": "v1.1.2"
         },
         "hasTools": false,

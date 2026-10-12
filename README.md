@@ -85,11 +85,22 @@ XRUP 包格式 schema 2 不改变发布清单的 `schema_version: 1`；设备兼
 修改发布控制脚本或元数据允许名单时，同时运行
 `python3 -m unittest discover -s tests -v`。
 
-XR Studio Mac 1.1.2 Public 当前仅为网站客户试用（Preview）下载，
-`software/pc/` 的 DMG 为本轮唯一资产，1.0.1 DMG 保留为回退入口。
-Windows 网站仍为 1.0.1；两平台 stable `ota/xr-studio/latest*.yml` 仍为
+XR Studio Mac / Windows 1.1.2 Public 当前仅为网站客户试用（Preview）下载，
+Mac DMG 入口保持不变；Windows 使用 EXE 安装器，ZIP 为免安装备用。
+两平台均保留 1.0.1 网站回退入口；stable `ota/xr-studio/latest*.yml` 仍为
 1.0.1，不随网站 Preview 推广。新的 OTA ZIP、blockmap 和 feed 须另行验收、
 审核发布，不得为满足引用校验而提前启用稳定自更新。
+
+Windows Preview 未做 Authenticode 签名。建议选择“所有用户”：标准路径安装已在
+Windows 11 build 26200 通过；首次 `/S /currentuser` 在 NSIS `System.dll` 报
+`0xc0000005`，根因未定位，按用户安装尚未通过验收。实际窗口/任务栏视觉与新包设备
+实测仍待用户确认。可下载 [免安装 ZIP 备用](https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.zip)。
+
+Windows Preview files are not Authenticode signed. Choose **All users**: standard-path
+installation passed on Windows 11 build 26200. The first `/S /currentuser` attempt
+failed in NSIS `System.dll` (`0xc0000005`); the root cause is unresolved and per-user
+installation is not validated. Window/taskbar appearance and device testing of this
+build await user confirmation. Use the [portable ZIP fallback](https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.zip) if needed.
 
 ### 4. 提交 PR
 
