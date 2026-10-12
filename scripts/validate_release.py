@@ -333,12 +333,12 @@ def validate() -> set[str]:
     ]
     expected_xr_studio = {
         "windows": {
-            "version": "v1.0.1",
+            "version": "v1.1.2",
             "link": [
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.0.1-win-x64.exe",
+                "xr-studio-1.1.2-win-x64.exe",
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.0.1-win-x64.zip",
+                "xr-studio-1.1.2-win-x64.zip",
             ],
             "button_en": ["Windows x64 Installer", "Windows x64 Portable ZIP"],
             "button_zh": ["Windows x64 安装版", "Windows x64 便携 ZIP"],
@@ -366,7 +366,7 @@ def validate() -> set[str]:
             or entry.get("btnNames", {}).get("en") != expected["button_en"]
             or entry.get("btnNames", {}).get("zh") != expected["button_zh"]
             or entry.get("platformVersions")
-            != {"windows": "v1.0.1", "mac": "v1.1.2"}
+            != {"windows": "v1.1.2", "mac": "v1.1.2"}
         ):
             fail(f"invalid XR Studio data.json entry for platform: {platform}")
         if platform == "mac" and (
@@ -377,6 +377,23 @@ def validate() -> set[str]:
             or "客户试用" not in entry.get("desc", {}).get("zh", "")
         ):
             fail("XR Studio Mac preview requires bilingual labels and the 1.0.1 rollback")
+        if platform == "windows":
+            if entry.get("oldVersion") != [
+                "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.exe",
+                "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.zip",
+            ]:
+                fail("XR Studio Windows preview requires the 1.0.1 rollback")
+            required_notices = {
+                "en": ("Preview", "not Authenticode signed", "All users", "26200",
+                       "/S /currentuser", "System.dll", "0xc0000005", "unresolved",
+                       "per-user installation is not validated", "ZIP", "await user confirmation"),
+                "zh": ("客户试用", "未做 Authenticode 签名", "所有用户", "26200",
+                       "/S /currentuser", "System.dll", "0xc0000005", "根因未定位",
+                       "按用户安装尚未通过验收", "ZIP", "待用户确认"),
+            }
+            for language, notices in required_notices.items():
+                if not all(notice in entry.get("desc", {}).get(language, "") for notice in notices):
+                    fail(f"XR Studio Windows preview requires installation caveats: {language}")
 
     # Website preview is independent of stable application self-update.
     updater_versions = {"latest.yml": "1.0.1", "latest-mac.yml": "1.0.1"}

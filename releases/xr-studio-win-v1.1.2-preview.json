@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "tag": "xr-studio-win-v1.1.2-preview",
+  "title": "XR Studio 1.1.2 Public Windows x64 Preview",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-studio-1.1.2-win-x64.exe",
+      "tos_key": "software/pc/xr-studio-1.1.2-win-x64.exe",
+      "size": 111652095,
+      "sha256": "36ec7b8d83929f58ff7d1410305843e5658e49b5c16f004d01b85067f96cfce9"
+    },
+    {
+      "name": "xr-studio-1.1.2-win-x64.zip",
+      "tos_key": "software/pc/xr-studio-1.1.2-win-x64.zip",
+      "size": 152207363,
+      "sha256": "b7d84517fd4ac421a13e4abcb411ddecb35b1642fd1ca3fff1c80abedf3fdeff"
+    }
+  ]
+}
