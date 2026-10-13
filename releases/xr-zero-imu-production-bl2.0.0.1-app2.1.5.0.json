@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "xr-zero-imu-production-bl2.0.0.1-app2.1.5.0",
+  "title": "XR-ZERO-IMU BL 2.0.0.1 + APP 2.1.5.0 production package",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-zero-imu-bl2.0.0.1-app2.1.5.0-production.zip",
+      "tos_key": "firmware/xr-zero-imu/xr-zero-imu-bl2.0.0.1-app2.1.5.0-production.zip",
+      "size": 137445,
+      "sha256": "06c843027d4e43b33fad1f49db01d9ec41f7536a996f3a90eb810b8dbdd6139d"
+    }
+  ]
+}

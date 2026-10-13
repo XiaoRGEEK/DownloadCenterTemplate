@@ -334,7 +334,7 @@ jobs:
 
           while IFS=$'\t' read -r status file rest; do
             case "${file}" in
-              data.json|index.html|style.css|update/software.yaml|firmware/mxbit/version.yaml|firmware/xr-car-tail/version.yaml|firmware/xr-aud-01/version.yaml|firmware/xr-zero-imu/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml|ota/xr-studio/latest.yml|ota/xr-studio/latest-mac.yml|software/image/*|software/ios/*|docs/*.html|docs/assets/*)
+              data.json|index.html|style.css|update/software.yaml|firmware/mxbit/version.yaml|firmware/xr-car-tail/version.yaml|firmware/xr-aud-01/version.yaml|firmware/xr-zero-imu/version.yaml|firmware/xr-zero-imu/production.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml|ota/xr-studio/latest.yml|ota/xr-studio/latest-mac.yml|software/image/*|software/ios/*|docs/*.html|docs/assets/*)
                 if [[ "${status}" == D* || "${status}" == R* ]]; then
                   echo "TOS deletion/rename is forbidden in deployment: ${status} ${file}" >&2
                   exit 1
@@ -342,7 +342,7 @@ jobs:
                 case "${file}" in
                   data.json)
                     printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-final.txt" ;;
-                  index.html|update/software.yaml|firmware/mxbit/version.yaml|firmware/xr-car-tail/version.yaml|firmware/xr-aud-01/version.yaml|firmware/xr-zero-imu/version.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml|ota/xr-studio/latest.yml|ota/xr-studio/latest-mac.yml)
+                  index.html|update/software.yaml|firmware/mxbit/version.yaml|firmware/xr-car-tail/version.yaml|firmware/xr-aud-01/version.yaml|firmware/xr-zero-imu/version.yaml|firmware/xr-zero-imu/production.yaml|software/pc/latest.yml|software/pc/moxin/latest.yml|ota/xr-studio/latest.yml|ota/xr-studio/latest-mac.yml)
                     printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-entrypoints.txt" ;;
                   *) printf '%s\n' "${file}" >> "${RUNNER_TEMP}/deploy-assets.txt" ;;
                 esac
@@ -427,9 +427,9 @@ jobs:
               --retry 5 --retry-all-errors --output "${public_data}" "${data_url}"
             [[ "$(jq '[.[] | select(.name.en == "XR Studio")] | length' "${public_data}")" == "2" ]]
             jq -e '[.[] | select(.name.en == "XR Studio") | .link[]] == [
-              "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.exe",
-              "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.zip",
-              "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-mac-arm64.dmg"
+              "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-win-x64.exe",
+              "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-win-x64.zip",
+              "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-mac-arm64.dmg"
             ]' "${public_data}" >/dev/null
             echo "Verified XR Studio website entries"
           fi

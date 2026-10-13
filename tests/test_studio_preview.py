@@ -29,11 +29,11 @@ class StudioPreviewTests(unittest.TestCase):
             return validate.validate()
 
     def test_preview_website_versions_are_valid(self):
-        self.assertEqual(self.entry("mac")["version"], "v1.1.2")
-        self.assertEqual(self.entry("windows")["version"], "v1.1.2")
+        self.assertEqual(self.entry("mac")["version"], "v1.1.3")
+        self.assertEqual(self.entry("windows")["version"], "v1.1.3")
         for platform in ("mac", "windows"):
             self.assertEqual(self.entry(platform)["platformVersions"],
-                             {"windows": "v1.1.2", "mac": "v1.1.2"})
+                             {"windows": "v1.1.3", "mac": "v1.1.3"})
         validate.validate()
 
     def test_wrong_windows_version_or_stale_cross_platform_label_is_rejected(self):
@@ -50,12 +50,16 @@ class StudioPreviewTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Windows preview requires.*rollback"):
             self.validate_data(data)
         notices = {
-            "en": ("Preview", "not Authenticode signed", "All users", "26200",
+            "en": ("Preview 1.1.3", "not Authenticode signed", "All users",
+                   "Program Files", "exit 0", "packaged renderer", "isolated profile",
                    "/S /currentuser", "System.dll", "0xc0000005", "unresolved",
-                   "per-user installation is not validated", "ZIP", "await user confirmation"),
-            "zh": ("客户试用", "未做 Authenticode 签名", "所有用户", "26200",
+                   "unvalidated", "ZIP", "visual acceptance", "hardware serial/online OTA",
+                   "Windows DNS", "not tested"),
+            "zh": ("1.1.3 客户试用", "未做 Authenticode 签名", "所有用户",
+                   "Program Files", "exit 0", "packaged renderer", "隔离 profile",
                    "/S /currentuser", "System.dll", "0xc0000005", "根因未定位",
-                   "按用户安装尚未通过验收", "ZIP", "待用户确认"),
+                   "仍未通过验收", "ZIP", "视觉", "硬件串口/在线 OTA",
+                   "Windows DNS", "未测试"),
         }
         for language, phrases in notices.items():
             for phrase in phrases:
@@ -90,34 +94,33 @@ class StudioPreviewTests(unittest.TestCase):
             target = ROOT / "ota/xr-studio" / name
             def read_text(path, *args, **kwargs):
                 text = original(path, *args, **kwargs)
-                return text.replace("version: 1.0.1", "version: 1.1.2") if path == target else text
+                return text.replace("version: 1.0.1", "version: 1.1.3") if path == target else text
             with patch.object(Path, "read_text", read_text):
                 with self.assertRaisesRegex(ValueError, "version must be 1.0.1"):
                     validate.validate()
 
     def test_preview_manifest_contains_only_website_dmg(self):
-        manifest = json.loads((ROOT / "releases/xr-studio-mac-v1.1.2-preview.json").read_text())
-        self.assertEqual(len(manifest["assets"]), 1)
+        manifest = json.loads((ROOT / "releases/xr-studio-v1.1.3-preview.json").read_text())
         self.assertEqual(manifest["assets"][0], {
-            "name": "xr-studio-1.1.2-mac-arm64.dmg",
-            "tos_key": "software/pc/xr-studio-1.1.2-mac-arm64.dmg",
-            "size": 127910769,
-            "sha256": "a8b9b556c8e61d1aa26c665746428461466d21d22be65167412d5e8ae1ce3a51",
+            "name": "xr-studio-1.1.3-mac-arm64.dmg",
+            "tos_key": "software/pc/xr-studio-1.1.3-mac-arm64.dmg",
+            "size": 127937786,
+            "sha256": "d5e6b1e8cd8af2f2ca727a2015e52d5df59308b2d0e8f2733924d7f2bd036d90",
         })
-        self.assertFalse(any(key.startswith("ota/xr-studio/") and "1.1.2" in key
+        self.assertFalse(any(key.startswith("ota/xr-studio/") and "1.1.3" in key
                              for key in self.objects))
 
     def test_windows_preview_manifest_contains_only_website_exe_and_zip(self):
-        manifest = json.loads((ROOT / "releases/xr-studio-win-v1.1.2-preview.json").read_text())
-        self.assertEqual(manifest["assets"], [
-            {"name": "xr-studio-1.1.2-win-x64.exe",
-             "tos_key": "software/pc/xr-studio-1.1.2-win-x64.exe",
-             "size": 111652095,
-             "sha256": "36ec7b8d83929f58ff7d1410305843e5658e49b5c16f004d01b85067f96cfce9"},
-            {"name": "xr-studio-1.1.2-win-x64.zip",
-             "tos_key": "software/pc/xr-studio-1.1.2-win-x64.zip",
-             "size": 152207363,
-             "sha256": "b7d84517fd4ac421a13e4abcb411ddecb35b1642fd1ca3fff1c80abedf3fdeff"},
+        manifest = json.loads((ROOT / "releases/xr-studio-v1.1.3-preview.json").read_text())
+        self.assertEqual(manifest["assets"][1:], [
+            {"name": "xr-studio-1.1.3-win-x64.exe",
+             "tos_key": "software/pc/xr-studio-1.1.3-win-x64.exe",
+             "size": 111666378,
+             "sha256": "2dfe0dd3e5cce4c07b95e01027e783f60920ad31bcefe2fcc3d46e7a413cd339"},
+            {"name": "xr-studio-1.1.3-win-x64.zip",
+             "tos_key": "software/pc/xr-studio-1.1.3-win-x64.zip",
+             "size": 152276186,
+             "sha256": "6af661103980444ec35fee10bdc7e134d3e35c87536817c22f1299f4de553be4"},
         ])
 
     def test_actual_workflow_public_link_check_accepts_only_preview_release(self):
