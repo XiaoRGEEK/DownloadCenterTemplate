@@ -85,6 +85,11 @@ XRUP 包格式 schema 2 不改变发布清单的 `schema_version: 1`；设备兼
 修改发布控制脚本或元数据允许名单时，同时运行
 `python3 -m unittest discover -s tests -v`。
 
+XR-ZERO-IMU 在线 OTA 只公开原始 APP BIN 与
+`firmware/xr-zero-imu/version.yaml`。合并 factory BIN、HEX、台架日志、设备卡和
+其他产线文件不属于该公开渠道；设备卡随 XR Studio 发布，不为本次固件发布扩展
+Release manifest。Runner 必须先校验并镜像版本化 APP BIN，最后才部署 catalog。
+
 XR Studio Mac / Windows 1.1.2 Public 当前仅为网站客户试用（Preview）下载，
 Mac DMG 入口保持不变；Windows 使用 EXE 安装器，ZIP 为免安装备用。
 两平台均保留 1.0.1 网站回退入口；stable `ota/xr-studio/latest*.yml` 仍为

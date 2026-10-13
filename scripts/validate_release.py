@@ -134,6 +134,9 @@ def referenced_objects() -> tuple[set[str], list[dict]]:
     objects |= yaml_urls(
         ROOT / "firmware/xr-aud-01/version.yaml", "firmware/xr-aud-01/"
     )
+    objects |= yaml_urls(
+        ROOT / "firmware/xr-zero-imu/version.yaml", "firmware/xr-zero-imu/"
+    )
     objects |= yaml_urls(ROOT / "software/pc/latest.yml", "software/pc/")
     objects |= yaml_urls(
         ROOT / "software/pc/moxin/latest.yml", "software/pc/moxin/"
@@ -430,6 +433,33 @@ def validate() -> set[str]:
             fail(f"XR-CAR-TAIL {field} must be {expected}")
     if not re.search(r"^\s*-\s*24833\s*$", xr_car_tail, re.MULTILINE):
         fail("XR-CAR-TAIL product_codes must contain 24833")
+
+    xr_zero_imu = (ROOT / "firmware/xr-zero-imu/version.yaml").read_text(
+        encoding="utf-8"
+    )
+    required_xr_zero_imu_fields = {
+        "id": "xr-zero-imu",
+        "device_type": "XR-ZERO-IMU",
+        "product_codes": "[24836]",
+        "version": "2.1.5.0",
+        "url": "app_2.1.5.0.bin",
+        "sha256": "f6f550f6a076bd5443de3586f5bb997d89b547c229ed10ae25db36cf35876a46",
+        "image_version": "2.1.5.0",
+        "product_code": "24836",
+        "image_size": "40240",
+        "image_crc32": "0x146C43FF",
+        "min_bootloader_version": "2.0.0.0",
+        "source_commit": "a893691069bed02234d6fa794c1f9a918d7fc8fb",
+        "whole_file_crc32": "0x146C43FF",
+        "whole_file_crc32_scope": "CRC32/ISO-HDLC of unchanged complete APP BIN",
+    }
+    for field, expected in required_xr_zero_imu_fields.items():
+        if not re.search(
+            rf"^\s*{re.escape(field)}:\s*['\"]?{re.escape(expected)}['\"]?\s*$",
+            xr_zero_imu,
+            re.MULTILINE,
+        ):
+            fail(f"XR-ZERO-IMU {field} must be {expected}")
 
     return objects
 

@@ -59,7 +59,7 @@ class XrupReleaseTests(unittest.TestCase):
 
     def test_reference_enumeration_preserves_existing_products(self):
         objects, _ = validate.referenced_objects()
-        for product in ("mxbit", "xr-car-tail", "xr-aud-01"):
+        for product in ("mxbit", "xr-car-tail", "xr-aud-01", "xr-zero-imu"):
             expected = validate.yaml_urls(
                 ROOT / f"firmware/{product}/version.yaml", f"firmware/{product}/"
             )
@@ -85,10 +85,17 @@ class XrupReleaseTests(unittest.TestCase):
             return result, plans
 
     def test_catalog_deploys_as_entrypoint_and_private_files_are_excluded(self):
-        catalogs = [CATALOG, "firmware/mxbit/version.yaml", "firmware/xr-car-tail/version.yaml"]
+        catalogs = [
+            CATALOG,
+            "firmware/mxbit/version.yaml",
+            "firmware/xr-car-tail/version.yaml",
+            "firmware/xr-zero-imu/version.yaml",
+        ]
         changes = "".join(f"A\t{path}\n" for path in catalogs)
         changes += "M\tdata.json\nA\tfirmware/xr-aud-01/private.key\n"
         changes += "A\tfirmware/xr-aud-01/factory.bin\nA\tfirmware/xr-aud-01/auth.json\n"
+        changes += "A\tfirmware/xr-zero-imu/factory.bin\n"
+        changes += "A\tfirmware/xr-zero-imu/factory.hex\n"
         result, plans = self.run_metadata_plan(changes)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(plans, {"assets": [], "entrypoints": catalogs, "final": ["data.json"]})
