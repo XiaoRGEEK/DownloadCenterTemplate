@@ -678,14 +678,14 @@
             "en": "XR Studio",
             "zh": "XR Studio"
         },
-        "version": "v1.1.2",
+        "version": "v1.1.3",
         "desc": {
-            "en": "Public Preview for customer evaluation. Windows x64 files are not Authenticode signed. Choose All users: standard-path installation passed on Windows 11 build 26200. The first /S /currentuser attempt failed in NSIS System.dll (0xc0000005); root cause is unresolved and per-user installation is not validated. Portable ZIP is a fallback. Window/taskbar appearance and device testing of this build await user confirmation. Stable auto-update remains at 1.0.1.",
-            "zh": "Public 客户试用版。Windows x64 文件未做 Authenticode 签名。建议选择“所有用户”：标准路径安装已在 Windows 11 build 26200 通过。首次 /S /currentuser 在 NSIS System.dll 报 0xc0000005，根因未定位，按用户安装尚未通过验收；ZIP 为免安装备用。实际窗口/任务栏视觉及新包设备实测仍待用户确认。稳定自更新保持 1.0.1。"
+            "en": "Public Preview 1.1.3 for customer evaluation. Windows x64 files are not Authenticode signed. Choose All users: installation to Program Files completed with exit 0, and the packaged renderer started and closed normally in an isolated profile. The earlier /S /currentuser path remains unvalidated after an NSIS System.dll (0xc0000005) failure with unresolved root cause. Portable ZIP is a fallback. Window/taskbar visual acceptance, hardware serial/online OTA and Windows DNS were not tested. Stable auto-update remains at 1.0.1.",
+            "zh": "Public 1.1.3 客户试用版。Windows x64 文件未做 Authenticode 签名。建议选择“所有用户”：Program Files 安装以 exit 0 完成，隔离 profile 下 packaged renderer 已正常启动和关闭。此前 /S /currentuser 路径在 NSIS System.dll 报 0xc0000005，根因未定位，按用户安装仍未通过验收；ZIP 为免安装备用。窗口/任务栏视觉、硬件串口/在线 OTA 与 Windows DNS 未测试。稳定自更新保持 1.0.1。"
         },
         "link": [
-            "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.exe",
-            "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.zip"
+            "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-win-x64.exe",
+            "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-win-x64.zip"
         ],
         "btnNames": {
             "en": [
@@ -698,13 +698,15 @@
             ]
         },
         "oldVersion": [
+            "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.exe",
+            "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.zip",
             "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.exe",
             "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.zip"
         ],
         "platform": "windows",
         "platformVersions": {
-            "windows": "v1.1.2",
-            "mac": "v1.1.2"
+            "windows": "v1.1.3",
+            "mac": "v1.1.3"
         },
         "hasTools": false,
         "tools": []
@@ -715,13 +717,13 @@
             "en": "XR Studio",
             "zh": "XR Studio"
         },
-        "version": "v1.1.2",
+        "version": "v1.1.3",
         "desc": {
-            "en": "Public Preview for customer evaluation: device communication, debugging, and OTA updates. macOS 12.0+ on Apple Silicon; stable auto-update remains at 1.0.1.",
-            "zh": "Public 客户试用版：设备通信、联调和 OTA 升级工作台。适用于 macOS 12.0+ Apple Silicon；稳定自更新仍保持 1.0.1。"
+            "en": "Public Preview 1.1.3 for customer evaluation: signed, notarized and stapled for macOS 12.0+ on Apple Silicon. Real GUI online XR-ZERO-IMU OTA, reboot and APP 2.1.5.0 confirmation passed on macOS. Power-loss OTA and effective calibration remain separate acceptance items; stable auto-update remains at 1.0.1.",
+            "zh": "Public 1.1.3 客户试用版：适用于 macOS 12.0+ Apple Silicon，已完成签名、公证和 stapling。macOS 真实 GUI 已完成 XR-ZERO-IMU 在线 OTA、重启及 APP 2.1.5.0 确认。OTA 掉电与有效校准仍为独立验收项；稳定自更新保持 1.0.1。"
         },
         "link": [
-            "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-mac-arm64.dmg"
+            "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-mac-arm64.dmg"
         ],
         "btnNames": {
             "en": [
@@ -732,12 +734,13 @@
             ]
         },
         "oldVersion": [
+            "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-mac-arm64.dmg",
             "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-mac-arm64.dmg"
         ],
         "platform": "mac",
         "platformVersions": {
-            "windows": "v1.1.2",
-            "mac": "v1.1.2"
+            "windows": "v1.1.3",
+            "mac": "v1.1.3"
         },
         "hasTools": false,
         "tools": []

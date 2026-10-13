@@ -65,6 +65,14 @@ class XrupReleaseTests(unittest.TestCase):
             )
             self.assertTrue(expected)
             self.assertTrue(expected <= objects)
+        production = validate.yaml_urls(
+            ROOT / "firmware/xr-zero-imu/production.yaml", "firmware/xr-zero-imu/"
+        )
+        self.assertEqual(production, {
+            "firmware/xr-zero-imu/"
+            "xr-zero-imu-bl2.0.0.1-app2.1.5.0-production.zip"
+        })
+        self.assertTrue(production <= objects)
         self.assertTrue(any(key.endswith(".XRUP") for key in objects))
 
     def run_metadata_plan(self, changes):
@@ -90,6 +98,7 @@ class XrupReleaseTests(unittest.TestCase):
             "firmware/mxbit/version.yaml",
             "firmware/xr-car-tail/version.yaml",
             "firmware/xr-zero-imu/version.yaml",
+            "firmware/xr-zero-imu/production.yaml",
         ]
         changes = "".join(f"A\t{path}\n" for path in catalogs)
         changes += "M\tdata.json\nA\tfirmware/xr-aud-01/private.key\n"
@@ -101,10 +110,11 @@ class XrupReleaseTests(unittest.TestCase):
         self.assertEqual(plans, {"assets": [], "entrypoints": catalogs, "final": ["data.json"]})
 
     def test_catalog_deletion_and_rename_remain_forbidden(self):
-        for status in ("D", "R100"):
-            result, _ = self.run_metadata_plan(f"{status}\t{CATALOG}\n")
-            self.assertNotEqual(result.returncode, 0)
-            self.assertIn("deletion/rename is forbidden", result.stderr)
+        for catalog in (CATALOG, "firmware/xr-zero-imu/production.yaml"):
+            for status in ("D", "R100"):
+                result, _ = self.run_metadata_plan(f"{status}\t{catalog}\n")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("deletion/rename is forbidden", result.stderr)
 
 
 if __name__ == "__main__":

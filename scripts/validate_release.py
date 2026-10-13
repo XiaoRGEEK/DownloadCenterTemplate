@@ -137,6 +137,9 @@ def referenced_objects() -> tuple[set[str], list[dict]]:
     objects |= yaml_urls(
         ROOT / "firmware/xr-zero-imu/version.yaml", "firmware/xr-zero-imu/"
     )
+    objects |= yaml_urls(
+        ROOT / "firmware/xr-zero-imu/production.yaml", "firmware/xr-zero-imu/"
+    )
     objects |= yaml_urls(ROOT / "software/pc/latest.yml", "software/pc/")
     objects |= yaml_urls(
         ROOT / "software/pc/moxin/latest.yml", "software/pc/moxin/"
@@ -336,21 +339,21 @@ def validate() -> set[str]:
     ]
     expected_xr_studio = {
         "windows": {
-            "version": "v1.1.2",
+            "version": "v1.1.3",
             "link": [
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.1.2-win-x64.exe",
+                "xr-studio-1.1.3-win-x64.exe",
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.1.2-win-x64.zip",
+                "xr-studio-1.1.3-win-x64.zip",
             ],
             "button_en": ["Windows x64 Installer", "Windows x64 Portable ZIP"],
             "button_zh": ["Windows x64 安装版", "Windows x64 便携 ZIP"],
         },
         "mac": {
-            "version": "v1.1.2",
+            "version": "v1.1.3",
             "link": [
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.1.2-mac-arm64.dmg"
+                "xr-studio-1.1.3-mac-arm64.dmg"
             ],
             "button_en": ["macOS Apple Silicon"],
             "button_zh": ["macOS Apple Silicon"],
@@ -369,30 +372,37 @@ def validate() -> set[str]:
             or entry.get("btnNames", {}).get("en") != expected["button_en"]
             or entry.get("btnNames", {}).get("zh") != expected["button_zh"]
             or entry.get("platformVersions")
-            != {"windows": "v1.1.2", "mac": "v1.1.2"}
+            != {"windows": "v1.1.3", "mac": "v1.1.3"}
         ):
             fail(f"invalid XR Studio data.json entry for platform: {platform}")
         if platform == "mac" and (
             entry.get("oldVersion") != [
-                "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-mac-arm64.dmg"
+                "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-mac-arm64.dmg",
+                "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-mac-arm64.dmg",
             ]
             or "preview" not in entry.get("desc", {}).get("en", "").lower()
             or "客户试用" not in entry.get("desc", {}).get("zh", "")
         ):
-            fail("XR Studio Mac preview requires bilingual labels and the 1.0.1 rollback")
+            fail("XR Studio Mac preview requires bilingual labels and the 1.1.2 rollback")
         if platform == "windows":
             if entry.get("oldVersion") != [
+                "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.exe",
+                "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.zip",
                 "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.exe",
                 "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.zip",
             ]:
-                fail("XR Studio Windows preview requires the 1.0.1 rollback")
+                fail("XR Studio Windows preview requires the 1.1.2 rollback")
             required_notices = {
-                "en": ("Preview", "not Authenticode signed", "All users", "26200",
+                "en": ("Preview 1.1.3", "not Authenticode signed", "All users",
+                       "Program Files", "exit 0", "packaged renderer", "isolated profile",
                        "/S /currentuser", "System.dll", "0xc0000005", "unresolved",
-                       "per-user installation is not validated", "ZIP", "await user confirmation"),
-                "zh": ("客户试用", "未做 Authenticode 签名", "所有用户", "26200",
+                       "unvalidated", "ZIP", "visual acceptance", "hardware serial/online OTA",
+                       "Windows DNS", "not tested"),
+                "zh": ("1.1.3 客户试用", "未做 Authenticode 签名", "所有用户",
+                       "Program Files", "exit 0", "packaged renderer", "隔离 profile",
                        "/S /currentuser", "System.dll", "0xc0000005", "根因未定位",
-                       "按用户安装尚未通过验收", "ZIP", "待用户确认"),
+                       "仍未通过验收", "ZIP", "视觉", "硬件串口/在线 OTA",
+                       "Windows DNS", "未测试"),
             }
             for language, notices in required_notices.items():
                 if not all(notice in entry.get("desc", {}).get(language, "") for notice in notices):
@@ -460,6 +470,36 @@ def validate() -> set[str]:
             re.MULTILINE,
         ):
             fail(f"XR-ZERO-IMU {field} must be {expected}")
+
+    xr_zero_production = (
+        ROOT / "firmware/xr-zero-imu/production.yaml"
+    ).read_text(encoding="utf-8")
+    required_xr_zero_production_fields = {
+        "id": "xr-zero-imu",
+        "device_type": "XR-ZERO-IMU",
+        "product_codes": "[24836]",
+        "version": "BL2.0.0.1-APP2.1.5.0",
+        "url": "xr-zero-imu-bl2.0.0.1-app2.1.5.0-production.zip",
+        "size": "137445",
+        "sha256": "06c843027d4e43b33fad1f49db01d9ec41f7536a996f3a90eb810b8dbdd6139d",
+        "merged_bin_size": "52528",
+        "merged_bin_sha256": "c04cb1c28b731a9ab186791135f7a01a784d82947b5a31da4f57b011abade42c",
+        "bin_start_address": "0x08000000",
+        "mass_erase_allowed": "false",
+        "data_included": "false",
+        "option_bytes_included": "false",
+        "app_ota": "false",
+        "source_commit": "a893691069bed02234d6fa794c1f9a918d7fc8fb",
+        "factory_tool_commit": "373eb09",
+        "evidence_commit": "3e3d35d",
+    }
+    for field, expected in required_xr_zero_production_fields.items():
+        if not re.search(
+            rf"^\s*{re.escape(field)}:\s*['\"]?{re.escape(expected)}['\"]?\s*$",
+            xr_zero_production,
+            re.MULTILINE,
+        ):
+            fail(f"XR-ZERO-IMU production {field} must be {expected}")
 
     return objects
 

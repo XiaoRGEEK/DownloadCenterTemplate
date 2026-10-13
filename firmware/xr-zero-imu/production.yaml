@@ -1,0 +1,24 @@
+product:
+  id: xr-zero-imu
+  device_type: XR-ZERO-IMU
+  product_codes: [24836]
+production:
+  package:
+    version: "BL2.0.0.1-APP2.1.5.0"
+    url: "xr-zero-imu-bl2.0.0.1-app2.1.5.0-production.zip"
+    name:
+      zh: "XR-ZERO-IMU 产线 ST-LINK 说明包"
+      en: "XR-ZERO-IMU production ST-LINK package"
+    size: 137445
+    sha256: "06c843027d4e43b33fad1f49db01d9ec41f7536a996f3a90eb810b8dbdd6139d"
+    merged_bin_size: 52528
+    merged_bin_sha256: "c04cb1c28b731a9ab186791135f7a01a784d82947b5a31da4f57b011abade42c"
+    bin_start_address: "0x08000000"
+    mass_erase_allowed: false
+    data_included: false
+    option_bytes_included: false
+    app_ota: false
+    validation: "Software integrity and independent BL/APP source evidence only; merged-image production flashing is not claimed."
+    source_commit: "a893691069bed02234d6fa794c1f9a918d7fc8fb"
+    factory_tool_commit: "373eb09"
+    evidence_commit: "3e3d35d"

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "tag": "xr-studio-v1.1.3-preview",
+  "title": "XR Studio 1.1.3 Public Preview",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-studio-1.1.3-mac-arm64.dmg",
+      "tos_key": "software/pc/xr-studio-1.1.3-mac-arm64.dmg",
+      "size": 127937786,
+      "sha256": "d5e6b1e8cd8af2f2ca727a2015e52d5df59308b2d0e8f2733924d7f2bd036d90"
+    },
+    {
+      "name": "xr-studio-1.1.3-win-x64.exe",
+      "tos_key": "software/pc/xr-studio-1.1.3-win-x64.exe",
+      "size": 111666378,
+      "sha256": "2dfe0dd3e5cce4c07b95e01027e783f60920ad31bcefe2fcc3d46e7a413cd339"
+    },
+    {
+      "name": "xr-studio-1.1.3-win-x64.zip",
+      "tos_key": "software/pc/xr-studio-1.1.3-win-x64.zip",
+      "size": 152276186,
+      "sha256": "6af661103980444ec35fee10bdc7e134d3e35c87536817c22f1299f4de553be4"
+    }
+  ]
+}
