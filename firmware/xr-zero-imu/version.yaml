@@ -1,0 +1,22 @@
+product:
+  id: xr-zero-imu
+  device_type: XR-ZERO-IMU
+  product_codes: [24836]
+firmware:
+  app:
+    version: "2.1.5.0"
+    url: "app_2.1.5.0.bin"
+    name:
+      zh: "XR-ZERO-IMU 固件"
+      en: "XR-ZERO-IMU firmware"
+    release_notes: "新增有界I²C卡线恢复，保留124/12和56/15旧协议；校准、精度及OTA掉电仍独立待验。"
+    sha256: "f6f550f6a076bd5443de3586f5bb997d89b547c229ed10ae25db36cf35876a46"
+    image_version: "2.1.5.0"
+    product_code: 24836
+    image_size: 40240
+    image_crc32: "0x146C43FF"
+    min_bootloader_version: "2.0.0.0"
+    metadata:
+      source_commit: "a893691069bed02234d6fa794c1f9a918d7fc8fb"
+      whole_file_crc32: "0x146C43FF"
+      whole_file_crc32_scope: "CRC32/ISO-HDLC of unchanged complete APP BIN"

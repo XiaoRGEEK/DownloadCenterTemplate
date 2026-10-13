@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "xr-zero-imu-app-v2.1.5.0",
+  "title": "XR-ZERO-IMU APP 2.1.5.0 OTA",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "app_2.1.5.0.bin",
+      "tos_key": "firmware/xr-zero-imu/app_2.1.5.0.bin",
+      "size": 40240,
+      "sha256": "f6f550f6a076bd5443de3586f5bb997d89b547c229ed10ae25db36cf35876a46"
+    }
+  ]
+}
