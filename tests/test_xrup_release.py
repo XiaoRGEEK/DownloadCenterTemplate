@@ -59,7 +59,7 @@ class XrupReleaseTests(unittest.TestCase):
 
     def test_reference_enumeration_preserves_existing_products(self):
         objects, _ = validate.referenced_objects()
-        for product in ("mxbit", "xr-car-tail", "xr-aud-01", "xr-zero-imu"):
+        for product in ("mxbit", "xr-base", "xr-car-tail", "xr-aud-01", "xr-zero-imu"):
             expected = validate.yaml_urls(
                 ROOT / f"firmware/{product}/version.yaml", f"firmware/{product}/"
             )
@@ -74,6 +74,34 @@ class XrupReleaseTests(unittest.TestCase):
         })
         self.assertTrue(production <= objects)
         self.assertTrue(any(key.endswith(".XRUP") for key in objects))
+
+    def test_xr_base_catalog_is_app_only_and_version_pinned(self):
+        target = ROOT / "firmware/xr-base/version.yaml"
+        catalog = target.read_text()
+        self.assertIn('url: "app_2.1.0.1.bin"', catalog)
+        self.assertIn('min_studio_version: "1.1.4"', catalog)
+        for forbidden in (
+            'url: "bl',
+            'url: "full',
+            "production.zip",
+            "authorization",
+        ):
+            self.assertNotIn(forbidden, catalog.lower())
+
+        original = Path.read_text
+
+        def read_text(path, *args, **kwargs):
+            text = original(path, *args, **kwargs)
+            if path == target:
+                return text.replace(
+                    'min_studio_version: "1.1.4"',
+                    'min_studio_version: "1.1.3"',
+                )
+            return text
+
+        with patch.object(Path, "read_text", read_text):
+            with self.assertRaisesRegex(ValueError, "XR-BASE min_studio_version"):
+                validate.validate()
 
     def run_metadata_plan(self, changes):
         # Execute the actual workflow allowlist, not a duplicated approximation.
@@ -96,6 +124,7 @@ class XrupReleaseTests(unittest.TestCase):
         catalogs = [
             CATALOG,
             "firmware/mxbit/version.yaml",
+            "firmware/xr-base/version.yaml",
             "firmware/xr-car-tail/version.yaml",
             "firmware/xr-zero-imu/version.yaml",
             "firmware/xr-zero-imu/production.yaml",
@@ -105,12 +134,18 @@ class XrupReleaseTests(unittest.TestCase):
         changes += "A\tfirmware/xr-aud-01/factory.bin\nA\tfirmware/xr-aud-01/auth.json\n"
         changes += "A\tfirmware/xr-zero-imu/factory.bin\n"
         changes += "A\tfirmware/xr-zero-imu/factory.hex\n"
+        changes += "A\tfirmware/xr-base/full.bin\n"
+        changes += "A\tfirmware/xr-base/authorization.json\n"
         result, plans = self.run_metadata_plan(changes)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(plans, {"assets": [], "entrypoints": catalogs, "final": ["data.json"]})
 
     def test_catalog_deletion_and_rename_remain_forbidden(self):
-        for catalog in (CATALOG, "firmware/xr-zero-imu/production.yaml"):
+        for catalog in (
+            CATALOG,
+            "firmware/xr-base/version.yaml",
+            "firmware/xr-zero-imu/production.yaml",
+        ):
             for status in ("D", "R100"):
                 result, _ = self.run_metadata_plan(f"{status}\t{catalog}\n")
                 self.assertNotEqual(result.returncode, 0)

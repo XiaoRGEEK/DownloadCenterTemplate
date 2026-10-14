@@ -1,0 +1,23 @@
+product:
+  id: xr-base
+  device_type: XR-BASE
+  product_codes: [24835]
+firmware:
+  app:
+    version: "2.1.0.1"
+    url: "app_2.1.0.1.bin"
+    name:
+      zh: "XR-BASE 主固件"
+      en: "XR-BASE firmware"
+    sha256: "2dc53efc696dfce432f8f696724891dfe50d0d9131fe967dde850ee21bf74681"
+    image_version: "2.1.0.1"
+    product_code: 24835
+    image_size: 30208
+    image_crc32: "0xDE805C0B"
+    min_bootloader_version: "2.0.0.0"
+    min_studio_version: "1.1.4"
+    release_notes: "新版 base2 XR-BASE APP；PA2 单线 500000/8N1，OTA 128B。在线升级仅更新 APP，保留设备 ID/SN。"
+    metadata:
+      source_commit: "cd56ddca80efc0d7acbe3416fd916c75ebfc731a"
+      whole_file_crc32: "0xDE805C0B"
+      whole_file_crc32_scope: "CRC32/ISO-HDLC of unchanged complete APP BIN"
