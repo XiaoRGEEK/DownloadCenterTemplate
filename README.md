@@ -92,6 +92,13 @@ XR-ZERO-IMU 在线 OTA 只公开原始 APP BIN 与
 不属于 APP OTA 渠道；设备卡随 XR Studio 发布。Runner 必须先校验并镜像版本化资产，
 最后才部署对应 catalog。
 
+XR-BASE 新版 base2 在线 OTA 只公开未修改的 APP BIN 与
+`firmware/xr-base/version.yaml`。入口仅适用于产品码 24835（`0x6103`）、
+最低 BL 2.0.0.0 且最低 XR Studio 1.1.4 的产品专用路径。64 B 头中的
+size/CRC/headerCRC 零占位保持原样，通用 strict parser 不放宽；目录使用
+整文件长度、SHA-256 与 CRC32/ISO-HDLC 验证。BL、FULL 合并包、工厂包、
+Internal 资源、授权数据和含设备身份的日志/备份都不属于该公开渠道。
+
 XR Studio Mac / Windows 1.1.3 Public 当前仅为网站客户试用（Preview）下载；
 Windows 使用 EXE 安装器，ZIP 为免安装备用。两平台均保留 1.1.2 网站回退入口；
 1.0.1 稳定网站回退也继续保留；stable `ota/xr-studio/latest*.yml` 仍为

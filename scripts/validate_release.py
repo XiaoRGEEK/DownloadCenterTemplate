@@ -128,6 +128,7 @@ def referenced_objects() -> tuple[set[str], list[dict]]:
     objects, data = data_objects()
     objects |= yaml_urls(ROOT / "update/software.yaml")
     objects |= yaml_urls(ROOT / "firmware/mxbit/version.yaml", "firmware/mxbit/")
+    objects |= yaml_urls(ROOT / "firmware/xr-base/version.yaml", "firmware/xr-base/")
     objects |= yaml_urls(
         ROOT / "firmware/xr-car-tail/version.yaml", "firmware/xr-car-tail/"
     )
@@ -443,6 +444,34 @@ def validate() -> set[str]:
             fail(f"XR-CAR-TAIL {field} must be {expected}")
     if not re.search(r"^\s*-\s*24833\s*$", xr_car_tail, re.MULTILINE):
         fail("XR-CAR-TAIL product_codes must contain 24833")
+
+    xr_base = (ROOT / "firmware/xr-base/version.yaml").read_text(
+        encoding="utf-8"
+    )
+    required_xr_base_fields = {
+        "id": "xr-base",
+        "device_type": "XR-BASE",
+        "product_codes": "[24835]",
+        "version": "2.1.0.1",
+        "url": "app_2.1.0.1.bin",
+        "sha256": "2dc53efc696dfce432f8f696724891dfe50d0d9131fe967dde850ee21bf74681",
+        "image_version": "2.1.0.1",
+        "product_code": "24835",
+        "image_size": "30208",
+        "image_crc32": "0xDE805C0B",
+        "min_bootloader_version": "2.0.0.0",
+        "min_studio_version": "1.1.4",
+        "source_commit": "cd56ddca80efc0d7acbe3416fd916c75ebfc731a",
+        "whole_file_crc32": "0xDE805C0B",
+        "whole_file_crc32_scope": "CRC32/ISO-HDLC of unchanged complete APP BIN",
+    }
+    for field, expected in required_xr_base_fields.items():
+        if not re.search(
+            rf"^\s*{re.escape(field)}:\s*['\"]?{re.escape(expected)}['\"]?\s*$",
+            xr_base,
+            re.MULTILINE,
+        ):
+            fail(f"XR-BASE {field} must be {expected}")
 
     xr_zero_imu = (ROOT / "firmware/xr-zero-imu/version.yaml").read_text(
         encoding="utf-8"

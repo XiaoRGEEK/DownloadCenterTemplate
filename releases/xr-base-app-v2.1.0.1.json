@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "xr-base-app-v2.1.0.1",
+  "title": "XR-BASE APP 2.1.0.1",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "app_2.1.0.1.bin",
+      "tos_key": "firmware/xr-base/app_2.1.0.1.bin",
+      "size": 30208,
+      "sha256": "2dc53efc696dfce432f8f696724891dfe50d0d9131fe967dde850ee21bf74681"
+    }
+  ]
+}
