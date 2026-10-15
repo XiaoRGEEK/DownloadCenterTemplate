@@ -680,8 +680,8 @@
         },
         "version": "v1.1.4",
         "desc": {
-            "en": "Public Preview 1.1.4 for customer evaluation. Adds the XR-BASE serial device card and identity query plus APP-only local/online OTA with strict product/identity/SHA/CRC validation and post-reboot same-device/version confirmation. Windows x64 files are not Authenticode signed. Public ASAR native serial and real HTTPS APP OTA bench testing passed; the operator reported GUI OTA, complete power-cycle and Public query passed. The installer installation process was not independently tested; GUI acceptance used the directory build. Portable ZIP is a fallback. Public excludes Internal authorization/configuration, PY32 worker/factory firmware and device backups/logs. Stable auto-update remains at 1.0.1.",
-            "zh": "Public 1.1.4 客户试用版。新增 XR-BASE 串口设备卡与身份查询，以及 APP-only 本地/在线 OTA；严格校验产品、身份、SHA/CRC，重启后再确认同一设备和目标版本。Windows x64 文件未做 Authenticode 签名。Public ASAR 原生串口与真实 HTTPS APP OTA 台架测试通过；操作者确认 GUI OTA、完全断电重启和 Public 查询通过。安装器安装过程未单独测试，GUI 验收使用目录包；ZIP 为免安装备用。Public 不含 Internal 授权/配置、PY32 worker/工厂固件或设备备份/日志。稳定自更新保持 1.0.1。"
+            "en": "Public Preview 1.1.4 for customer evaluation. Adds the XR-BASE serial device card and identity query plus APP-only local/online OTA with strict product/identity/SHA/CRC validation and post-reboot same-device/version confirmation. Windows x64 files are not Authenticode signed. Public ASAR native serial and real HTTPS APP OTA bench testing passed; the operator reported GUI OTA, complete power-cycle and Public query passed. The installer installation process was not independently tested; GUI acceptance used the directory build. Portable ZIP is a fallback. Public excludes Internal authorization/configuration, PY32 worker/factory firmware and device backups/logs. Stable auto-update is 1.1.4.",
+            "zh": "Public 1.1.4 客户试用版。新增 XR-BASE 串口设备卡与身份查询，以及 APP-only 本地/在线 OTA；严格校验产品、身份、SHA/CRC，重启后再确认同一设备和目标版本。Windows x64 文件未做 Authenticode 签名。Public ASAR 原生串口与真实 HTTPS APP OTA 台架测试通过；操作者确认 GUI OTA、完全断电重启和 Public 查询通过。安装器安装过程未单独测试，GUI 验收使用目录包；ZIP 为免安装备用。Public 不含 Internal 授权/配置、PY32 worker/工厂固件或设备备份/日志。稳定自更新为 1.1.4。"
         },
         "link": [
             "https://software.xiao-r.com/software/pc/xr-studio-1.1.4-win-x64.exe",
@@ -708,7 +708,7 @@
         "platform": "windows",
         "platformVersions": {
             "windows": "v1.1.4",
-            "mac": "v1.1.3"
+            "mac": "v1.1.4"
         },
         "hasTools": false,
         "tools": []
@@ -719,13 +719,13 @@
             "en": "XR Studio",
             "zh": "XR Studio"
         },
-        "version": "v1.1.3",
+        "version": "v1.1.4",
         "desc": {
-            "en": "Public Preview 1.1.3 for customer evaluation: signed, notarized and stapled for macOS 12.0+ on Apple Silicon. Real GUI online XR-ZERO-IMU OTA, reboot and APP 2.1.5.0 confirmation passed on macOS. Power-loss OTA and effective calibration remain separate acceptance items; stable auto-update remains at 1.0.1.",
-            "zh": "Public 1.1.3 客户试用版：适用于 macOS 12.0+ Apple Silicon，已完成签名、公证和 stapling。macOS 真实 GUI 已完成 XR-ZERO-IMU 在线 OTA、重启及 APP 2.1.5.0 确认。OTA 掉电与有效校准仍为独立验收项；稳定自更新保持 1.0.1。"
+            "en": "Public 1.1.4 for macOS 12.0+ on Apple Silicon, signed, notarized and stapled. It uses the same e50cc19 feature source as Windows 1.1.4. GUI validation confirmed XR Studio 1.1.4, the XR-BASE device card, identity 500000 / D2 / 0x6103 and the update entry. Known issue: broadcast scan may still misreport 00; this release does not claim that issue is fixed. Public excludes Internal resources. Stable auto-update is 1.1.4.",
+            "zh": "Public 1.1.4，适用于 macOS 12.0+ Apple Silicon，已完成公司签名、Apple 公证和 stapling；功能源码与 Windows 1.1.4 的 e50cc19 一致。GUI 已确认 XR Studio 1.1.4、XR-BASE 设备卡、身份 500000 / D2 / 0x6103 及升级入口。已知广播扫描仍可能误报 00，本版本不宣称该问题已修复。Public 不含 Internal 资源。稳定自更新为 1.1.4。"
         },
         "link": [
-            "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-mac-arm64.dmg"
+            "https://software.xiao-r.com/software/pc/xr-studio-1.1.4-mac-arm64.dmg"
         ],
         "btnNames": {
             "en": [
@@ -736,13 +736,14 @@
             ]
         },
         "oldVersion": [
+            "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-mac-arm64.dmg",
             "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-mac-arm64.dmg",
             "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-mac-arm64.dmg"
         ],
         "platform": "mac",
         "platformVersions": {
             "windows": "v1.1.4",
-            "mac": "v1.1.3"
+            "mac": "v1.1.4"
         },
         "hasTools": false,
         "tools": []

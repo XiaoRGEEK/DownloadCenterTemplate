@@ -357,10 +357,10 @@ def validate() -> set[str]:
             "button_zh": ["Windows x64 安装版", "Windows x64 便携 ZIP"],
         },
         "mac": {
-            "version": "v1.1.3",
+            "version": "v1.1.4",
             "link": [
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.1.3-mac-arm64.dmg"
+                "xr-studio-1.1.4-mac-arm64.dmg"
             ],
             "button_en": ["macOS Apple Silicon"],
             "button_zh": ["macOS Apple Silicon"],
@@ -379,18 +379,34 @@ def validate() -> set[str]:
             or entry.get("btnNames", {}).get("en") != expected["button_en"]
             or entry.get("btnNames", {}).get("zh") != expected["button_zh"]
             or entry.get("platformVersions")
-            != {"windows": "v1.1.4", "mac": "v1.1.3"}
+            != {"windows": "v1.1.4", "mac": "v1.1.4"}
         ):
             fail(f"invalid XR Studio data.json entry for platform: {platform}")
         if platform == "mac" and (
             entry.get("oldVersion") != [
+                "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-mac-arm64.dmg",
                 "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-mac-arm64.dmg",
                 "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-mac-arm64.dmg",
             ]
-            or "preview" not in entry.get("desc", {}).get("en", "").lower()
-            or "客户试用" not in entry.get("desc", {}).get("zh", "")
+            or not all(
+                notice in entry.get("desc", {}).get("en", "")
+                for notice in (
+                    "Public 1.1.4", "signed, notarized and stapled", "e50cc19",
+                    "500000 / D2 / 0x6103", "broadcast scan may still misreport 00",
+                    "does not claim that issue is fixed", "excludes Internal resources",
+                    "Stable auto-update is 1.1.4",
+                )
+            )
+            or not all(
+                notice in entry.get("desc", {}).get("zh", "")
+                for notice in (
+                    "Public 1.1.4", "公司签名", "Apple 公证", "e50cc19",
+                    "500000 / D2 / 0x6103", "仍可能误报 00", "不宣称该问题已修复",
+                    "不含 Internal 资源", "稳定自更新为 1.1.4",
+                )
+            )
         ):
-            fail("XR Studio Mac preview requires bilingual labels and the 1.1.2 rollback")
+            fail("XR Studio Mac 1.1.4 requires signed release notices and rollback links")
         if platform == "windows":
             if entry.get("oldVersion") != [
                 "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-win-x64.exe",
@@ -411,7 +427,7 @@ def validate() -> set[str]:
                        "installer installation process was not independently tested",
                        "directory build", "Portable ZIP", "Internal authorization/configuration",
                        "PY32 worker/factory firmware", "device backups/logs",
-                       "Stable auto-update remains at 1.0.1"),
+                       "Stable auto-update is 1.1.4"),
                 "zh": ("1.1.4 客户试用", "XR-BASE", "APP-only 本地/在线 OTA",
                        "严格校验产品、身份、SHA/CRC", "重启后再确认同一设备和目标版本",
                        "未做 Authenticode 签名", "Public ASAR", "原生串口",
@@ -419,14 +435,14 @@ def validate() -> set[str]:
                        "完全断电重启", "Public 查询", "安装器安装过程未单独测试",
                        "GUI 验收使用目录包", "ZIP", "Internal 授权/配置",
                        "PY32 worker/工厂固件", "设备备份/日志",
-                       "稳定自更新保持 1.0.1"),
+                       "稳定自更新为 1.1.4"),
             }
             for language, notices in required_notices.items():
                 if not all(notice in entry.get("desc", {}).get(language, "") for notice in notices):
                     fail(f"XR Studio Windows preview requires installation caveats: {language}")
 
     # Platform feeds are promoted independently after their own approval.
-    updater_versions = {"latest.yml": "1.1.4", "latest-mac.yml": "1.0.1"}
+    updater_versions = {"latest.yml": "1.1.4", "latest-mac.yml": "1.1.4"}
     for updater_name, updater_version in updater_versions.items():
         updater_path = ROOT / "ota/xr-studio" / updater_name
         updater_text = updater_path.read_text(encoding="utf-8-sig")

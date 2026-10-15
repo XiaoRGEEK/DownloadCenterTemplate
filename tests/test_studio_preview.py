@@ -1,4 +1,4 @@
-"""Website previews must preserve rollbacks, caveats and stable feeds."""
+"""XR Studio releases must preserve rollbacks, caveats and stable feeds."""
 
 import copy
 import hashlib
@@ -29,16 +29,16 @@ class StudioPreviewTests(unittest.TestCase):
             return validate.validate()
 
     def test_preview_website_versions_are_valid(self):
-        self.assertEqual(self.entry("mac")["version"], "v1.1.3")
+        self.assertEqual(self.entry("mac")["version"], "v1.1.4")
         self.assertEqual(self.entry("windows")["version"], "v1.1.4")
         for platform in ("mac", "windows"):
             self.assertEqual(self.entry(platform)["platformVersions"],
-                             {"windows": "v1.1.4", "mac": "v1.1.3"})
+                             {"windows": "v1.1.4", "mac": "v1.1.4"})
         validate.validate()
 
     def test_wrong_windows_version_or_stale_cross_platform_label_is_rejected(self):
         for field, value in (("version", "v1.0.1"), ("link", ["unpublished.exe"]),
-                             ("platformVersions", {"windows": "v1.0.1", "mac": "v1.1.3"})):
+                             ("platformVersions", {"windows": "v1.0.1", "mac": "v1.1.4"})):
             data = copy.deepcopy(self.data)
             self.entry("windows", data)[field] = value
             with self.assertRaisesRegex(ValueError, "invalid XR Studio"):
@@ -59,7 +59,7 @@ class StudioPreviewTests(unittest.TestCase):
                    "installer installation process was not independently tested",
                    "directory build", "Portable ZIP", "Internal authorization/configuration",
                    "PY32 worker/factory firmware", "device backups/logs",
-                   "Stable auto-update remains at 1.0.1"),
+                   "Stable auto-update is 1.1.4"),
             "zh": ("1.1.4 客户试用", "XR-BASE", "APP-only 本地/在线 OTA",
                    "严格校验产品、身份、SHA/CRC", "重启后再确认同一设备和目标版本",
                    "未做 Authenticode 签名", "Public ASAR", "原生串口",
@@ -67,7 +67,7 @@ class StudioPreviewTests(unittest.TestCase):
                    "完全断电重启", "Public 查询", "安装器安装过程未单独测试",
                    "GUI 验收使用目录包", "ZIP", "Internal 授权/配置",
                    "PY32 worker/工厂固件", "设备备份/日志",
-                   "稳定自更新保持 1.0.1"),
+                   "稳定自更新为 1.1.4"),
         }
         for language, phrases in notices.items():
             for phrase in phrases:
@@ -79,19 +79,19 @@ class StudioPreviewTests(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError, "installation caveats"):
                         self.validate_data(data)
 
-    def test_bilingual_preview_and_rollback_are_required(self):
-        for field, value in (("oldVersion", []), ("desc", {"en": "Preview", "zh": "正式版"}),
-                             ("desc", {"en": "Stable", "zh": "客户试用"})):
+    def test_mac_1_1_4_notices_and_rollback_are_required(self):
+        for field, value in (("oldVersion", []), ("desc", {"en": "Public 1.1.4", "zh": "正式版"}),
+                             ("desc", {"en": "Stable", "zh": "Public 1.1.4"})):
             data = copy.deepcopy(self.data)
             self.entry("mac", data)[field] = value
-            with self.assertRaisesRegex(ValueError, "preview requires"):
+            with self.assertRaisesRegex(ValueError, "Mac 1.1.4 requires"):
                 self.validate_data(data)
 
     def test_stable_feeds_are_byte_identical_to_approved_versions(self):
         # Each platform promotion is separately reviewed and updates this contract.
         expected = {
             "latest.yml": "535cd6b3641f4416f9a75fbc90ba0b519185034601b2ef1ffb888bd84ef7994b",
-            "latest-mac.yml": "ebb0304a80e3ad0ef31d587a548ef7eb9195d42cf37afdc853c9a4ade932cede",
+            "latest-mac.yml": "1ac07c0d4aca1c0a19fffe8a2666b3ef7dd1cab936bcf5153695fa9c4a98bc25",
         }
         for name, digest in expected.items():
             self.assertEqual(hashlib.sha256((ROOT / "ota/xr-studio" / name).read_bytes()).hexdigest(), digest)
@@ -100,7 +100,7 @@ class StudioPreviewTests(unittest.TestCase):
         original = Path.read_text
         cases = (
             ("latest.yml", "version: 1.1.4", "version: 1.1.5", "version must be 1.1.4"),
-            ("latest-mac.yml", "version: 1.0.1", "version: 1.1.4", "version must be 1.0.1"),
+            ("latest-mac.yml", "version: 1.1.4", "version: 1.1.5", "version must be 1.1.4"),
         )
         for name, approved, unreviewed, error in cases:
             target = ROOT / "ota/xr-studio" / name
@@ -134,6 +134,25 @@ class StudioPreviewTests(unittest.TestCase):
              "size": 152683425,
              "sha256": "46b1a77c1a177e7491764a000ca3584bfcff1c5395e5885820d502392d9d273e"},
         ])
+
+    def test_mac_1_1_4_manifests_separate_website_and_updater_assets(self):
+        download = json.loads((ROOT / "releases/xr-studio-v1.1.4-mac-downloads.json").read_text())
+        ota = json.loads((ROOT / "releases/xr-studio-v1.1.4-mac-ota.json").read_text())
+        self.assertEqual(download["assets"], [{
+            "name": "xr-studio-1.1.4-mac-arm64.dmg",
+            "tos_key": "software/pc/xr-studio-1.1.4-mac-arm64.dmg",
+            "size": 128542812,
+            "sha256": "cbe9a6a015c62f7dd50867f393a25c7cf7f945f22128dc8f7f2e2679889f8655",
+        }])
+        self.assertEqual(
+            {asset["tos_key"] for asset in ota["assets"]},
+            {
+                "ota/xr-studio/xr-studio-1.1.4-mac-arm64.dmg",
+                "ota/xr-studio/xr-studio-1.1.4-mac-arm64.dmg.blockmap",
+                "ota/xr-studio/xr-studio-1.1.4-mac-arm64.zip",
+                "ota/xr-studio/xr-studio-1.1.4-mac-arm64.zip.blockmap",
+            },
+        )
 
     def test_actual_workflow_public_link_check_accepts_only_preview_release(self):
         workflow = (ROOT / ".github/workflows/deploy-tos.yml").read_text()
