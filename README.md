@@ -99,24 +99,24 @@ size/CRC/headerCRC 零占位保持原样，通用 strict parser 不放宽；目�
 整文件长度、SHA-256 与 CRC32/ISO-HDLC 验证。BL、FULL 合并包、工厂包、
 Internal 资源、授权数据和含设备身份的日志/备份都不属于该公开渠道。
 
-XR Studio Mac / Windows 1.1.3 Public 当前仅为网站客户试用（Preview）下载；
-Windows 使用 EXE 安装器，ZIP 为免安装备用。两平台均保留 1.1.2 网站回退入口；
-1.0.1 稳定网站回退也继续保留；stable `ota/xr-studio/latest*.yml` 仍为
+XR Studio Windows 1.1.4 Public 与 Mac 1.1.3 Public 当前仅为网站客户试用（Preview）
+下载；Windows 使用 EXE 安装器，ZIP 为免安装备用。Windows 保留 1.1.3、
+1.1.2 与 1.0.1 网站回退入口；Mac 入口和回退保持不变。stable `ota/xr-studio/latest*.yml` 仍为
 1.0.1，不随网站 Preview 推广。新的 OTA ZIP、blockmap 和 feed 须另行验收、
 审核发布，不得为满足引用校验而提前启用稳定自更新。
 
-Windows Preview 未做 Authenticode 签名。建议选择“所有用户”：Program Files 安装
-以 exit 0 完成，隔离 profile 下 packaged renderer 已正常启动和关闭。此前
-`/S /currentuser` 路径在 NSIS `System.dll` 报 `0xc0000005`，根因未定位，按用户安装
-仍未通过验收。窗口/任务栏视觉、硬件串口/在线 OTA 与 Windows DNS 未测试。可下载
-[免安装 ZIP 备用](https://software.xiao-r.com/software/pc/xr-studio-1.1.3-win-x64.zip)。
+Windows 1.1.4 Preview 未做 Authenticode 签名。Public ASAR 原生串口与真实 HTTPS
+APP OTA 台架测试通过；操作者确认 GUI OTA、完全断电重启和 Public 查询通过。
+安装器安装过程未单独测试，GUI 验收使用目录包。Public 不含 Internal 授权/配置、
+PY32 worker/工厂固件或设备备份/日志。可下载
+[免安装 ZIP 备用](https://software.xiao-r.com/software/pc/xr-studio-1.1.4-win-x64.zip)。
 
-Windows Preview files are not Authenticode signed. Choose **All users**: installation
-to Program Files completed with exit 0, and the packaged renderer started and closed
-normally in an isolated profile. The earlier `/S /currentuser` path remains unvalidated
-after an NSIS `System.dll` (`0xc0000005`) failure with unresolved root cause. Window/taskbar
-visual acceptance, hardware serial/online OTA and Windows DNS were not tested. Use the
-[portable ZIP fallback](https://software.xiao-r.com/software/pc/xr-studio-1.1.3-win-x64.zip) if needed.
+Windows 1.1.4 Preview files are not Authenticode signed. Public ASAR native serial and
+real HTTPS APP OTA bench testing passed; the operator reported GUI OTA, complete power-cycle
+and Public query passed. The installer installation process was not independently tested;
+GUI acceptance used the directory build. Public excludes Internal authorization/configuration,
+the PY32 worker/factory firmware and device backups/logs. Use the
+[portable ZIP fallback](https://software.xiao-r.com/software/pc/xr-studio-1.1.4-win-x64.zip) if needed.
 
 ### 4. 提交 PR
 
