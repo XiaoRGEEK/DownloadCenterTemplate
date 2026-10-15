@@ -87,24 +87,28 @@ class StudioPreviewTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "preview requires"):
                 self.validate_data(data)
 
-    def test_stable_feeds_are_byte_identical_to_approved_1_0_1(self):
-        # Promotion is a separate reviewed release that must update this contract.
+    def test_stable_feeds_are_byte_identical_to_approved_versions(self):
+        # Each platform promotion is separately reviewed and updates this contract.
         expected = {
-            "latest.yml": "85a9dc43fe631139a2ce1c7fa6040349be6a7d1e27a8e03063691865a4e0438a",
+            "latest.yml": "535cd6b3641f4416f9a75fbc90ba0b519185034601b2ef1ffb888bd84ef7994b",
             "latest-mac.yml": "ebb0304a80e3ad0ef31d587a548ef7eb9195d42cf37afdc853c9a4ade932cede",
         }
         for name, digest in expected.items():
             self.assertEqual(hashlib.sha256((ROOT / "ota/xr-studio" / name).read_bytes()).hexdigest(), digest)
 
-    def test_validator_rejects_stable_feed_promotion(self):
+    def test_validator_rejects_unreviewed_feed_promotion(self):
         original = Path.read_text
-        for name in ("latest.yml", "latest-mac.yml"):
+        cases = (
+            ("latest.yml", "version: 1.1.4", "version: 1.1.5", "version must be 1.1.4"),
+            ("latest-mac.yml", "version: 1.0.1", "version: 1.1.4", "version must be 1.0.1"),
+        )
+        for name, approved, unreviewed, error in cases:
             target = ROOT / "ota/xr-studio" / name
             def read_text(path, *args, **kwargs):
                 text = original(path, *args, **kwargs)
-                return text.replace("version: 1.0.1", "version: 1.1.4") if path == target else text
+                return text.replace(approved, unreviewed) if path == target else text
             with patch.object(Path, "read_text", read_text):
-                with self.assertRaisesRegex(ValueError, "version must be 1.0.1"):
+                with self.assertRaisesRegex(ValueError, error):
                     validate.validate()
 
     def test_preview_manifest_contains_only_website_dmg(self):
