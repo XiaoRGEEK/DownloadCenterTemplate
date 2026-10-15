@@ -340,12 +340,12 @@ def validate() -> set[str]:
     ]
     expected_xr_studio = {
         "windows": {
-            "version": "v1.1.3",
+            "version": "v1.1.4",
             "link": [
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.1.3-win-x64.exe",
+                "xr-studio-1.1.4-win-x64.exe",
                 "https://software.xiao-r.com/software/pc/"
-                "xr-studio-1.1.3-win-x64.zip",
+                "xr-studio-1.1.4-win-x64.zip",
             ],
             "button_en": ["Windows x64 Installer", "Windows x64 Portable ZIP"],
             "button_zh": ["Windows x64 安装版", "Windows x64 便携 ZIP"],
@@ -373,7 +373,7 @@ def validate() -> set[str]:
             or entry.get("btnNames", {}).get("en") != expected["button_en"]
             or entry.get("btnNames", {}).get("zh") != expected["button_zh"]
             or entry.get("platformVersions")
-            != {"windows": "v1.1.3", "mac": "v1.1.3"}
+            != {"windows": "v1.1.4", "mac": "v1.1.3"}
         ):
             fail(f"invalid XR Studio data.json entry for platform: {platform}")
         if platform == "mac" and (
@@ -387,23 +387,33 @@ def validate() -> set[str]:
             fail("XR Studio Mac preview requires bilingual labels and the 1.1.2 rollback")
         if platform == "windows":
             if entry.get("oldVersion") != [
+                "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-win-x64.exe",
+                "https://software.xiao-r.com/software/pc/xr-studio-1.1.3-win-x64.zip",
                 "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.exe",
                 "https://software.xiao-r.com/software/pc/xr-studio-1.1.2-win-x64.zip",
                 "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.exe",
                 "https://software.xiao-r.com/software/pc/xr-studio-1.0.1-win-x64.zip",
             ]:
-                fail("XR Studio Windows preview requires the 1.1.2 rollback")
+                fail("XR Studio Windows preview requires the 1.1.3 rollback")
             required_notices = {
-                "en": ("Preview 1.1.3", "not Authenticode signed", "All users",
-                       "Program Files", "exit 0", "packaged renderer", "isolated profile",
-                       "/S /currentuser", "System.dll", "0xc0000005", "unresolved",
-                       "unvalidated", "ZIP", "visual acceptance", "hardware serial/online OTA",
-                       "Windows DNS", "not tested"),
-                "zh": ("1.1.3 客户试用", "未做 Authenticode 签名", "所有用户",
-                       "Program Files", "exit 0", "packaged renderer", "隔离 profile",
-                       "/S /currentuser", "System.dll", "0xc0000005", "根因未定位",
-                       "仍未通过验收", "ZIP", "视觉", "硬件串口/在线 OTA",
-                       "Windows DNS", "未测试"),
+                "en": ("Preview 1.1.4", "XR-BASE", "APP-only local/online OTA",
+                       "strict product/identity/SHA/CRC validation",
+                       "post-reboot same-device/version confirmation",
+                       "not Authenticode signed", "Public ASAR", "native serial",
+                       "real HTTPS APP OTA", "operator reported", "GUI OTA",
+                       "complete power-cycle", "Public query",
+                       "installer installation process was not independently tested",
+                       "directory build", "Portable ZIP", "Internal authorization/configuration",
+                       "PY32 worker/factory firmware", "device backups/logs",
+                       "Stable auto-update remains at 1.0.1"),
+                "zh": ("1.1.4 客户试用", "XR-BASE", "APP-only 本地/在线 OTA",
+                       "严格校验产品、身份、SHA/CRC", "重启后再确认同一设备和目标版本",
+                       "未做 Authenticode 签名", "Public ASAR", "原生串口",
+                       "真实 HTTPS APP OTA", "操作者确认", "GUI OTA",
+                       "完全断电重启", "Public 查询", "安装器安装过程未单独测试",
+                       "GUI 验收使用目录包", "ZIP", "Internal 授权/配置",
+                       "PY32 worker/工厂固件", "设备备份/日志",
+                       "稳定自更新保持 1.0.1"),
             }
             for language, notices in required_notices.items():
                 if not all(notice in entry.get("desc", {}).get(language, "") for notice in notices):
