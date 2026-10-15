@@ -21,23 +21,43 @@
   },
   {
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-mac-arm64.dmg",
-    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.dmg",
-    "reason": "XR Studio Mac 1.0.1 supersedes the 1.0.0 updater DMG while preserving the historical release asset."
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.dmg",
+    "reason": "XR Studio Mac 1.1.4 supersedes the 1.0.0 updater DMG while preserving the historical release asset."
   },
   {
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-mac-arm64.dmg.blockmap",
-    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.dmg.blockmap",
-    "reason": "The 1.0.0 DMG blockmap remains historical after the Mac 1.0.1 updater release."
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.dmg.blockmap",
+    "reason": "The 1.0.0 DMG blockmap remains historical after the Mac 1.1.4 updater release."
   },
   {
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-mac-arm64.zip",
-    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.zip",
-    "reason": "XR Studio Mac 1.0.1 supersedes the 1.0.0 updater ZIP while preserving the historical release asset."
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.zip",
+    "reason": "XR Studio Mac 1.1.4 supersedes the 1.0.0 updater ZIP while preserving the historical release asset."
   },
   {
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-mac-arm64.zip.blockmap",
-    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.zip.blockmap",
-    "reason": "The 1.0.0 ZIP blockmap remains historical after the Mac 1.0.1 updater release."
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.zip.blockmap",
+    "reason": "The 1.0.0 ZIP blockmap remains historical after the Mac 1.1.4 updater release."
+  },
+  {
+    "tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.dmg",
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.dmg",
+    "reason": "XR Studio Mac 1.1.4 supersedes the 1.0.1 updater DMG while preserving the historical release asset."
+  },
+  {
+    "tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.dmg.blockmap",
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.dmg.blockmap",
+    "reason": "The 1.0.1 DMG blockmap remains historical after the Mac 1.1.4 updater release."
+  },
+  {
+    "tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.zip",
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.zip",
+    "reason": "XR Studio Mac 1.1.4 supersedes the 1.0.1 updater ZIP while preserving the historical release asset."
+  },
+  {
+    "tos_key": "ota/xr-studio/xr-studio-1.0.1-mac-arm64.zip.blockmap",
+    "replacement_tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.zip.blockmap",
+    "reason": "The 1.0.1 ZIP blockmap remains historical after the Mac 1.1.4 updater release."
   },
   {
     "tos_key": "software/pc/xr-studio-1.0.0-win-x64-native.exe",

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "tag": "xr-studio-v1.1.4-mac-ota",
+  "title": "XR Studio 1.1.4 macOS Apple Silicon Automatic Update",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "xr-studio-1.1.4-mac-arm64.dmg",
+      "tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.dmg",
+      "size": 128542812,
+      "sha256": "cbe9a6a015c62f7dd50867f393a25c7cf7f945f22128dc8f7f2e2679889f8655"
+    },
+    {
+      "name": "xr-studio-1.1.4-mac-arm64.zip",
+      "tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.zip",
+      "size": 122730281,
+      "sha256": "b75d7f5fc4d6dbf50d2b3cf9468d72ff60fa2431bd9ecd8d788bc629754e19ce"
+    },
+    {
+      "name": "xr-studio-1.1.4-mac-arm64.dmg.blockmap",
+      "tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.dmg.blockmap",
+      "size": 134806,
+      "sha256": "0f291d5acd18577cf6737e354c3071a2fbe3611a488f9b20f4b07a32dc22af73"
+    },
+    {
+      "name": "xr-studio-1.1.4-mac-arm64.zip.blockmap",
+      "tos_key": "ota/xr-studio/xr-studio-1.1.4-mac-arm64.zip.blockmap",
+      "size": 129058,
+      "sha256": "f561efa7cc91898e1d96b398d48fa46095f43a14d3b6c74ef3531920b9892535"
+    }
+  ]
+}
