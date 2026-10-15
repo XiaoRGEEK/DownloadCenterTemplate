@@ -99,11 +99,12 @@ size/CRC/headerCRC 零占位保持原样，通用 strict parser 不放宽；目�
 整文件长度、SHA-256 与 CRC32/ISO-HDLC 验证。BL、FULL 合并包、工厂包、
 Internal 资源、授权数据和含设备身份的日志/备份都不属于该公开渠道。
 
-XR Studio Windows 1.1.4 Public 与 Mac 1.1.3 Public 当前仅为网站客户试用（Preview）
+XR Studio Windows 1.1.4 Public 与 Mac 1.1.3 Public 当前为网站客户试用（Preview）
 下载；Windows 使用 EXE 安装器，ZIP 为免安装备用。Windows 保留 1.1.3、
-1.1.2 与 1.0.1 网站回退入口；Mac 入口和回退保持不变。stable `ota/xr-studio/latest*.yml` 仍为
-1.0.1，不随网站 Preview 推广。新的 OTA ZIP、blockmap 和 feed 须另行验收、
-审核发布，不得为满足引用校验而提前启用稳定自更新。
+1.1.2 与 1.0.1 网站回退入口；Mac 入口和回退保持不变。Windows stable
+`ota/xr-studio/latest.yml` 已单独批准登记为 1.1.4，直接引用既有网站 EXE；
+缺少相邻 blockmap 时客户端回退为 SHA512 校验的整包下载。Mac stable
+`latest-mac.yml` 仍为 1.0.1，不随本次 Windows 更新变更。
 
 Windows 1.1.4 Preview 未做 Authenticode 签名。Public ASAR 原生串口与真实 HTTPS
 APP OTA 台架测试通过；操作者确认 GUI OTA、完全断电重启和 Public 查询通过。

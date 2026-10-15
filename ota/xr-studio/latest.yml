@@ -1,8 +1,11 @@
-version: 1.0.1
+version: 1.1.4
 files:
-  - url: xr-studio-1.0.1-win-x64.exe
-    sha512: Cr+PBXRBRTZ2KqaLgryaLIk4v4AcM2h7pwMfqeMKZ+ZOy9NG9OORNXSXp3JRWGvkQci8dBToSiwtI3RkpCWaMg==
-    size: 84085843
-path: xr-studio-1.0.1-win-x64.exe
-sha512: Cr+PBXRBRTZ2KqaLgryaLIk4v4AcM2h7pwMfqeMKZ+ZOy9NG9OORNXSXp3JRWGvkQci8dBToSiwtI3RkpCWaMg==
-releaseDate: '2026-09-02T11:09:13.803Z'
+  - url: https://software.xiao-r.com/software/pc/xr-studio-1.1.4-win-x64.exe
+    sha512: N6VQvMLIUXYsPncd78HW84e7R486lj1veBZAru+3Z+PZQFtrV4qnpeK1r2j9L4fV5TOV6bNp3tqpGIXVF4QVSg==
+    size: 111991953
+path: https://software.xiao-r.com/software/pc/xr-studio-1.1.4-win-x64.exe
+sha512: N6VQvMLIUXYsPncd78HW84e7R486lj1veBZAru+3Z+PZQFtrV4qnpeK1r2j9L4fV5TOV6bNp3tqpGIXVF4QVSg==
+releaseDate: '2026-10-15T04:31:30Z'
+releaseNotes: >-
+  Windows 1.1.4 新增 XR-BASE 设备卡、身份查询及 APP-only 本地/在线 OTA；
+  安装包未做 Authenticode 签名。

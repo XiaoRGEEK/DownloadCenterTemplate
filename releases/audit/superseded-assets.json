@@ -6,13 +6,13 @@
   },
   {
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64.exe",
-    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe",
-    "reason": "The original Windows updater package was cross-built on macOS and could not run on Windows."
+    "replacement_tos_key": "software/pc/xr-studio-1.1.4-win-x64.exe",
+    "reason": "The original Windows updater package was cross-built on macOS and is superseded by the approved Windows 1.1.4 installer now referenced by the stable feed."
   },
   {
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64.exe.blockmap",
-    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe.blockmap",
-    "reason": "The blockmap belongs to the superseded cross-built Windows updater package."
+    "replacement_tos_key": "software/pc/xr-studio-1.1.4-win-x64.exe",
+    "reason": "The blockmap belongs to the superseded cross-built Windows updater package; Windows 1.1.4 uses the reviewed full installer with SHA512 verification."
   },
   {
     "tos_key": "software/pc/xr-studio-1.0.0-mac-arm64.dmg",
@@ -51,13 +51,23 @@
   },
   {
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64-native.exe",
-    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe",
-    "reason": "XR Studio Windows 1.0.1 supersedes the corrected native 1.0.0 updater package while preserving the historical release asset."
+    "replacement_tos_key": "software/pc/xr-studio-1.1.4-win-x64.exe",
+    "reason": "XR Studio Windows 1.1.4 supersedes the corrected native 1.0.0 updater package while preserving the historical release asset."
   },
   {
     "tos_key": "ota/xr-studio/xr-studio-1.0.0-win-x64-native.exe.blockmap",
-    "replacement_tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe.blockmap",
-    "reason": "The native 1.0.0 updater blockmap remains historical after the Windows 1.0.1 release."
+    "replacement_tos_key": "software/pc/xr-studio-1.1.4-win-x64.exe",
+    "reason": "The native 1.0.0 updater blockmap remains historical; Windows 1.1.4 uses the reviewed full installer with SHA512 verification."
+  },
+  {
+    "tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe",
+    "replacement_tos_key": "software/pc/xr-studio-1.1.4-win-x64.exe",
+    "reason": "The Windows stable feed now references the already published XR Studio 1.1.4 installer directly."
+  },
+  {
+    "tos_key": "ota/xr-studio/xr-studio-1.0.1-win-x64.exe.blockmap",
+    "replacement_tos_key": "software/pc/xr-studio-1.1.4-win-x64.exe",
+    "reason": "The Windows 1.0.1 differential blockmap is historical; the 1.1.4 feed falls back to the SHA512-verified full installer when no adjacent blockmap is available."
   },
   {
     "tos_key": "software/android/XR-Controller_V1.4.168.260908.7f05a88_release.apk",

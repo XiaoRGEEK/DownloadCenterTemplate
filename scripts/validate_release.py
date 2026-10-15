@@ -114,12 +114,18 @@ def yaml_urls(path: Path, base: str = "") -> set[str]:
 
 
 def electron_updater_objects(path: Path, base: str) -> set[str]:
-    """Return updater packages plus their implicit differential blockmaps."""
+    """Return updater packages plus same-channel differential blockmaps.
+
+    A feed may reuse an immutable installer already published by another
+    controlled channel.  electron-updater falls back to the SHA512-verified
+    full installer when that cross-channel URL has no adjacent blockmap.
+    """
     objects = yaml_urls(path, base)
     blockmaps = {
         f"{key}.blockmap"
         for key in objects
-        if Path(key).suffix.lower() in {".dmg", ".exe", ".zip"}
+        if key.startswith(base)
+        and Path(key).suffix.lower() in {".dmg", ".exe", ".zip"}
     }
     return objects | blockmaps
 
@@ -419,8 +425,8 @@ def validate() -> set[str]:
                 if not all(notice in entry.get("desc", {}).get(language, "") for notice in notices):
                     fail(f"XR Studio Windows preview requires installation caveats: {language}")
 
-    # Website preview is independent of stable application self-update.
-    updater_versions = {"latest.yml": "1.0.1", "latest-mac.yml": "1.0.1"}
+    # Platform feeds are promoted independently after their own approval.
+    updater_versions = {"latest.yml": "1.1.4", "latest-mac.yml": "1.0.1"}
     for updater_name, updater_version in updater_versions.items():
         updater_path = ROOT / "ota/xr-studio" / updater_name
         updater_text = updater_path.read_text(encoding="utf-8-sig")
