@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "xr-controller-v1.4.185",
+  "title": "XR Controller v1.4.185",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "XR-Controller_V1.4.185.261109.a04954c_release.apk",
+      "tos_key": "software/android/XR-Controller_V1.4.185.261109.a04954c_release.apk",
+      "size": 63661577,
+      "sha256": "bb8869340a0c61643c6e48494bdeebbe678b3d266e49bf396b054fe21791d85e"
+    }
+  ]
+}
