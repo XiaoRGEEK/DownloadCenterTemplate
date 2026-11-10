@@ -4,11 +4,11 @@ product:
   product_codes: [24836]
 firmware:
   app:
-    version: "0.1.0.4"
-    image_version: "0.1.0.4"
+    version: "0.1.0.6"
+    image_version: "0.1.0.6"
     name:
       zh: "XR-ZERO-IMU F030 2S"
-    url: "app_0.1.0.4.bin"
+    url: "app_0.1.0.6.bin"
     product_code: 24836
     target_id: "0xF0304B32"
     layout_version: 3
@@ -16,12 +16,12 @@ firmware:
     battery_cells: 2
     min_studio_version: "1.1.10"
     min_bootloader_version: "0.1.0.4"
-    image_size: 54784
-    image_crc32: "0xD9AE9062"
-    sha256: "f4486cd8de67f8aa1c1314f14fc8e9bf296fedbfb4b194ce52cabc990a0615d1"
-    release_notes: "PY32F030 layout3，统一ID200控制、外部六面校准和充电电流配置。BL为8KiB，旧layout2须先使用ST-Link完整初始化。2S为软件电量配方。"
+    image_size: 54800
+    image_crc32: "0x0598A08D"
+    sha256: "365a13f961db4b4d01208c40de4cda23529e43d6d6606eeebeae32f8692149d7"
+    release_notes: "完善 IMU 校准与启动稳定性。"
     metadata:
-      source_commit: "840d893d6361d2227153052f5bf7092c609789d7"
+      source_commit: "7369e6edfed2233d87d24a04d171792ca4897d60"
       image_crc32_scope: "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
       sha256_scope: "Unchanged complete APP BIN"
       software_battery_cells: 2

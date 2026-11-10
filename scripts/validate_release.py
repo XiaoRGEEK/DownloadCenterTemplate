@@ -136,16 +136,16 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
         "id": "xr-zero-imu",
         "device_type": "XR-ZERO-IMU",
         "product_codes": "[24836]",
-        "version": "0.1.0.4",
-        "image_version": "0.1.0.4",
-        "url": "app_0.1.0.4.bin",
+        "version": "0.1.0.6",
+        "image_version": "0.1.0.6",
+        "url": "app_0.1.0.6.bin",
         "product_code": "24836",
         "target_id": "0xF0304B32",
         "layout_version": "3",
         "app_base": "0x08002000",
         "min_studio_version": "1.1.10",
         "min_bootloader_version": "0.1.0.4",
-        "source_commit": "840d893d6361d2227153052f5bf7092c609789d7",
+        "source_commit": "7369e6edfed2233d87d24a04d171792ca4897d60",
         "image_crc32_scope": (
             "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
         ),
@@ -160,10 +160,10 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
                 **common,
                 "battery_cells": "2",
                 "software_battery_cells": "2",
-                "image_size": "54784",
-                "image_crc32": "0xD9AE9062",
+                "image_size": "54800",
+                "image_crc32": "0x0598A08D",
                 "sha256": (
-                    "f4486cd8de67f8aa1c1314f14fc8e9bf296fedbfb4b194ce52cabc990a0615d1"
+                    "365a13f961db4b4d01208c40de4cda23529e43d6d6606eeebeae32f8692149d7"
                 ),
             },
         },
@@ -175,10 +175,10 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
                 **common,
                 "battery_cells": "3",
                 "software_battery_cells": "3",
-                "image_size": "54808",
-                "image_crc32": "0x8C1AAEC5",
+                "image_size": "54828",
+                "image_crc32": "0xC63F1FD8",
                 "sha256": (
-                    "cc239f2d0e938aad72e58ed6060957a863d3f25df0238ddef886fd823de1f1fe"
+                    "c708a7f84dbf30ff3770637f74b5e6d32936ffeed313052f4156ce6fe1806403"
                 ),
             },
         },

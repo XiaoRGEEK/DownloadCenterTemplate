@@ -93,5 +93,15 @@
     "tos_key": "software/android/XR-Controller_V1.4.168.260908.7f05a88_release.apk",
     "replacement_tos_key": "software/android/XR-Controller_V1.4.185.261109.a04954c_release.apk",
     "reason": "XR Controller 1.4.168 was withdrawn after a reported functional issue; tested XR Controller 1.4.185 is now the current stable download."
+  },
+  {
+    "tos_key": "firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.4.bin",
+    "replacement_tos_key": "firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.6.bin",
+    "reason": "XR-ZERO-IMU F030 layout 3 APP 0.1.0.6 supersedes the 2S software battery recipe APP 0.1.0.4 while preserving the historical object."
+  },
+  {
+    "tos_key": "firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.4.bin",
+    "replacement_tos_key": "firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.6.bin",
+    "reason": "XR-ZERO-IMU F030 layout 3 APP 0.1.0.6 supersedes the 3S software battery recipe APP 0.1.0.4 while preserving the historical object."
   }
 ]
