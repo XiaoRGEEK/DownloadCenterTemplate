@@ -92,6 +92,14 @@ XR-ZERO-IMU 在线 OTA 只公开原始 APP BIN 与
 不属于 APP OTA 渠道；设备卡随 XR Studio 发布。Runner 必须先校验并镜像版本化资产，
 最后才部署对应 catalog。
 
+XR-ZERO-IMU F030 layout 3 使用与旧 F003 根清单隔离的
+`firmware/xr-zero-imu/f030/layout3/{2s,3s}/version.yaml`。2S／3S 表示初始化时选择的
+软件电量配方，不从硬件充电串数自动推断。两个清单必须成对审核、分别声明
+`battery_cells`，并只引用各自目录的原始 APP BIN；旧 layout 2 设备必须先通过 ST-Link
+完整初始化。F030 `image_crc32` 是排除 APP `0x100..0x13f` 头部后的 CRC32/ISO-HDLC，
+SHA-256 仍绑定完整未修改 BIN，不能套用旧 F003 的整文件 CRC 口径。两个目录的 APP
+文件名相同时使用两个 Draft Release 和两个公开清单，避免 GitHub Release 资产重名。
+
 XR-BASE 新版 base2 在线 OTA 只公开未修改的 APP BIN 与
 `firmware/xr-base/version.yaml`。入口仅适用于产品码 24835（`0x6103`）、
 最低 BL 2.0.0.0 且最低 XR Studio 1.1.4 的产品专用路径。64 B 头中的
