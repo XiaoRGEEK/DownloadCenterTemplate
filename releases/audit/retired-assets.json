@@ -1,0 +1,26 @@
+[
+  {
+    "tos_key": "firmware/xr-zero-imu/app_2.1.5.0.bin",
+    "reason": "XR-ZERO-IMU public firmware distribution was retired; firmware is now provided only through internal controlled flashing."
+  },
+  {
+    "tos_key": "firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.4.bin",
+    "reason": "XR-ZERO-IMU F030 public firmware distribution was retired; the historical 2S APP is no longer publicly downloadable."
+  },
+  {
+    "tos_key": "firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.6.bin",
+    "reason": "XR-ZERO-IMU F030 public firmware distribution was retired; the current 2S APP is no longer publicly downloadable."
+  },
+  {
+    "tos_key": "firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.4.bin",
+    "reason": "XR-ZERO-IMU F030 public firmware distribution was retired; the historical 3S APP is no longer publicly downloadable."
+  },
+  {
+    "tos_key": "firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.6.bin",
+    "reason": "XR-ZERO-IMU F030 public firmware distribution was retired; the current 3S APP is no longer publicly downloadable."
+  },
+  {
+    "tos_key": "firmware/xr-zero-imu/xr-zero-imu-bl2.0.0.1-app2.1.5.0-production.zip",
+    "reason": "XR-ZERO-IMU public production package distribution was retired; production artifacts are now internal only."
+  }
+]

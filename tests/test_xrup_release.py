@@ -61,20 +61,13 @@ class XrupReleaseTests(unittest.TestCase):
 
     def test_reference_enumeration_preserves_existing_products(self):
         objects, _ = validate.referenced_objects()
-        for product in ("mxbit", "xr-base", "xr-car-tail", "xr-aud-01", "xr-zero-imu"):
+        for product in ("mxbit", "xr-base", "xr-car-tail", "xr-aud-01"):
             expected = validate.yaml_urls(
                 ROOT / f"firmware/{product}/version.yaml", f"firmware/{product}/"
             )
             self.assertTrue(expected)
             self.assertTrue(expected <= objects)
-        production = validate.yaml_urls(
-            ROOT / "firmware/xr-zero-imu/production.yaml", "firmware/xr-zero-imu/"
-        )
-        self.assertEqual(production, {
-            "firmware/xr-zero-imu/"
-            "xr-zero-imu-bl2.0.0.1-app2.1.5.0-production.zip"
-        })
-        self.assertTrue(production <= objects)
+        self.assertFalse(any(key.startswith("firmware/xr-zero-imu/") for key in objects))
         self.assertTrue(any(key.endswith(".XRUP") for key in objects))
 
     def test_xr_base_catalog_is_app_only_and_version_pinned(self):
@@ -113,34 +106,13 @@ class XrupReleaseTests(unittest.TestCase):
               product_codes: [24836]
             firmware:
               app:
-                version: "0.1.0.6"
-                image_version: "0.1.0.6"
-                url: "app_0.1.0.6.bin"
-                product_code: 24836
-                target_id: "0xF0304B32"
-                layout_version: 3
-                app_base: "0x08002000"
+                available: false
+                status: "offline"
                 battery_cells: 2
-                min_studio_version: "1.1.10"
-                min_bootloader_version: "0.1.0.4"
-                image_size: 54800
-                image_crc32: "0x0598A08D"
-                sha256: "365a13f961db4b4d01208c40de4cda23529e43d6d6606eeebeae32f8692149d7"
-                release_notes: "F030 layout3 2S"
-                metadata:
-                  source_commit: "7369e6edfed2233d87d24a04d171792ca4897d60"
-                  image_crc32_scope: "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
-                  sha256_scope: "Unchanged complete APP BIN"
-                  software_battery_cells: 2
+                release_notes: "Public OTA retired for F030 layout3 2S"
         """)
         three_s = (two_s
             .replace("battery_cells: 2", "battery_cells: 3")
-            .replace("image_size: 54800", "image_size: 54828")
-            .replace("0x0598A08D", "0xC63F1FD8")
-            .replace(
-                "365a13f961db4b4d01208c40de4cda23529e43d6d6606eeebeae32f8692149d7",
-                "c708a7f84dbf30ff3770637f74b5e6d32936ffeed313052f4156ce6fe1806403",
-            )
             .replace("layout3 2S", "layout3 3S"))
 
         with tempfile.TemporaryDirectory() as directory:
@@ -158,6 +130,27 @@ class XrupReleaseTests(unittest.TestCase):
                 three_path.write_text(three_s.replace("battery_cells: 3", "battery_cells: 2", 1))
                 with self.assertRaisesRegex(ValueError, "3S battery_cells must be 3"):
                     validate.validate_xr_zero_imu_f030_catalogs()
+
+    def test_retired_assets_must_be_manifested_and_unreferenced(self):
+        key = "firmware/xr-zero-imu/app_2.1.5.0.bin"
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            audit = root / "releases/audit"
+            audit.mkdir(parents=True)
+            (audit / "retired-assets.json").write_text(json.dumps([
+                {"tos_key": key, "reason": "public distribution retired"}
+            ]))
+            with patch.object(validate, "ROOT", root):
+                self.assertEqual(validate.validate_retired_assets({key}, set()), {key})
+                with self.assertRaisesRegex(ValueError, "invalid retired asset"):
+                    validate.validate_retired_assets({key}, {key})
+
+    def test_zero_retirement_workflow_is_exactly_scoped(self):
+        workflow = (ROOT / ".github/workflows/retire-xr-zero-imu.yml").read_text()
+        self.assertIn("PURGE-XR-ZERO-IMU-PUBLIC-FIRMWARE", workflow)
+        self.assertIn('prefix="tos://${TOS_BUCKET}/firmware/xr-zero-imu/"', workflow)
+        self.assertIn('tosutil rm "${prefix}" -r -v -f -j=1', workflow)
+        self.assertIn("environment: tos-maintenance", workflow)
 
     def run_metadata_plan(self, changes):
         # Execute the actual workflow allowlist, not a duplicated approximation.

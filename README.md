@@ -85,20 +85,10 @@ XRUP 包格式 schema 2 不改变发布清单的 `schema_version: 1`；设备兼
 修改发布控制脚本或元数据允许名单时，同时运行
 `python3 -m unittest discover -s tests -v`。
 
-XR-ZERO-IMU 在线 OTA 只公开原始 APP BIN 与
-`firmware/xr-zero-imu/version.yaml`。经单独审核的不可变产线说明 ZIP 可由
-`firmware/xr-zero-imu/production.yaml` 独立引用；其中的合并 BIN/HEX 不是 APP OTA，
-不能改变 `version.yaml` 的入口。裸 factory 文件、台架日志、设备卡和其他产线文件
-不属于 APP OTA 渠道；设备卡随 XR Studio 发布。Runner 必须先校验并镜像版本化资产，
-最后才部署对应 catalog。
-
-XR-ZERO-IMU F030 layout 3 使用与旧 F003 根清单隔离的
-`firmware/xr-zero-imu/f030/layout3/{2s,3s}/version.yaml`。2S／3S 表示初始化时选择的
-软件电量配方，不从硬件充电串数自动推断。两个清单必须成对审核、分别声明
-`battery_cells`，并只引用各自目录的原始 APP BIN；旧 layout 2 设备必须先通过 ST-Link
-完整初始化。F030 `image_crc32` 是排除 APP `0x100..0x13f` 头部后的 CRC32/ISO-HDLC，
-SHA-256 仍绑定完整未修改 BIN，不能套用旧 F003 的整文件 CRC 口径。两个目录的 APP
-文件名相同时使用两个 Draft Release 和两个公开清单，避免 GitHub Release 资产重名。
+XR-ZERO-IMU 的 F003、F030 2S／3S OTA 及公开产线包已于 2026-11-11 停用；公开 catalog
+只保留 `available: false` 的退役状态，不再引用任何固件对象。固件改为内部受控烧录，
+GitHub Release 与 TOS 对象通过独立维护流程清除。未来重新开放云端升级前，必须重新设计
+密钥、加密容器、设备授权和 MCU 解密校验流程，不得重新公开原始 BIN。
 
 XR-BASE 新版 base2 在线 OTA 只公开未修改的 APP BIN 与
 `firmware/xr-base/version.yaml`。入口仅适用于产品码 24835（`0x6103`）、
@@ -209,3 +199,6 @@ Environment 的设置中。发布脚本只使用 `gh` 当前登录态，不把�
 - 删除对象是单独、显式审核的维护操作，不属于发布 Action。
 - `tos-maintenance` Environment 需要 `XiaoRGEEK` 审批。
 - 生命周期规则保留当前对象，非当前版本 30 天后过期，未完成分片 7 天后终止。
+- XR-ZERO-IMU 的一次性公开退役使用 `retire-xr-zero-imu.yml`，只允许清除
+  `firmware/xr-zero-imu/` 前缀的所有对象版本和删除标记，并要求精确确认和
+  `tos-maintenance` Environment 审批。
