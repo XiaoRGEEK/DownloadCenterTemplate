@@ -136,20 +136,8 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
         "id": "xr-zero-imu",
         "device_type": "XR-ZERO-IMU",
         "product_codes": "[24836]",
-        "version": "0.1.0.6",
-        "image_version": "0.1.0.6",
-        "url": "app_0.1.0.6.bin",
-        "product_code": "24836",
-        "target_id": "0xF0304B32",
-        "layout_version": "3",
-        "app_base": "0x08002000",
-        "min_studio_version": "1.1.10",
-        "min_bootloader_version": "0.1.0.4",
-        "source_commit": "7369e6edfed2233d87d24a04d171792ca4897d60",
-        "image_crc32_scope": (
-            "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
-        ),
-        "sha256_scope": "Unchanged complete APP BIN",
+        "available": "false",
+        "status": "offline",
     }
     return (
         {
@@ -159,12 +147,6 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
             "fields": {
                 **common,
                 "battery_cells": "2",
-                "software_battery_cells": "2",
-                "image_size": "54800",
-                "image_crc32": "0x0598A08D",
-                "sha256": (
-                    "365a13f961db4b4d01208c40de4cda23529e43d6d6606eeebeae32f8692149d7"
-                ),
             },
         },
         {
@@ -174,12 +156,6 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
             "fields": {
                 **common,
                 "battery_cells": "3",
-                "software_battery_cells": "3",
-                "image_size": "54828",
-                "image_crc32": "0xC63F1FD8",
-                "sha256": (
-                    "c708a7f84dbf30ff3770637f74b5e6d32936ffeed313052f4156ce6fe1806403"
-                ),
             },
         },
     )
@@ -364,6 +340,38 @@ def validate_superseded_assets(
     return superseded
 
 
+def validate_retired_assets(
+    manifest_keys: set[str], referenced_keys: set[str]
+) -> set[str]:
+    path = ROOT / "releases/audit/retired-assets.json"
+    if not path.exists():
+        return set()
+    try:
+        records = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(f"invalid retired asset registry: {exc}")
+    if not isinstance(records, list):
+        fail("retired asset registry must contain a top-level list")
+
+    retired: set[str] = set()
+    for record in records:
+        if not isinstance(record, dict) or set(record) != {"tos_key", "reason"}:
+            fail("invalid retired asset registry entry")
+        key = record.get("tos_key")
+        reason = record.get("reason")
+        if (
+            not isinstance(key, str)
+            or not isinstance(reason, str)
+            or not reason.strip()
+            or key in retired
+            or key not in manifest_keys
+            or key in referenced_keys
+        ):
+            fail(f"invalid retired asset mapping: {key}")
+        retired.add(key)
+    return retired
+
+
 def validate() -> set[str]:
     tracked = tracked_files()
     binaries = [path for path in tracked if Path(path).suffix.lower() in BINARY_SUFFIXES]
@@ -385,7 +393,10 @@ def validate() -> set[str]:
     objects, data = referenced_objects()
     _, manifest_keys = validate_release_manifests()
     superseded = validate_superseded_assets(manifest_keys, objects)
-    orphaned = sorted(manifest_keys - objects - superseded)
+    retired = validate_retired_assets(manifest_keys, objects)
+    if superseded & retired:
+        fail("release assets cannot be both superseded and retired")
+    orphaned = sorted(manifest_keys - objects - superseded - retired)
     if orphaned:
         fail("release assets are not referenced by public metadata:\n  " + "\n  ".join(orphaned))
     invalid = [key for key in sorted(objects) if Path(key).suffix.lower() not in RELEASE_SUFFIXES]
@@ -594,17 +605,8 @@ def validate() -> set[str]:
         "id": "xr-zero-imu",
         "device_type": "XR-ZERO-IMU",
         "product_codes": "[24836]",
-        "version": "2.1.5.0",
-        "url": "app_2.1.5.0.bin",
-        "sha256": "f6f550f6a076bd5443de3586f5bb997d89b547c229ed10ae25db36cf35876a46",
-        "image_version": "2.1.5.0",
-        "product_code": "24836",
-        "image_size": "40240",
-        "image_crc32": "0x146C43FF",
-        "min_bootloader_version": "2.0.0.0",
-        "source_commit": "a893691069bed02234d6fa794c1f9a918d7fc8fb",
-        "whole_file_crc32": "0x146C43FF",
-        "whole_file_crc32_scope": "CRC32/ISO-HDLC of unchanged complete APP BIN",
+        "available": "false",
+        "status": "offline",
     }
     for field, expected in required_xr_zero_imu_fields.items():
         if not re.search(
@@ -613,6 +615,8 @@ def validate() -> set[str]:
             re.MULTILINE,
         ):
             fail(f"XR-ZERO-IMU {field} must be {expected}")
+    if not re.search(r"^\s*release_notes:\s*['\"]?.+", xr_zero_imu, re.MULTILINE):
+        fail("XR-ZERO-IMU retirement release_notes must not be empty")
 
     xr_zero_production = (
         ROOT / "firmware/xr-zero-imu/production.yaml"
@@ -621,20 +625,9 @@ def validate() -> set[str]:
         "id": "xr-zero-imu",
         "device_type": "XR-ZERO-IMU",
         "product_codes": "[24836]",
-        "version": "BL2.0.0.1-APP2.1.5.0",
-        "url": "xr-zero-imu-bl2.0.0.1-app2.1.5.0-production.zip",
-        "size": "137445",
-        "sha256": "06c843027d4e43b33fad1f49db01d9ec41f7536a996f3a90eb810b8dbdd6139d",
-        "merged_bin_size": "52528",
-        "merged_bin_sha256": "c04cb1c28b731a9ab186791135f7a01a784d82947b5a31da4f57b011abade42c",
-        "bin_start_address": "0x08000000",
-        "mass_erase_allowed": "false",
-        "data_included": "false",
-        "option_bytes_included": "false",
+        "available": "false",
+        "status": "offline",
         "app_ota": "false",
-        "source_commit": "a893691069bed02234d6fa794c1f9a918d7fc8fb",
-        "factory_tool_commit": "373eb09",
-        "evidence_commit": "3e3d35d",
     }
     for field, expected in required_xr_zero_production_fields.items():
         if not re.search(
@@ -643,6 +636,10 @@ def validate() -> set[str]:
             re.MULTILINE,
         ):
             fail(f"XR-ZERO-IMU production {field} must be {expected}")
+    if not re.search(
+        r"^\s*release_notes:\s*['\"]?.+", xr_zero_production, re.MULTILINE
+    ):
+        fail("XR-ZERO-IMU production retirement release_notes must not be empty")
 
     return objects
 
