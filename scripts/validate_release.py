@@ -130,6 +130,84 @@ def electron_updater_objects(path: Path, base: str) -> set[str]:
     return objects | blockmaps
 
 
+def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
+    base = "firmware/xr-zero-imu/f030/layout3"
+    common = {
+        "id": "xr-zero-imu",
+        "device_type": "XR-ZERO-IMU",
+        "product_codes": "[24836]",
+        "version": "0.1.0.4",
+        "image_version": "0.1.0.4",
+        "url": "app_0.1.0.4.bin",
+        "product_code": "24836",
+        "target_id": "0xF0304B32",
+        "layout_version": "3",
+        "app_base": "0x08002000",
+        "min_studio_version": "1.1.10",
+        "min_bootloader_version": "0.1.0.4",
+        "source_commit": "840d893d6361d2227153052f5bf7092c609789d7",
+        "image_crc32_scope": (
+            "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
+        ),
+        "sha256_scope": "Unchanged complete APP BIN",
+    }
+    return (
+        {
+            "label": "2S",
+            "path": ROOT / base / "2s/version.yaml",
+            "object_base": f"{base}/2s/",
+            "fields": {
+                **common,
+                "battery_cells": "2",
+                "software_battery_cells": "2",
+                "image_size": "54784",
+                "image_crc32": "0xD9AE9062",
+                "sha256": (
+                    "f4486cd8de67f8aa1c1314f14fc8e9bf296fedbfb4b194ce52cabc990a0615d1"
+                ),
+            },
+        },
+        {
+            "label": "3S",
+            "path": ROOT / base / "3s/version.yaml",
+            "object_base": f"{base}/3s/",
+            "fields": {
+                **common,
+                "battery_cells": "3",
+                "software_battery_cells": "3",
+                "image_size": "54808",
+                "image_crc32": "0x8C1AAEC5",
+                "sha256": (
+                    "cc239f2d0e938aad72e58ed6060957a863d3f25df0238ddef886fd823de1f1fe"
+                ),
+            },
+        },
+    )
+
+
+def validate_xr_zero_imu_f030_catalogs() -> None:
+    catalogs = xr_zero_imu_f030_catalogs()
+    present = [catalog["path"].exists() for catalog in catalogs]
+    if any(present) and not all(present):
+        fail("XR-ZERO-IMU F030 2S and 3S catalogs must be added together")
+    if not all(present):
+        return
+
+    for catalog in catalogs:
+        text = catalog["path"].read_text(encoding="utf-8")
+        for field, expected in catalog["fields"].items():
+            if not re.search(
+                rf"^\s*{re.escape(field)}:\s*['\"]?{re.escape(expected)}['\"]?\s*$",
+                text,
+                re.MULTILINE,
+            ):
+                fail(
+                    f"XR-ZERO-IMU F030 {catalog['label']} {field} must be {expected}"
+                )
+        if not re.search(r"^\s*release_notes:\s*['\"]?.+", text, re.MULTILINE):
+            fail(f"XR-ZERO-IMU F030 {catalog['label']} release_notes must not be empty")
+
+
 def referenced_objects() -> tuple[set[str], list[dict]]:
     objects, data = data_objects()
     objects |= yaml_urls(ROOT / "update/software.yaml")
@@ -147,6 +225,9 @@ def referenced_objects() -> tuple[set[str], list[dict]]:
     objects |= yaml_urls(
         ROOT / "firmware/xr-zero-imu/production.yaml", "firmware/xr-zero-imu/"
     )
+    for catalog in xr_zero_imu_f030_catalogs():
+        if catalog["path"].exists():
+            objects |= yaml_urls(catalog["path"], catalog["object_base"])
     objects |= yaml_urls(ROOT / "software/pc/latest.yml", "software/pc/")
     objects |= yaml_urls(
         ROOT / "software/pc/moxin/latest.yml", "software/pc/moxin/"
@@ -300,6 +381,7 @@ def validate() -> set[str]:
     if sensitive:
         fail("sensitive files are tracked by Git:\n  " + "\n  ".join(sensitive))
 
+    validate_xr_zero_imu_f030_catalogs()
     objects, data = referenced_objects()
     _, manifest_keys = validate_release_manifests()
     superseded = validate_superseded_assets(manifest_keys, objects)

@@ -15,6 +15,8 @@ from scripts import validate_release as validate
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = "firmware/xr-aud-01/version.yaml"
+F030_2S_CATALOG = "firmware/xr-zero-imu/f030/layout3/2s/version.yaml"
+F030_3S_CATALOG = "firmware/xr-zero-imu/f030/layout3/3s/version.yaml"
 
 
 class XrupReleaseTests(unittest.TestCase):
@@ -103,6 +105,60 @@ class XrupReleaseTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "XR-BASE min_studio_version"):
                 validate.validate()
 
+    def test_f030_catalogs_are_paired_and_strictly_isolated(self):
+        two_s = textwrap.dedent("""\
+            product:
+              id: xr-zero-imu
+              device_type: XR-ZERO-IMU
+              product_codes: [24836]
+            firmware:
+              app:
+                version: "0.1.0.4"
+                image_version: "0.1.0.4"
+                url: "app_0.1.0.4.bin"
+                product_code: 24836
+                target_id: "0xF0304B32"
+                layout_version: 3
+                app_base: "0x08002000"
+                battery_cells: 2
+                min_studio_version: "1.1.10"
+                min_bootloader_version: "0.1.0.4"
+                image_size: 54784
+                image_crc32: "0xD9AE9062"
+                sha256: "f4486cd8de67f8aa1c1314f14fc8e9bf296fedbfb4b194ce52cabc990a0615d1"
+                release_notes: "F030 layout3 2S"
+                metadata:
+                  source_commit: "840d893d6361d2227153052f5bf7092c609789d7"
+                  image_crc32_scope: "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
+                  sha256_scope: "Unchanged complete APP BIN"
+                  software_battery_cells: 2
+        """)
+        three_s = (two_s
+            .replace("battery_cells: 2", "battery_cells: 3")
+            .replace("image_size: 54784", "image_size: 54808")
+            .replace("0xD9AE9062", "0x8C1AAEC5")
+            .replace(
+                "f4486cd8de67f8aa1c1314f14fc8e9bf296fedbfb4b194ce52cabc990a0615d1",
+                "cc239f2d0e938aad72e58ed6060957a863d3f25df0238ddef886fd823de1f1fe",
+            )
+            .replace("layout3 2S", "layout3 3S"))
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            two_path = root / F030_2S_CATALOG
+            three_path = root / F030_3S_CATALOG
+            two_path.parent.mkdir(parents=True)
+            three_path.parent.mkdir(parents=True)
+            two_path.write_text(two_s)
+            with patch.object(validate, "ROOT", root):
+                with self.assertRaisesRegex(ValueError, "must be added together"):
+                    validate.validate_xr_zero_imu_f030_catalogs()
+                three_path.write_text(three_s)
+                validate.validate_xr_zero_imu_f030_catalogs()
+                three_path.write_text(three_s.replace("battery_cells: 3", "battery_cells: 2", 1))
+                with self.assertRaisesRegex(ValueError, "3S battery_cells must be 3"):
+                    validate.validate_xr_zero_imu_f030_catalogs()
+
     def run_metadata_plan(self, changes):
         # Execute the actual workflow allowlist, not a duplicated approximation.
         workflow = (ROOT / ".github/workflows/deploy-tos.yml").read_text()
@@ -128,12 +184,16 @@ class XrupReleaseTests(unittest.TestCase):
             "firmware/xr-car-tail/version.yaml",
             "firmware/xr-zero-imu/version.yaml",
             "firmware/xr-zero-imu/production.yaml",
+            F030_2S_CATALOG,
+            F030_3S_CATALOG,
         ]
         changes = "".join(f"A\t{path}\n" for path in catalogs)
         changes += "M\tdata.json\nA\tfirmware/xr-aud-01/private.key\n"
         changes += "A\tfirmware/xr-aud-01/factory.bin\nA\tfirmware/xr-aud-01/auth.json\n"
         changes += "A\tfirmware/xr-zero-imu/factory.bin\n"
         changes += "A\tfirmware/xr-zero-imu/factory.hex\n"
+        changes += "A\tfirmware/xr-zero-imu/f030/layout3/2s/factory.bin\n"
+        changes += "A\tfirmware/xr-zero-imu/f030/layout3/3s/private.key\n"
         changes += "A\tfirmware/xr-base/full.bin\n"
         changes += "A\tfirmware/xr-base/authorization.json\n"
         result, plans = self.run_metadata_plan(changes)
@@ -145,6 +205,8 @@ class XrupReleaseTests(unittest.TestCase):
             CATALOG,
             "firmware/xr-base/version.yaml",
             "firmware/xr-zero-imu/production.yaml",
+            F030_2S_CATALOG,
+            F030_3S_CATALOG,
         ):
             for status in ("D", "R100"):
                 result, _ = self.run_metadata_plan(f"{status}\t{catalog}\n")
