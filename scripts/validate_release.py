@@ -425,10 +425,23 @@ def validate() -> set[str]:
     if len(xrblock) != 1:
         fail("data.json must contain exactly one XRBlock entry")
     entry = xrblock[0]
-    if entry.get("version") != "v2.3.3" or entry.get("link") != [
-        "software/pc/XR Block v2.3.3.exe"
-    ]:
-        fail("XRBlock website release must point to v2.3.3")
+    if (
+        entry.get("version") != "v3.0.0"
+        or entry.get("link") != [
+            "software/pc/XR Block_3.0.0_x64-setup.exe"
+        ]
+        or entry.get("oldVersion") != ["software/pc/XR Block v2.3.3.exe"]
+        or entry.get("platformVersions") != {"windows": "v3.0.0"}
+        or entry.get("btnNames", {}).get("en") != ["Windows x64 Installer"]
+        or entry.get("btnNames", {}).get("zh") != ["Windows x64 安装版"]
+    ):
+        fail("XRBlock website release must point to Windows x64 v3.0.0")
+    for language, notice in {
+        "en": "not Authenticode signed",
+        "zh": "未做 Authenticode 数字签名",
+    }.items():
+        if notice not in entry.get("desc", {}).get(language, ""):
+            fail(f"XRBlock 3.0.0 requires the unsigned installer notice: {language}")
 
     omnimind = [key for key in objects if "omnimind" in key.lower()]
     if omnimind:
