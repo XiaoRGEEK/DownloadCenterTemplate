@@ -642,6 +642,36 @@
         "tools": []
     },
     {
+        "logoSrc": "./software/image/flashbox.png",
+        "name": {
+            "en": "FlashBox SD/TF Card Tool",
+            "zh": "FlashBox SD/TF 卡备份与写入工具"
+        },
+        "version": "v2.7.2",
+        "desc": {
+            "en": "SD/TF card backup and imaging tool with backup, write, image trim/expand, and image file browsing. The Windows installer is not Authenticode signed.",
+            "zh": "SD/TF 卡备份与写入工具，支持备份、烧录、裁切/扩容镜像及浏览镜像文件。Windows 安装程序未做 Authenticode 数字签名。"
+        },
+        "link": [
+            "software/pc/FlashBox-Setup-2.7.2.exe"
+        ],
+        "btnNames": {
+            "en": [
+                "Windows Installer"
+            ],
+            "zh": [
+                "Windows 安装版"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "windows",
+        "platformVersions": {
+            "windows": "v2.7.2"
+        },
+        "hasTools": false,
+        "tools": []
+    },
+    {
         "logoSrc": "./software/image/xrblock.png",
         "name": {
             "en": "XRBlock Scratch3.0 Software",
