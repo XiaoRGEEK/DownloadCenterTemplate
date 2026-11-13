@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "xr-zero-imu-f030-layout3-3s-app-v0.1.0.10",
+  "title": "XR-ZERO-IMU F030 Layout3 3S APP v0.1.0.10",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "app_0.1.0.10.bin",
+      "tos_key": "firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.10.bin",
+      "size": 55192,
+      "sha256": "d7a34ae15efcefc024272228657be1c66d99c71a1b0a1456ebe776e8ee9f0360"
+    }
+  ]
+}

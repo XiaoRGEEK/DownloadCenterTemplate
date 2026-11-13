@@ -74,8 +74,8 @@ class XrupReleaseTests(unittest.TestCase):
                 if key.startswith("firmware/xr-zero-imu/f030/layout3/")
             },
             {
-                "firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.9.bin",
-                "firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.9.bin",
+                "firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.10.bin",
+                "firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.10.bin",
             },
         )
         self.assertFalse(
@@ -123,9 +123,9 @@ class XrupReleaseTests(unittest.TestCase):
               product_codes: [24836]
             firmware:
               app:
-                version: "0.1.0.9"
-                image_version: "0.1.0.9"
-                url: "app_0.1.0.9.bin"
+                version: "0.1.0.10"
+                image_version: "0.1.0.10"
+                url: "app_0.1.0.10.bin"
                 product_code: 24836
                 target_id: "0xF0304B32"
                 layout_version: 3
@@ -133,23 +133,23 @@ class XrupReleaseTests(unittest.TestCase):
                 battery_cells: 2
                 min_studio_version: "1.1.10"
                 min_bootloader_version: "0.1.0.4"
-                image_size: 55164
-                image_crc32: "0xA1919B39"
-                sha256: "e9e00fca677b7d2da5cafa119a12e3d175b680410791d38ac172b08ad3ee6ba5"
+                image_size: 55160
+                image_crc32: "0x1B7B9AC9"
+                sha256: "24e8218da83baf5de5d464b9593228aa93f360173ff6f3858b56571abf6a27d4"
                 release_notes: "F030 layout3 2S online"
                 metadata:
-                  source_commit: "2491fe069bfdb68f872b7465f10db55b43674930"
+                  source_commit: "082f1b0470af13782c9ac9c5c279e236c24f3516"
                   image_crc32_scope: "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
                   sha256_scope: "Unchanged complete APP BIN"
                   software_battery_cells: 2
         """)
         three_s = (two_s
             .replace("battery_cells: 2", "battery_cells: 3")
-            .replace("image_size: 55164", "image_size: 55196")
-            .replace("image_crc32: \"0xA1919B39\"", "image_crc32: \"0x8BCBE25A\"")
+            .replace("image_size: 55160", "image_size: 55192")
+            .replace("image_crc32: \"0x1B7B9AC9\"", "image_crc32: \"0xA8D51A92\"")
             .replace(
-                "e9e00fca677b7d2da5cafa119a12e3d175b680410791d38ac172b08ad3ee6ba5",
-                "705aa184a2473c16ec20830af5627e1379a87da3a54f3af47d19655858112e4c",
+                "24e8218da83baf5de5d464b9593228aa93f360173ff6f3858b56571abf6a27d4",
+                "d7a34ae15efcefc024272228657be1c66d99c71a1b0a1456ebe776e8ee9f0360",
             )
             .replace("software_battery_cells: 2", "software_battery_cells: 3")
             .replace("layout3 2S", "layout3 3S"))
