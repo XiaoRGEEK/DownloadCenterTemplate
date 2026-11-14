@@ -67,7 +67,24 @@ class XrupReleaseTests(unittest.TestCase):
             )
             self.assertTrue(expected)
             self.assertTrue(expected <= objects)
-        self.assertFalse(any(key.startswith("firmware/xr-zero-imu/") for key in objects))
+        self.assertEqual(
+            {
+                key
+                for key in objects
+                if key.startswith("firmware/xr-zero-imu/f030/layout3/")
+            },
+            {
+                "firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.10.bin",
+                "firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.10.bin",
+            },
+        )
+        self.assertFalse(
+            any(
+                key.startswith("firmware/xr-zero-imu/")
+                and "/f030/layout3/" not in key
+                for key in objects
+            )
+        )
         self.assertTrue(any(key.endswith(".XRUP") for key in objects))
 
     def test_xr_base_catalog_is_app_only_and_version_pinned(self):
@@ -106,13 +123,35 @@ class XrupReleaseTests(unittest.TestCase):
               product_codes: [24836]
             firmware:
               app:
-                available: false
-                status: "offline"
+                version: "0.1.0.10"
+                image_version: "0.1.0.10"
+                url: "app_0.1.0.10.bin"
+                product_code: 24836
+                target_id: "0xF0304B32"
+                layout_version: 3
+                app_base: "0x08002000"
                 battery_cells: 2
-                release_notes: "Public OTA retired for F030 layout3 2S"
+                min_studio_version: "1.1.10"
+                min_bootloader_version: "0.1.0.4"
+                image_size: 55160
+                image_crc32: "0x1B7B9AC9"
+                sha256: "24e8218da83baf5de5d464b9593228aa93f360173ff6f3858b56571abf6a27d4"
+                release_notes: "F030 layout3 2S online"
+                metadata:
+                  source_commit: "082f1b0470af13782c9ac9c5c279e236c24f3516"
+                  image_crc32_scope: "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
+                  sha256_scope: "Unchanged complete APP BIN"
+                  software_battery_cells: 2
         """)
         three_s = (two_s
             .replace("battery_cells: 2", "battery_cells: 3")
+            .replace("image_size: 55160", "image_size: 55192")
+            .replace("image_crc32: \"0x1B7B9AC9\"", "image_crc32: \"0xA8D51A92\"")
+            .replace(
+                "24e8218da83baf5de5d464b9593228aa93f360173ff6f3858b56571abf6a27d4",
+                "d7a34ae15efcefc024272228657be1c66d99c71a1b0a1456ebe776e8ee9f0360",
+            )
+            .replace("software_battery_cells: 2", "software_battery_cells: 3")
             .replace("layout3 2S", "layout3 3S"))
 
         with tempfile.TemporaryDirectory() as directory:
@@ -145,12 +184,8 @@ class XrupReleaseTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "invalid retired asset"):
                     validate.validate_retired_assets({key}, {key})
 
-    def test_zero_retirement_workflow_is_exactly_scoped(self):
-        workflow = (ROOT / ".github/workflows/retire-xr-zero-imu.yml").read_text()
-        self.assertIn("PURGE-XR-ZERO-IMU-PUBLIC-FIRMWARE", workflow)
-        self.assertIn('prefix="tos://${TOS_BUCKET}/firmware/xr-zero-imu/"', workflow)
-        self.assertIn('tosutil rm "${prefix}" -r -v -f -j=1', workflow)
-        self.assertIn("environment: tos-maintenance", workflow)
+    def test_zero_full_prefix_retirement_workflow_is_absent(self):
+        self.assertFalse((ROOT / ".github/workflows/retire-xr-zero-imu.yml").exists())
 
     def run_metadata_plan(self, changes):
         # Execute the actual workflow allowlist, not a duplicated approximation.

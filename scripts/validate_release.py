@@ -136,8 +136,17 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
         "id": "xr-zero-imu",
         "device_type": "XR-ZERO-IMU",
         "product_codes": "[24836]",
-        "available": "false",
-        "status": "offline",
+        "version": "0.1.0.10",
+        "image_version": "0.1.0.10",
+        "product_code": "24836",
+        "target_id": "0xF0304B32",
+        "layout_version": "3",
+        "app_base": "0x08002000",
+        "min_studio_version": "1.1.10",
+        "min_bootloader_version": "0.1.0.4",
+        "source_commit": "082f1b0470af13782c9ac9c5c279e236c24f3516",
+        "image_crc32_scope": "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f",
+        "sha256_scope": "Unchanged complete APP BIN",
     }
     return (
         {
@@ -146,7 +155,12 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
             "object_base": f"{base}/2s/",
             "fields": {
                 **common,
+                "url": "app_0.1.0.10.bin",
                 "battery_cells": "2",
+                "image_size": "55160",
+                "image_crc32": "0x1B7B9AC9",
+                "sha256": "24e8218da83baf5de5d464b9593228aa93f360173ff6f3858b56571abf6a27d4",
+                "software_battery_cells": "2",
             },
         },
         {
@@ -155,7 +169,12 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
             "object_base": f"{base}/3s/",
             "fields": {
                 **common,
+                "url": "app_0.1.0.10.bin",
                 "battery_cells": "3",
+                "image_size": "55192",
+                "image_crc32": "0xA8D51A92",
+                "sha256": "d7a34ae15efcefc024272228657be1c66d99c71a1b0a1456ebe776e8ee9f0360",
+                "software_battery_cells": "3",
             },
         },
     )
@@ -182,6 +201,12 @@ def validate_xr_zero_imu_f030_catalogs() -> None:
                 )
         if not re.search(r"^\s*release_notes:\s*['\"]?.+", text, re.MULTILINE):
             fail(f"XR-ZERO-IMU F030 {catalog['label']} release_notes must not be empty")
+        for retired_field in ("available", "status"):
+            if re.search(rf"^\s*{retired_field}:\s*", text, re.MULTILINE):
+                fail(
+                    f"XR-ZERO-IMU F030 {catalog['label']} online catalog must not "
+                    f"contain retired field {retired_field}"
+                )
 
 
 def referenced_objects() -> tuple[set[str], list[dict]]:

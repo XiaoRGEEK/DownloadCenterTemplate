@@ -4,7 +4,24 @@ product:
   product_codes: [24836]
 firmware:
   app:
-    available: false
-    status: "offline"
+    version: "0.1.0.10"
+    image_version: "0.1.0.10"
+    name:
+      zh: "XR-ZERO-IMU F030 3S"
+    url: "app_0.1.0.10.bin"
+    product_code: 24836
+    target_id: "0xF0304B32"
+    layout_version: 3
+    app_base: "0x08002000"
     battery_cells: 3
-    release_notes: "公网 OTA 已停用；XR-ZERO-IMU F030 3S 固件仅通过内部受控烧录提供。"
+    min_studio_version: "1.1.10"
+    min_bootloader_version: "0.1.0.4"
+    image_size: 55192
+    image_crc32: "0xA8D51A92"
+    sha256: "d7a34ae15efcefc024272228657be1c66d99c71a1b0a1456ebe776e8ee9f0360"
+    release_notes: "修正升级后的版本显示，改善低电关机与充电唤醒电量显示。"
+    metadata:
+      source_commit: "082f1b0470af13782c9ac9c5c279e236c24f3516"
+      image_crc32_scope: "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
+      sha256_scope: "Unchanged complete APP BIN"
+      software_battery_cells: 3

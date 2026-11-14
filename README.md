@@ -85,10 +85,13 @@ XRUP 包格式 schema 2 不改变发布清单的 `schema_version: 1`；设备兼
 修改发布控制脚本或元数据允许名单时，同时运行
 `python3 -m unittest discover -s tests -v`。
 
-XR-ZERO-IMU 的 F003、F030 2S／3S OTA 及公开产线包已于 2026-11-11 停用；公开 catalog
-只保留 `available: false` 的退役状态，不再引用任何固件对象。固件改为内部受控烧录，
-GitHub Release 与 TOS 对象通过独立维护流程清除。未来重新开放云端升级前，必须重新设计
-密钥、加密容器、设备授权和 MCU 解密校验流程，不得重新公开原始 BIN。
+XR-ZERO-IMU 的根目录 F003 APP 与公开产线包继续保持退役，只保留
+`available: false` 的离线状态，不引用固件对象。经明确授权，F030 layout3 的 2S／3S
+APP 0.1.0.10 恢复公网 OTA：两个配方使用独立 catalog、独立 Draft Release 和独立 TOS
+Key，最低 XR Studio 1.1.10、最低 BL 0.1.0.4。该例外公开的是未加密原始 BIN，任何人均可
+下载；物理低电关机／充电唤醒与 3S 实机验证仍待补充，不得把当前软件回归结果写成完整实机
+验收。0.1.0.10 修正了未发布 0.1.0.9 镜像头与运行时 HELLO／INFO 版本不一致的问题；
+0.1.0.9 冻结字节仅保留在禁止发布的 Draft Release 中。其他旧 F030 版本继续退役，不得重新引用。
 
 XR-BASE 新版 base2 在线 OTA 只公开未修改的 APP BIN 与
 `firmware/xr-base/version.yaml`。入口仅适用于产品码 24835（`0x6103`）、
@@ -199,6 +202,6 @@ Environment 的设置中。发布脚本只使用 `gh` 当前登录态，不把�
 - 删除对象是单独、显式审核的维护操作，不属于发布 Action。
 - `tos-maintenance` Environment 需要 `XiaoRGEEK` 审批。
 - 生命周期规则保留当前对象，非当前版本 30 天后过期，未完成分片 7 天后终止。
-- XR-ZERO-IMU 的一次性公开退役使用 `retire-xr-zero-imu.yml`，只允许清除
-  `firmware/xr-zero-imu/` 前缀的所有对象版本和删除标记，并要求精确确认和
-  `tos-maintenance` Environment 审批。
+- XR-ZERO-IMU 的全前缀一次性清除工作流已在 F030 2S／3S OTA 恢复时移除；后续清理
+  必须使用限定到明确对象 Key 的独立维护 PR 和 `tos-maintenance` Environment 审批，
+  不得递归删除 `firmware/xr-zero-imu/`。
