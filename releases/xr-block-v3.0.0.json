@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "xr-block-v3.0.0",
+  "title": "XR Block v3.0.0",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "XR.Block_3.0.0_x64-setup.exe",
+      "tos_key": "software/pc/XR Block_3.0.0_x64-setup.exe",
+      "size": 51385791,
+      "sha256": "07f94fc02f368973aa37982847c7daaeb148ef13e2639da72afa683ffdf0fbc2"
+    }
+  ]
+}

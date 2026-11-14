@@ -677,28 +677,28 @@
             "en": "XRBlock Scratch3.0 Software",
             "zh": "XRBlock 图形化编程PC端软件"
         },
-        "version": "v2.3.3",
+        "version": "v3.0.0",
         "desc": {
-            "en": "Support Scratch3.0 porducts",
-            "zh": "支持图形化编程系列产品"
+            "en": "XR Block 3.0 graphical programming software for Windows x64. The installer is not Authenticode signed.",
+            "zh": "XR Block 3.0 Windows x64 图形化编程软件。安装程序未做 Authenticode 数字签名。"
         },
         "link": [
-            "software/pc/XR Block v2.3.3.exe"
+            "software/pc/XR Block_3.0.0_x64-setup.exe"
         ],
         "btnNames": {
             "en": [
-                "Windows"
+                "Windows x64 Installer"
             ],
             "zh": [
-                "Windows"
+                "Windows x64 安装版"
             ]
         },
         "oldVersion": [
-            "software/pc/XR Block v2.2.6.exe"
+            "software/pc/XR Block v2.3.3.exe"
         ],
         "platform": "windows",
         "platformVersions": {
-            "windows": "v2.3.3"
+            "windows": "v3.0.0"
         },
         "hasTools": false,
         "tools": []
