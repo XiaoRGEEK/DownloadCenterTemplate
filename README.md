@@ -87,11 +87,13 @@ XRUP 包格式 schema 2 不改变发布清单的 `schema_version: 1`；设备兼
 
 XR-ZERO-IMU 的根目录 F003 APP 与公开产线包继续保持退役，只保留
 `available: false` 的离线状态，不引用固件对象。经明确授权，F030 layout3 的 2S／3S
-APP 0.1.0.10 恢复公网 OTA：两个配方使用独立 catalog、独立 Draft Release 和独立 TOS
+APP 0.1.0.11 当前通过公网 OTA 发布：两个配方使用独立 catalog、独立 Draft Release 和独立 TOS
 Key，最低 XR Studio 1.1.10、最低 BL 0.1.0.4。该例外公开的是未加密原始 BIN，任何人均可
 下载；物理低电关机／充电唤醒与 3S 实机验证仍待补充，不得把当前软件回归结果写成完整实机
-验收。0.1.0.10 修正了未发布 0.1.0.9 镜像头与运行时 HELLO／INFO 版本不一致的问题；
-0.1.0.9 冻结字节仅保留在禁止发布的 Draft Release 中。其他旧 F030 版本继续退役，不得重新引用。
+验收。0.1.0.11 将 MPU6050 采集与姿态融合提升至 100 Hz，并保留 50 Hz 主机读取兼容；
+实际 100 Hz 运动延时和整机长测仍待补充，不得写成总跟随延时已达到 10 ms。0.1.0.10
+保留为上一回滚版本，0.1.0.9 冻结字节仅保留在禁止发布的 Draft Release 中。其他旧
+F030 版本继续退役，不得重新引用。
 
 XR-BASE 新版 base2 在线 OTA 只公开未修改的 APP BIN 与
 `firmware/xr-base/version.yaml`。入口仅适用于产品码 24835（`0x6103`）、

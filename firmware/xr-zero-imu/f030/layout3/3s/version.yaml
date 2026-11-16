@@ -4,11 +4,11 @@ product:
   product_codes: [24836]
 firmware:
   app:
-    version: "0.1.0.10"
-    image_version: "0.1.0.10"
+    version: "0.1.0.11"
+    image_version: "0.1.0.11"
     name:
       zh: "XR-ZERO-IMU F030 3S"
-    url: "app_0.1.0.10.bin"
+    url: "app_0.1.0.11.bin"
     product_code: 24836
     target_id: "0xF0304B32"
     layout_version: 3
@@ -16,12 +16,12 @@ firmware:
     battery_cells: 3
     min_studio_version: "1.1.10"
     min_bootloader_version: "0.1.0.4"
-    image_size: 55192
-    image_crc32: "0xA8D51A92"
-    sha256: "d7a34ae15efcefc024272228657be1c66d99c71a1b0a1456ebe776e8ee9f0360"
-    release_notes: "修正升级后的版本显示，改善低电关机与充电唤醒电量显示。"
+    image_size: 55268
+    image_crc32: "0x0E6B84EF"
+    sha256: "80eec02668e96beaa39371ee9890a55a4418556589c9893e9102917d21c7c2c7"
+    release_notes: "IMU采集与姿态融合提升至100Hz，降低滤波和采集调度延时。"
     metadata:
-      source_commit: "082f1b0470af13782c9ac9c5c279e236c24f3516"
+      source_commit: "dd114d8ca5d75d4a532732fd9f1a72a3142600b1"
       image_crc32_scope: "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
       sha256_scope: "Unchanged complete APP BIN"
       software_battery_cells: 3
