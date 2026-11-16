@@ -647,13 +647,13 @@
             "en": "FlashBox SD/TF Card Tool",
             "zh": "FlashBox SD/TF 卡备份与写入工具"
         },
-        "version": "v2.7.2",
+        "version": "v2.7.3",
         "desc": {
-            "en": "SD/TF card backup and imaging tool with backup, write, image trim/expand, and image file browsing. The Windows installer is not Authenticode signed.",
-            "zh": "SD/TF 卡备份与写入工具，支持备份、烧录、裁切/扩容镜像及浏览镜像文件。Windows 安装程序未做 Authenticode 数字签名。"
+            "en": "SD/TF card backup and imaging tool. Version 2.7.3 broadens support for image shrinking, expansion, and GPT partition cleanup, and fixes A7Z images that previously could not be trimmed. The Windows installer is not Authenticode signed.",
+            "zh": "SD/TF 卡备份与写入工具。2.7.3 扩大了镜像缩小、扩容及 GPT 分区整理的适用范围，并修复 A7Z 镜像无法裁剪的问题。Windows 安装程序未做 Authenticode 数字签名。"
         },
         "link": [
-            "software/pc/FlashBox-Setup-2.7.2.exe"
+            "software/pc/FlashBox-Setup-2.7.3.exe"
         ],
         "btnNames": {
             "en": [
@@ -663,10 +663,12 @@
                 "Windows 安装版"
             ]
         },
-        "oldVersion": [],
+        "oldVersion": [
+            "software/pc/FlashBox-Setup-2.7.2.exe"
+        ],
         "platform": "windows",
         "platformVersions": {
-            "windows": "v2.7.2"
+            "windows": "v2.7.3"
         },
         "hasTools": false,
         "tools": []

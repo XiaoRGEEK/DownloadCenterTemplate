@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "flashbox-v2.7.3",
+  "title": "FlashBox 2.7.3",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "FlashBox-Setup-2.7.3.exe",
+      "tos_key": "software/pc/FlashBox-Setup-2.7.3.exe",
+      "size": 88653139,
+      "sha256": "574de0f01b30ca6156fdb6e32630b0467216004a2127a8384a7e6447b20064d0"
+    }
+  ]
+}
