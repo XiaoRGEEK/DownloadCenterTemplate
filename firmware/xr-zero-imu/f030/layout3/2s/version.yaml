@@ -4,24 +4,19 @@ product:
   product_codes: [24836]
 firmware:
   app:
+    available: false
+    status: internal_only
     version: "0.1.0.11"
     image_version: "0.1.0.11"
     name:
       zh: "XR-ZERO-IMU F030 2S"
-    url: "app_0.1.0.11.bin"
     product_code: 24836
     target_id: "0xF0304B32"
     layout_version: 3
     app_base: "0x08002000"
     battery_cells: 2
-    min_studio_version: "1.1.10"
-    min_bootloader_version: "0.1.0.4"
-    image_size: 55248
-    image_crc32: "0xED5136DF"
-    sha256: "56cdd8f51fd46522e90b57e43236fdbe08f7929c821e7c8c06b2c0dca3c3a5c8"
-    release_notes: "IMU采集与姿态融合提升至100Hz，降低滤波和采集调度延时。"
+    release_notes: "公网 OTA 已撤下；内部固件由 XR Studio Internal 109 管理。"
     metadata:
-      source_commit: "dd114d8ca5d75d4a532732fd9f1a72a3142600b1"
-      image_crc32_scope: "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
-      sha256_scope: "Unchanged complete APP BIN"
+      public_distribution_retired: "2026-11-17"
+      internal_channel: "109"
       software_battery_cells: 2
