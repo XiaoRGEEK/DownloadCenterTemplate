@@ -85,15 +85,12 @@ XRUP 包格式 schema 2 不改变发布清单的 `schema_version: 1`；设备兼
 修改发布控制脚本或元数据允许名单时，同时运行
 `python3 -m unittest discover -s tests -v`。
 
-XR-ZERO-IMU 的根目录 F003 APP 与公开产线包继续保持退役，只保留
-`available: false` 的离线状态，不引用固件对象。经明确授权，F030 layout3 的 2S／3S
-APP 0.1.0.11 当前通过公网 OTA 发布：两个配方使用独立 catalog、独立 Draft Release 和独立 TOS
-Key，最低 XR Studio 1.1.10、最低 BL 0.1.0.4。该例外公开的是未加密原始 BIN，任何人均可
-下载；物理低电关机／充电唤醒与 3S 实机验证仍待补充，不得把当前软件回归结果写成完整实机
-验收。0.1.0.11 将 MPU6050 采集与姿态融合提升至 100 Hz，并保留 50 Hz 主机读取兼容；
-实际 100 Hz 运动延时和整机长测仍待补充，不得写成总跟随延时已达到 10 ms。0.1.0.10
-保留为上一回滚版本，0.1.0.9 冻结字节仅保留在禁止发布的 Draft Release 中。其他旧
-F030 版本继续退役，不得重新引用。
+XR-ZERO-IMU 的 F003、F030 layout3 2S／3S APP 与公开产线包均保持退役。公开 catalog
+只保留 `available: false`、`status: internal_only` 的审计状态，不引用任何固件对象；TOS
+上的 catalog 和 APP BIN 必须不可下载。F030 的 0.1.0.10／0.1.0.11 Release 记录、Tag、
+Git 清单与 SHA-256 继续用于审计，但公开 Release 附件已撤下；0.1.0.9 冻结字节只留在
+禁止发布的 Draft Release 中。当前 IMU 固件仅由 XR Studio Internal 的 109 内部渠道管理，
+不得重新引用公网地址或恢复未加密 BIN 分发，除非后续另行批准安全发布方案。
 
 XR-BASE 新版 base2 在线 OTA 只公开未修改的 APP BIN 与
 `firmware/xr-base/version.yaml`。入口仅适用于产品码 24835（`0x6103`）、
@@ -204,6 +201,6 @@ Environment 的设置中。发布脚本只使用 `gh` 当前登录态，不把�
 - 删除对象是单独、显式审核的维护操作，不属于发布 Action。
 - `tos-maintenance` Environment 需要 `XiaoRGEEK` 审批。
 - 生命周期规则保留当前对象，非当前版本 30 天后过期，未完成分片 7 天后终止。
-- XR-ZERO-IMU 的全前缀一次性清除工作流已在 F030 2S／3S OTA 恢复时移除；后续清理
-  必须使用限定到明确对象 Key 的独立维护 PR 和 `tos-maintenance` Environment 审批，
-  不得递归删除 `firmware/xr-zero-imu/`。
+- XR-ZERO-IMU 的全前缀一次性清除工作流已移除；F030 公网退休仅允许使用限定到十个
+  明确对象 Key 的维护工作流和 `tos-maintenance` Environment 审批。维护脚本逐版本删除，
+  不得递归删除 `firmware/xr-zero-imu/` 或任何目录前缀。

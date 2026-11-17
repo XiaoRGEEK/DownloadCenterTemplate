@@ -136,17 +136,16 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
         "id": "xr-zero-imu",
         "device_type": "XR-ZERO-IMU",
         "product_codes": "[24836]",
+        "available": "false",
+        "status": "internal_only",
         "version": "0.1.0.11",
         "image_version": "0.1.0.11",
         "product_code": "24836",
         "target_id": "0xF0304B32",
         "layout_version": "3",
         "app_base": "0x08002000",
-        "min_studio_version": "1.1.10",
-        "min_bootloader_version": "0.1.0.4",
-        "source_commit": "dd114d8ca5d75d4a532732fd9f1a72a3142600b1",
-        "image_crc32_scope": "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f",
-        "sha256_scope": "Unchanged complete APP BIN",
+        "public_distribution_retired": "2026-11-17",
+        "internal_channel": "109",
     }
     return (
         {
@@ -155,11 +154,7 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
             "object_base": f"{base}/2s/",
             "fields": {
                 **common,
-                "url": "app_0.1.0.11.bin",
                 "battery_cells": "2",
-                "image_size": "55248",
-                "image_crc32": "0xED5136DF",
-                "sha256": "56cdd8f51fd46522e90b57e43236fdbe08f7929c821e7c8c06b2c0dca3c3a5c8",
                 "software_battery_cells": "2",
             },
         },
@@ -169,11 +164,7 @@ def xr_zero_imu_f030_catalogs() -> tuple[dict, ...]:
             "object_base": f"{base}/3s/",
             "fields": {
                 **common,
-                "url": "app_0.1.0.11.bin",
                 "battery_cells": "3",
-                "image_size": "55268",
-                "image_crc32": "0x0E6B84EF",
-                "sha256": "80eec02668e96beaa39371ee9890a55a4418556589c9893e9102917d21c7c2c7",
                 "software_battery_cells": "3",
             },
         },
@@ -201,11 +192,11 @@ def validate_xr_zero_imu_f030_catalogs() -> None:
                 )
         if not re.search(r"^\s*release_notes:\s*['\"]?.+", text, re.MULTILINE):
             fail(f"XR-ZERO-IMU F030 {catalog['label']} release_notes must not be empty")
-        for retired_field in ("available", "status"):
-            if re.search(rf"^\s*{retired_field}:\s*", text, re.MULTILINE):
+        for public_field in ("url", "image_size", "image_crc32", "sha256"):
+            if re.search(rf"^\s*{public_field}:\s*", text, re.MULTILINE):
                 fail(
-                    f"XR-ZERO-IMU F030 {catalog['label']} online catalog must not "
-                    f"contain retired field {retired_field}"
+                    f"XR-ZERO-IMU F030 {catalog['label']} retired catalog must not "
+                    f"contain public field {public_field}"
                 )
 
 

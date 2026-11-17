@@ -73,10 +73,7 @@ class XrupReleaseTests(unittest.TestCase):
                 for key in objects
                 if key.startswith("firmware/xr-zero-imu/f030/layout3/")
             },
-            {
-                "firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.11.bin",
-                "firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.11.bin",
-            },
+            set(),
         )
         self.assertFalse(
             any(
@@ -123,34 +120,23 @@ class XrupReleaseTests(unittest.TestCase):
               product_codes: [24836]
             firmware:
               app:
+                available: false
+                status: internal_only
                 version: "0.1.0.11"
                 image_version: "0.1.0.11"
-                url: "app_0.1.0.11.bin"
                 product_code: 24836
                 target_id: "0xF0304B32"
                 layout_version: 3
                 app_base: "0x08002000"
                 battery_cells: 2
-                min_studio_version: "1.1.10"
-                min_bootloader_version: "0.1.0.4"
-                image_size: 55248
-                image_crc32: "0xED5136DF"
-                sha256: "56cdd8f51fd46522e90b57e43236fdbe08f7929c821e7c8c06b2c0dca3c3a5c8"
-                release_notes: "F030 layout3 2S online"
+                release_notes: "F030 layout3 2S internal only"
                 metadata:
-                  source_commit: "dd114d8ca5d75d4a532732fd9f1a72a3142600b1"
-                  image_crc32_scope: "CRC32/ISO-HDLC over APP bytes excluding header 0x100..0x13f"
-                  sha256_scope: "Unchanged complete APP BIN"
+                  public_distribution_retired: "2026-11-17"
+                  internal_channel: "109"
                   software_battery_cells: 2
         """)
         three_s = (two_s
             .replace("battery_cells: 2", "battery_cells: 3")
-            .replace("image_size: 55248", "image_size: 55268")
-            .replace("image_crc32: \"0xED5136DF\"", "image_crc32: \"0x0E6B84EF\"")
-            .replace(
-                "56cdd8f51fd46522e90b57e43236fdbe08f7929c821e7c8c06b2c0dca3c3a5c8",
-                "80eec02668e96beaa39371ee9890a55a4418556589c9893e9102917d21c7c2c7",
-            )
             .replace("software_battery_cells: 2", "software_battery_cells: 3")
             .replace("layout3 2S", "layout3 3S"))
 
@@ -169,6 +155,12 @@ class XrupReleaseTests(unittest.TestCase):
                 three_path.write_text(three_s.replace("battery_cells: 3", "battery_cells: 2", 1))
                 with self.assertRaisesRegex(ValueError, "3S battery_cells must be 3"):
                     validate.validate_xr_zero_imu_f030_catalogs()
+                three_path.write_text(three_s.replace(
+                    "status: internal_only",
+                    'status: internal_only\n    url: "app_0.1.0.11.bin"',
+                ))
+                with self.assertRaisesRegex(ValueError, "must not contain public field url"):
+                    validate.validate_xr_zero_imu_f030_catalogs()
 
     def test_retired_assets_must_be_manifested_and_unreferenced(self):
         key = "firmware/xr-zero-imu/app_2.1.5.0.bin"
@@ -186,6 +178,21 @@ class XrupReleaseTests(unittest.TestCase):
 
     def test_zero_full_prefix_retirement_workflow_is_absent(self):
         self.assertFalse((ROOT / ".github/workflows/retire-xr-zero-imu.yml").exists())
+
+    def test_f030_retirement_workflow_is_exact_and_non_recursive(self):
+        workflow = (ROOT / ".github/workflows/retire-xr-zero-imu-f030-public.yml").read_text()
+        self.assertNotIn('tosutil rm "${prefix}" -r', workflow)
+        self.assertNotIn('tos://${TOS_BUCKET}/firmware/xr-zero-imu/"', workflow)
+        self.assertIn('tosutil rm "${uri}" "-versionId=${version_id}" -f', workflow)
+        for cells in ("2s", "3s"):
+            for name in (
+                "version.yaml",
+                "app_0.1.0.4.bin",
+                "app_0.1.0.6.bin",
+                "app_0.1.0.10.bin",
+                "app_0.1.0.11.bin",
+            ):
+                self.assertIn(f"firmware/xr-zero-imu/f030/layout3/{cells}/{name}", workflow)
 
     def run_metadata_plan(self, changes):
         # Execute the actual workflow allowlist, not a duplicated approximation.

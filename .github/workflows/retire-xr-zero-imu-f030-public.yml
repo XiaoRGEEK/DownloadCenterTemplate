@@ -1,0 +1,157 @@
+name: Retire XR-ZERO-IMU F030 public firmware
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type RETIRE-XR-ZERO-IMU-F030-PUBLIC
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tos-maintenance
+  cancel-in-progress: false
+
+jobs:
+  retire:
+    environment: tos-maintenance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout protected master
+        uses: actions/checkout@v7
+
+      - name: Verify retired control plane and exact confirmation
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          set -euo pipefail
+          test "${CONFIRMATION}" = "RETIRE-XR-ZERO-IMU-F030-PUBLIC"
+          test "$(python3 scripts/validate_release.py --print-objects \
+            | grep -c '^firmware/xr-zero-imu/f030/layout3/' || true)" = "0"
+          grep -q '^[[:space:]]*available:[[:space:]]*false[[:space:]]*$' \
+            firmware/xr-zero-imu/f030/layout3/2s/version.yaml
+          grep -q '^[[:space:]]*available:[[:space:]]*false[[:space:]]*$' \
+            firmware/xr-zero-imu/f030/layout3/3s/version.yaml
+
+      - name: Install and configure tosutil
+        env:
+          TOS_ENDPOINT: ${{ secrets.TOS_ENDPOINT }}
+          TOS_REGION: ${{ secrets.TOS_REGION }}
+          TOS_ACCESS_KEY_ID: ${{ secrets.TOS_ACCESS_KEY_ID }}
+          TOS_SECRET_ACCESS_KEY: ${{ secrets.TOS_SECRET_ACCESS_KEY }}
+          TOS_SECURITY_TOKEN: ${{ secrets.TOS_SECURITY_TOKEN }}
+        run: |
+          set -euo pipefail
+          install_dir="${RUNNER_TEMP}/tosutil-bin"
+          mkdir -p "${install_dir}"
+          curl --fail --silent --show-error --location --retry 3 \
+            --output "${install_dir}/tosutil" \
+            https://tos-tools.tos-cn-beijing.volces.com/linux/amd64/tosutil
+          chmod 0755 "${install_dir}/tosutil"
+          echo "${install_dir}" >> "${GITHUB_PATH}"
+          args=(config "-e=${TOS_ENDPOINT}" "-re=${TOS_REGION}" \
+            "-i=${TOS_ACCESS_KEY_ID}" "-k=${TOS_SECRET_ACCESS_KEY}")
+          if [[ -n "${TOS_SECURITY_TOKEN:-}" ]]; then
+            args+=("-t=${TOS_SECURITY_TOKEN}")
+          fi
+          "${install_dir}/tosutil" "${args[@]}"
+
+      - name: Permanently delete exact TOS object versions
+        env:
+          TOS_BUCKET: ${{ secrets.TOS_BUCKET }}
+        run: |
+          set -euo pipefail
+          objects=(
+            firmware/xr-zero-imu/f030/layout3/2s/version.yaml
+            firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.4.bin
+            firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.6.bin
+            firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.10.bin
+            firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.11.bin
+            firmware/xr-zero-imu/f030/layout3/3s/version.yaml
+            firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.4.bin
+            firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.6.bin
+            firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.10.bin
+            firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.11.bin
+          )
+
+          for object in "${objects[@]}"; do
+            uri="tos://${TOS_BUCKET}/${object}"
+            before="${RUNNER_TEMP}/before-$(printf '%s' "${object}" | sha256sum | awk '{print $1}').txt"
+            tosutil ls "${uri}" -v -bf=raw -limit=1000 > "${before}"
+            while IFS= read -r listed_uri; do
+              test "${listed_uri}" = "${uri}"
+            done < <(awk '$1 ~ /^tos:\/\// {print $1}' "${before}")
+            mapfile -t version_ids < <(
+              awk '$1 ~ /^[0-9A-F]+$/ && $2 ~ /^[0-9]{4}-/ {print $1}' "${before}"
+            )
+            for version_id in "${version_ids[@]}"; do
+              tosutil rm "${uri}" "-versionId=${version_id}" -f
+            done
+
+            after="${RUNNER_TEMP}/after-$(printf '%s' "${object}" | sha256sum | awk '{print $1}').txt"
+            tosutil ls "${uri}" -v -bf=raw -limit=1000 > "${after}"
+            grep -q 'Versioning file number is: 0' "${after}"
+            grep -q 'DeleteMarker number is: 0' "${after}"
+          done
+
+      - name: Remove public GitHub Release assets and preserve tags
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          releases=(
+            xr-zero-imu-f030-layout3-2s-app-v0.1.0.10:app_0.1.0.10.bin
+            xr-zero-imu-f030-layout3-3s-app-v0.1.0.10:app_0.1.0.10.bin
+            xr-zero-imu-f030-layout3-2s-app-v0.1.0.11:app_0.1.0.11.bin
+            xr-zero-imu-f030-layout3-3s-app-v0.1.0.11:app_0.1.0.11.bin
+          )
+          for item in "${releases[@]}"; do
+            tag="${item%%:*}"
+            asset="${item#*:}"
+            gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag}" >/dev/null
+            if gh release view "${tag}" --repo "${GITHUB_REPOSITORY}" \
+              --json assets --jq '.assets[].name' | grep -Fxq "${asset}"; then
+              gh release delete-asset "${tag}" "${asset}" \
+                --repo "${GITHUB_REPOSITORY}" --yes
+            fi
+            test "$(gh release view "${tag}" --repo "${GITHUB_REPOSITORY}" \
+              --json assets --jq '.assets | length')" = "0"
+            gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag}" >/dev/null
+          done
+
+      - name: Verify public endpoints are unavailable
+        run: |
+          set -euo pipefail
+          tos_objects=(
+            firmware/xr-zero-imu/f030/layout3/2s/version.yaml
+            firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.4.bin
+            firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.6.bin
+            firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.10.bin
+            firmware/xr-zero-imu/f030/layout3/2s/app_0.1.0.11.bin
+            firmware/xr-zero-imu/f030/layout3/3s/version.yaml
+            firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.4.bin
+            firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.6.bin
+            firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.10.bin
+            firmware/xr-zero-imu/f030/layout3/3s/app_0.1.0.11.bin
+          )
+          for object in "${tos_objects[@]}"; do
+            status=$(curl --silent --show-error --location --output /dev/null \
+              --write-out '%{http_code}' "https://software.xiao-r.com/${object}")
+            test "${status}" = "404"
+          done
+
+          release_assets=(
+            xr-zero-imu-f030-layout3-2s-app-v0.1.0.10/app_0.1.0.10.bin
+            xr-zero-imu-f030-layout3-3s-app-v0.1.0.10/app_0.1.0.10.bin
+            xr-zero-imu-f030-layout3-2s-app-v0.1.0.11/app_0.1.0.11.bin
+            xr-zero-imu-f030-layout3-3s-app-v0.1.0.11/app_0.1.0.11.bin
+          )
+          for asset in "${release_assets[@]}"; do
+            status=$(curl --silent --show-error --location --output /dev/null \
+              --write-out '%{http_code}' \
+              "https://github.com/${GITHUB_REPOSITORY}/releases/download/${asset}")
+            test "${status}" = "404"
+          done
