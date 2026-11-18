@@ -358,6 +358,36 @@
         "tools": []
     },
     {
+        "logoSrc": "./software/image/xr-finder.png",
+        "name": {
+            "en": "XR-FINDER",
+            "zh": "XR-FINDER 设备发现与配网"
+        },
+        "version": "v1.0.1",
+        "desc": {
+            "en": "XRGEEK device discovery, Bluetooth provisioning, activation and binding app",
+            "zh": "XRGEEK 设备发现、蓝牙配网、激活与绑定工具"
+        },
+        "link": [
+            "software/android/XR-FINDER_V1.0.1.apk"
+        ],
+        "btnNames": {
+            "en": [
+                "Android"
+            ],
+            "zh": [
+                "Android"
+            ]
+        },
+        "oldVersion": [],
+        "platform": "android",
+        "platformVersions": {
+            "android": "v1.0.1"
+        },
+        "hasTools": false,
+        "tools": []
+    },
+    {
         "logoSrc": "./software/image/xr-controller.png",
         "name": {
             "en": "XR-Controller",

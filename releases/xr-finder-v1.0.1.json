@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tag": "xr-finder-v1.0.1",
+  "title": "XR-FINDER v1.0.1",
+  "target_commitish": "master",
+  "assets": [
+    {
+      "name": "XR-FINDER_V1.0.1.apk",
+      "tos_key": "software/android/XR-FINDER_V1.0.1.apk",
+      "size": 50274863,
+      "sha256": "b872a114ff4c4c16e34bf0288c116f305e526359060a6222b539413901bd6d36"
+    }
+  ]
+}
