@@ -65,8 +65,8 @@ android:
       english: Update WuliBot to latest version
   XR-Controller:
     name: XR-Controller
-    version: 1.4.185
-    url: software/android/XR-Controller_V1.4.185.261109.a04954c_release.apk
+    version: 1.4.186
+    url: software/android/XR-Controller_V1.4.186.261125.dd69749_release.apk
     forceUpdate: false
     updateMsg:
       chinese: 更新 XR-Controller 到最新版本

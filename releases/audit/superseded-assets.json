@@ -92,6 +92,6 @@
   {
     "tos_key": "software/android/XR-Controller_V1.4.168.260908.7f05a88_release.apk",
     "replacement_tos_key": "software/android/XR-Controller_V1.4.185.261109.a04954c_release.apk",
-    "reason": "XR Controller 1.4.168 was withdrawn after a reported functional issue; tested XR Controller 1.4.185 is now the current stable download."
+    "reason": "XR Controller 1.4.168 was withdrawn after a reported functional issue; tested XR Controller 1.4.185 replaced it and remains available for rollback."
   }
 ]
