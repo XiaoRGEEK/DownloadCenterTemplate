@@ -91,7 +91,32 @@
   },
   {
     "tos_key": "software/android/XR-Controller_V1.4.168.260908.7f05a88_release.apk",
-    "replacement_tos_key": "software/android/XR-Controller_V1.4.185.261109.a04954c_release.apk",
-    "reason": "XR Controller 1.4.168 was withdrawn after a reported functional issue; tested XR Controller 1.4.185 replaced it and remains available for rollback."
+    "replacement_tos_key": "software/android/XR-Controller_V1.4.186.261125.dd69749_release.apk",
+    "reason": "XR Controller 1.4.168 was withdrawn after a reported functional issue; 1.4.186 is the supported rollback download."
+  },
+  {
+    "tos_key": "software/android/XR-Controller_V1.4.185.261109.a04954c_release.apk",
+    "replacement_tos_key": "software/android/XR-Controller_V1.4.186.261125.dd69749_release.apk",
+    "reason": "Removed from download-center listings under the current-plus-one-rollback policy; 1.4.186 is the rollback."
+  },
+  {
+    "tos_key": "software/android/XR-Controller_V1.4.165.260630.6cfcfdb_arm64-v8a-release.apk",
+    "replacement_tos_key": "software/android/XR-Controller_V1.4.186.261125.dd69749_release.apk",
+    "reason": "Superseded Android arm64 download; the listed rollback still supports arm64-v8a."
+  },
+  {
+    "tos_key": "software/android/XR-Controller_V1.4.162.260212.379dc84_arm64-v8a-release.apk",
+    "replacement_tos_key": "software/android/XR-Controller_V1.4.186.261125.dd69749_release.apk",
+    "reason": "Superseded Android arm64 download; the listed rollback still supports arm64-v8a."
+  },
+  {
+    "tos_key": "software/android/XR-Controller_V1.4.144.251030.ac19f2c_armeabi-v7a-release.apk",
+    "replacement_tos_key": "software/android/XR-Controller_V1.4.186.261125.dd69749_release.apk",
+    "reason": "Superseded Android ARM download; the listed rollback still supports armeabi-v7a."
+  },
+  {
+    "tos_key": "software/android/XR-Controller_V1.4.143.250603.91316e0_armeabi-v7a-release.apk",
+    "replacement_tos_key": "software/android/XR-Controller_V1.4.186.261125.dd69749_release.apk",
+    "reason": "Superseded Android ARM download; the listed rollback still supports armeabi-v7a."
   }
 ]
